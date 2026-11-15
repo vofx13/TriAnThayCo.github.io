@@ -10,6 +10,8 @@
     
     <!-- Three.js cho hiệu ứng không gian 3D -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- Dữ liệu hình ảnh Thầy Cô 3D (Tự động tải không giới hạn CORS) -->
+    <script src="gallery-data.js"></script>
 
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -86,33 +88,188 @@
             z-index: 1;
         }
 
-        /* ================= VĂN BIA KỶ NIỆM LỊCH SỬ (MONUMENT TABLETS) - BÃI BỎ BO GÓC AI ================= */
-        .timeline-monument-tablet {
-            background: linear-gradient(180deg, rgba(24, 20, 16, 0.98) 0%, rgba(14, 12, 10, 0.99) 100%);
-            border: 1.5px solid rgba(217, 119, 6, 0.4);
-            outline: 1px solid rgba(250, 204, 21, 0.18);
-            outline-offset: -8px;
-            box-shadow: 0 35px 80px -15px rgba(0, 0, 0, 0.98), inset 0 0 50px rgba(0, 0, 0, 0.8);
+        /* ================= VĂN BIA KỶ NIỆM LỊCH SỬ (MONUMENT TABLETS) - HIỆU ỨNG PHÓNG NGANG & ĐẨY TRỤC ================= */
+        .timeline-node {
             position: relative;
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            min-height: 85vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4rem 0.5rem;
+            transition: all 0.85s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .timeline-monument-tablet:hover {
-            transform: translateY(-5px);
+
+        /* Khung wrapper cho phép phóng ngang */
+        .monument-wrapper {
+            width: 100%;
+            transition: width 0.85s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s cubic-bezier(0.16, 1, 0.3, 1), margin 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: width, transform;
+            z-index: 20;
+        }
+
+        @media (min-width: 768px) {
+            .timeline-node[data-side="left"] .monument-wrapper {
+                width: 45%;
+                margin-right: auto;
+                margin-left: 0;
+            }
+            .timeline-node[data-side="right"] .monument-wrapper {
+                width: 45%;
+                margin-left: auto;
+                margin-right: 0;
+            }
+
+            /* KHI EXPANDED (SAU KHI DỪNG 2S): Phóng to rộng nhưng chừa hẳn mép thoáng, không đè lên thanh tiến trình */
+            .timeline-node[data-side="left"].is-expanded .monument-wrapper {
+                width: 80% !important;
+                max-width: 1040px;
+                margin-right: auto !important;
+                margin-left: 0 !important;
+                z-index: 15;
+            }
+            .timeline-node[data-side="right"].is-expanded .monument-wrapper {
+                width: 80% !important;
+                max-width: 1040px;
+                margin-left: auto !important;
+                margin-right: 0 !important;
+                z-index: 15;
+            }
+        }
+
+        /* Bảng Bia Ký Lịch Sử Sơn Mài Đồng Cổ */
+        .timeline-monument-tablet {
+            background: linear-gradient(180deg, rgba(24, 20, 16, 0.98) 0%, rgba(13, 11, 9, 0.99) 100%);
+            border: 1.5px solid rgba(217, 119, 6, 0.35);
+            outline: 1px solid rgba(250, 204, 21, 0.15);
+            outline-offset: -8px;
+            box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.95);
+            position: relative;
+            transition: all 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+            opacity: 0.55;
+            transform: scale(0.96);
+            will-change: transform, opacity, box-shadow, border-color;
+        }
+
+        /* Khi active: bừng sáng hào quang vàng cổ điển */
+        .timeline-node.is-expanded .timeline-monument-tablet {
+            opacity: 1;
+            transform: scale(1);
             border-color: rgba(250, 204, 21, 0.85);
             outline-color: rgba(250, 204, 21, 0.45);
-            box-shadow: 0 45px 95px -10px rgba(0, 0, 0, 0.99), 0 0 50px rgba(217, 119, 6, 0.18), inset 0 0 40px rgba(250, 204, 21, 0.05);
+            box-shadow: 0 40px 100px -10px rgba(0, 0, 0, 0.99), 0 0 60px rgba(217, 119, 6, 0.25), inset 0 0 50px rgba(250, 204, 21, 0.08);
         }
+
+        /* GÓC CHỈ KHẢM THANH MẢNH TINH TẾ - KHÔNG BỊ ĐẬM THÔ */
         .monument-corner {
             position: absolute;
             width: 14px;
             height: 14px;
-            border-color: #FACC15;
+            border-color: rgba(250, 204, 21, 0.65);
             pointer-events: none;
+            transition: all 0.5s ease;
         }
-        .monument-tl { top: -2px; left: -2px; border-top: 3px solid; border-left: 3px solid; }
-        .monument-tr { top: -2px; right: -2px; border-top: 3px solid; border-right: 3px solid; }
-        .monument-bl { bottom: -2px; left: -2px; border-bottom: 3px solid; border-left: 3px solid; }
-        .monument-br { bottom: -2px; right: -2px; border-bottom: 3px solid; border-right: 3px solid; }
+        .monument-tl { top: -1px; left: -1px; border-top: 1.5px solid; border-left: 1.5px solid; }
+        .monument-tr { top: -1px; right: -1px; border-top: 1.5px solid; border-right: 1.5px solid; }
+        .monument-bl { bottom: -1px; left: -1px; border-bottom: 1.5px solid; border-left: 1.5px solid; }
+        .monument-br { bottom: -1px; right: -1px; border-bottom: 1.5px solid; border-right: 1.5px solid; }
+
+        .timeline-node.is-expanded .monument-corner {
+            width: 18px;
+            height: 18px;
+            border-color: #FACC15;
+            border-top-width: 1.5px;
+            border-left-width: 1.5px;
+            border-right-width: 1.5px;
+            border-bottom-width: 1.5px;
+        }
+
+        /* Bố cục văn bia: Lúc đầu chỉ có chữ thuần khiết, khi mở rộng mới hiện khung ảnh */
+        .monument-grid-layout {
+            display: block;
+            width: 100%;
+        }
+
+        .monument-content-column {
+            width: 100%;
+        }
+
+        /* KHUNG ẢNH TƯ LIỆU: MẶC ĐỊNH ẨN HOÀN TOÀN TRƯỚC KHI MỞ RỘNG */
+        .monument-photo-dossier {
+            display: none !important;
+        }
+
+        /* KHI EXPANDED (SAU 2S DỪNG LẠI): Chuyển sang 2 cột tư liệu và hiện khung ảnh */
+        .timeline-node.is-expanded .monument-grid-layout {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            align-items: stretch;
+        }
+
+        @media (min-width: 1024px) {
+            .timeline-node.is-expanded .monument-grid-layout {
+                display: grid;
+                grid-template-columns: 4.6fr 7.4fr;
+                gap: 2.5rem;
+                align-items: stretch;
+            }
+        }
+
+        .timeline-node.is-expanded .monument-photo-dossier {
+            display: flex !important;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+            border-bottom: 1px solid rgba(250, 204, 21, 0.2);
+            padding-bottom: 1.5rem;
+            animation: fadeInDossier 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @media (min-width: 1024px) {
+            .timeline-node.is-expanded .monument-photo-dossier {
+                border-bottom: none;
+                border-right: 1px solid rgba(250, 204, 21, 0.25);
+                padding-bottom: 0;
+                padding-right: 2rem;
+            }
+        }
+
+        @keyframes fadeInDossier {
+            0% { opacity: 0; transform: translateY(14px) scale(0.98); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* Thanh ray tiến trình: Luôn nằm ở lớp đáy (z-index: 5) để KHÔNG BAO GIỜ ĐÈ LÊN SỐ */
+        #timeline-rail-track, #scroll-progress-line {
+            transition: transform 0.85s cubic-bezier(0.16, 1, 0.3, 1), height 0.15s ease-out;
+            will-change: transform;
+            z-index: 5 !important;
+        }
+
+        /* Huy hiệu thoi mốc son: Luôn nằm trên cùng (z-index: 50) và nền đặc 100%, che đường ray chạy qua */
+        .milestone-marker-node {
+            position: absolute;
+            top: 50%;
+            background-color: #12100d !important;
+            border: 2px solid #FACC15 !important;
+            transition: transform 0.85s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.6s ease, background-color 0.6s ease, border-color 0.6s ease;
+            will-change: transform;
+            z-index: 50 !important;
+        }
+        .milestone-marker-node span {
+            position: relative;
+            z-index: 60 !important;
+            display: inline-block;
+        }
+        .timeline-node.is-expanded .milestone-marker-node {
+            box-shadow: 0 0 35px rgba(250, 204, 21, 0.95), 0 0 60px rgba(217, 119, 6, 0.7);
+            background-color: #FACC15 !important;
+            border-color: #FEF08A !important;
+        }
+        .timeline-node.is-expanded .milestone-marker-node span {
+            color: #000000 !important;
+            font-weight: 900 !important;
+        }
 
         .timeline-rail {
             background: linear-gradient(to bottom, rgba(250,204,21,0.15), rgba(250,204,21,0.85), rgba(217,119,6,0.2));
@@ -218,13 +375,99 @@
             border: 1.5px solid #1c1815;
         }
 
-        /* ================= 3D VIRTUAL GALLERY (TRIỂN LÃM ẢO 3D - PHÂN KHU III) ================= */
+        /* ================= MOBILE ORIENTATION OVERLAY & ANIMATION ================= */
+        @keyframes phoneRotate {
+            0%, 20% {
+                transform: rotate(0deg);
+            }
+            50%, 75% {
+                transform: rotate(90deg);
+            }
+            95%, 100% {
+                transform: rotate(0deg);
+            }
+        }
+        .phone-rotate-anim {
+            animation: phoneRotate 2.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+            transform-origin: center center;
+        }
+        @keyframes spinSlow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .animate-spin-slow {
+            animation: spinSlow 12s linear infinite;
+        }
+        @keyframes rotateArrows {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .animate-rotate-arrows {
+            animation: rotateArrows 5s linear infinite;
+        }
+        @keyframes pingSlow {
+            0% { transform: scale(0.96); opacity: 0.5; }
+            50% { transform: scale(1.08); opacity: 0.15; }
+            100% { transform: scale(0.96); opacity: 0.5; }
+        }
+        .animate-ping-slow {
+            animation: pingSlow 3s ease-in-out infinite;
+        }
+
+        #mobile-orientation-overlay {
+            display: none;
+        }
+        @media (max-width: 900px) and (orientation: portrait) {
+            #mobile-orientation-overlay {
+                display: flex !important;
+            }
+        }
+
+        /* Responsive Newspaper for Mobile and Desktop */
+        @media (max-width: 1023px) {
+            #flipping-leaf-3d {
+                position: static !important;
+                width: 100% !important;
+                transform: none !important;
+                box-shadow: none !important;
+                z-index: 10 !important;
+                display: block !important;
+            }
+            .leaf-face {
+                position: static !important;
+                inset: auto !important;
+                backface-visibility: visible !important;
+                -webkit-backface-visibility: visible !important;
+                transform: none !important;
+            }
+            .leaf-face-back {
+                transform: none !important;
+            }
+            .news-mobile-page {
+                display: none;
+            }
+            .news-mobile-page.active-mobile-page {
+                display: flex !important;
+            }
+        }
+        @media (min-width: 1024px) {
+            .news-mobile-page {
+                display: flex !important;
+            }
+        }
+
+        /* ================= 3D VIRTUAL GALLERY (BẢO TÀNG SỐ 3D) ================= */
         #gallery-canvas-container {
             width: 100%;
-            height: 580px;
+            height: 750px;
             position: relative;
             cursor: grab;
             touch-action: none;
+        }
+        @media (min-width: 1024px) {
+            #gallery-canvas-container {
+                height: 820px;
+            }
         }
         #gallery-canvas-container:active {
             cursor: grabbing;
@@ -246,6 +489,58 @@
     </style>
 </head>
 <body class="antialiased bg-[#08080b] text-gray-100 overflow-x-hidden selection:bg-brand-gold selection:text-black">
+
+    <!-- ==================== MOBILE ORIENTATION OVERLAY (XOAY NGANG MÀN HÌNH) ==================== -->
+    <div id="mobile-orientation-overlay" class="fixed inset-0 z-[999999] bg-[#0c0a09]/95 backdrop-blur-xl flex flex-col items-center justify-center p-6 text-center select-none" style="display: none;">
+        <div class="relative w-44 h-44 mb-8 flex items-center justify-center">
+            <!-- Vòng xoay các hạt và radar -->
+            <div class="absolute inset-0 rounded-full border-2 border-dashed border-brand-gold/30 animate-spin-slow"></div>
+            <div class="absolute -inset-3 rounded-full border border-brand-gold/15 animate-ping-slow"></div>
+            
+            <!-- Vòng xoay mũi tên chỉ hướng xoay 90 độ -->
+            <svg class="absolute inset-0 w-full h-full text-brand-gold animate-rotate-arrows pointer-events-none" viewBox="0 0 120 120" fill="none">
+                <path d="M 60 16 A 44 44 0 0 1 104 60" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="5 5" />
+                <polygon points="104,52 110,62 100,62" fill="currentColor" />
+                <path d="M 60 104 A 44 44 0 0 1 16 60" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="5 5" />
+                <polygon points="16,68 10,58 20,58" fill="currentColor" />
+            </svg>
+
+            <!-- Điện thoại xoay ngang 90 độ -->
+            <div class="phone-rotate-anim w-16 h-28 rounded-2xl border-2 border-brand-gold bg-[#181410] shadow-[0_0_35px_rgba(250,204,21,0.4)] flex flex-col items-center justify-between p-2 relative">
+                <!-- Camera / Tai thỏ -->
+                <div class="w-5 h-1.5 bg-brand-gold/70 rounded-full"></div>
+                <!-- Màn hình bên trong phát sáng -->
+                <div class="w-full flex-1 my-1.5 rounded-lg bg-gradient-to-br from-brand-gold/20 via-amber-500/10 to-transparent flex flex-col items-center justify-center border border-brand-gold/30">
+                    <i data-lucide="rotate-cw" class="w-6 h-6 text-brand-gold animate-spin"></i>
+                    <span class="text-[9px] font-mono text-brand-gold mt-1 font-bold">90° ROTATE</span>
+                </div>
+                <!-- Home indicator bar -->
+                <div class="w-7 h-1 bg-brand-gold/70 rounded-full"></div>
+            </div>
+        </div>
+
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-brand-gold/50 bg-brand-gold/10 text-brand-gold text-xs font-cinzel font-bold tracking-widest uppercase mb-4 shadow-lg">
+            <i data-lucide="screen-share" class="w-4 h-4"></i>
+            TRẢI NGHIỆM BẢO TÀNG SỐ
+        </div>
+
+        <h3 class="font-serif text-2xl sm:text-3xl font-bold text-white mb-3 tracking-tight">
+            Vui lòng xoay ngang màn hình
+        </h3>
+        
+        <p class="text-sm text-amber-200/85 max-w-sm leading-relaxed font-sans mb-6">
+            Để có trải nghiệm không gian 3D tương tác 360° và lật trang báo tường tốt nhất, xin vui lòng xoay thiết bị của bạn theo chiều ngang.
+        </p>
+
+        <div class="flex items-center gap-2 text-xs font-mono text-gray-400 bg-white/5 px-4 py-2 rounded-full border border-white/10">
+            <i data-lucide="smartphone" class="w-4 h-4 text-brand-gold animate-pulse"></i>
+            <span>Tự động mở khóa khi xoay ngang màn hình</span>
+        </div>
+
+        <button id="dismiss-orientation-overlay-btn" type="button" class="mt-6 text-xs text-amber-200/50 hover:text-brand-gold underline transition-colors cursor-pointer">
+            Hoặc tiếp tục xem ở màn hình dọc
+        </button>
+    </div>
 
     <!-- 3D WebGL Canvas Layer (Tự động pause khi không ở hero) -->
     <canvas id="webgl-canvas"></canvas>
@@ -272,7 +567,7 @@
 
             <p class="font-sans text-base sm:text-xl md:text-2xl text-gray-200 max-w-3xl mx-auto font-light tracking-wide leading-relaxed animate-fade-in-up text-glow">
                 "Dưới ánh mặt trời, không có nghề nào cao quý hơn nghề dạy học." <br class="hidden sm:block" />
-                Kính chúc Quý thầy cô luôn dồi dào sức khỏe, hạnh phúc và thành công trên con đường ươm mầm tri thức.
+                Mùa Hiến chương đầu tiên của tuổi 15 dưới mái trường Chuyên Quang Trung, tập thể Chi đoàn 10I xin gửi gắm trọn vẹn lòng biết ơn mộc mạc và kính chúc Quý Thầy Cô luôn nhiều niềm vui, mạnh khỏe bên chúng em!
             </p>
 
             <a href="#timeline-section" class="mt-14 inline-flex flex-col items-center gap-2 opacity-80 hover:opacity-100 transition-opacity group cursor-pointer">
@@ -303,212 +598,440 @@
             </p>
         </div>
 
-        <div class="relative">
-            <div class="timeline-rail absolute left-4 sm:left-1/2 top-4 bottom-8 w-[3px] -translate-x-1/2 rounded-full"></div>
-            <div id="scroll-progress-line" class="absolute left-4 sm:left-1/2 top-4 w-[3px] -translate-x-1/2 bg-gradient-to-b from-brand-gold via-amber-300 to-amber-500 rounded-full transition-all duration-150 z-10" style="height: 0px; box-shadow: 0 0 20px rgba(250, 204, 21, 0.8);"></div>
+        <div class="relative max-w-7xl mx-auto">
+            <div id="timeline-rail-track" class="timeline-rail absolute left-4 sm:left-1/2 top-4 bottom-8 w-[3px] -translate-x-1/2 rounded-full z-0"></div>
+            <div id="scroll-progress-line" class="absolute left-4 sm:left-1/2 top-4 w-[3px] -translate-x-1/2 bg-gradient-to-b from-brand-gold via-amber-300 to-amber-500 rounded-full transition-all duration-150 z-0" style="height: 0px; box-shadow: 0 0 20px rgba(250, 204, 21, 0.8);"></div>
 
-            <div class="space-y-20 sm:space-y-32 relative z-20">
+            <div id="timeline-milestones-container" class="space-y-36 sm:space-y-56 relative z-30 py-8">
 
-                <!-- MỐC 1: 1946 -->
-                <div class="timeline-node relative flex flex-col sm:flex-row items-start sm:items-center group">
-                    <div class="absolute left-4 sm:left-1/2 -translate-x-1/2 w-11 h-11 sm:w-13 sm:h-13 bg-[#18130e] border-2 border-brand-gold rotate-45 flex items-center justify-center z-20 shadow-xl shadow-brand-gold/30 group-hover:scale-125 transition-transform duration-300">
+                <!-- MỐC 1: 1946 (BÊN TRÁI PHÓNG NGANG SANG PHẢI) -->
+                <div class="timeline-node relative flex items-center group" data-side="left" data-index="0">
+                    <div class="milestone-marker-node absolute left-4 sm:left-1/2 -translate-x-1/2 w-11 h-11 sm:w-13 sm:h-13 bg-[#12100d] border-2 border-brand-gold rotate-45 flex items-center justify-center z-50 shadow-xl shadow-brand-gold/30">
                         <span class="-rotate-45 font-cinzel font-black text-brand-gold text-xs sm:text-sm">I</span>
                     </div>
 
-                    <div class="ml-14 sm:ml-0 sm:w-1/2 sm:pr-14 w-[calc(100%-3.5rem)]">
-                        <div class="timeline-monument-tablet p-7 sm:p-11 relative">
+                    <div class="monument-wrapper ml-12 sm:ml-0">
+                        <div class="timeline-monument-tablet p-6 sm:p-9 lg:p-11 relative overflow-hidden">
                             <div class="monument-corner monument-tl"></div>
                             <div class="monument-corner monument-tr"></div>
                             <div class="monument-corner monument-bl"></div>
                             <div class="monument-corner monument-br"></div>
 
-                            <div class="flex items-baseline justify-between border-b border-brand-gold/25 pb-4 mb-5">
-                                <span class="text-4xl sm:text-5xl lg:text-6xl font-cinzel font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-brand-gold to-amber-500 tracking-tight">1946</span>
-                                <span class="text-xs uppercase tracking-widest text-amber-300/90 font-serif border border-amber-600/40 bg-amber-950/40 px-3 py-1 font-semibold">Tháng 7 • Paris, Pháp</span>
+                            <div class="monument-grid-layout">
+                                <!-- CỘT ẢNH TƯ LIỆU: MẶC ĐỊNH ẨN HOÀN TOÀN, CHỈ XUẤT HIỆN KHI EXPANDED (SAU 2S) -->
+                                <div class="monument-photo-dossier">
+                                    <div>
+                                        <div class="flex items-center gap-2 mb-3 text-[11px] font-cinzel text-brand-gold tracking-widest font-bold">
+                                            <i data-lucide="folder-archive" class="w-4 h-4 text-brand-gold"></i>
+                                            <span>HỒ SƠ TƯ LIỆU GỐC</span>
+                                        </div>
+                                        <div class="border border-brand-gold/50 p-2 bg-[#0d0b09] shadow-2xl mb-3 group/img overflow-hidden">
+                                            <div class="aspect-[16/10] w-full overflow-hidden border border-brand-gold/30 bg-[#16120e] relative">
+                                                <img src="timeline_1946.jpg" alt="Ảnh tư liệu: Hội nghị thành lập FISE tại Paris năm 1946" class="w-full h-full object-cover transition-transform duration-700 group-hover/img:scale-105" loading="lazy">
+                                                <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none"></div>
+                                            </div>
+                                            <div class="text-[11px] font-serif italic text-amber-200/90 text-center mt-2 px-1">
+                                                Ảnh tư liệu: Hội nghị thành lập FISE tại Paris (Pháp) - Tháng 7/1946
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex items-center justify-between pt-3 border-t border-brand-gold/20 text-[11px] font-cinzel text-red-400 tracking-widest font-bold">
+                                        <div class="flex items-center gap-2">
+                                            <span class="w-2 h-2 rounded-full bg-red-600 animate-pulse"></span>
+                                            <span>DẤU ẤN LỊCH SỬ • FISE QUỐC TẾ</span>
+                                        </div>
+                                        <span class="text-[10px] text-stone-500 font-serif uppercase tracking-normal">Paris 1946</span>
+                                    </div>
+                                </div>
+
+                                <!-- CỘT VĂN BẢN TƯ LIỆU: MẶC ĐỊNH CHIẾM 100% CHIỀU RỘNG THẺ THOÁNG ĐÃNG -->
+                                <div class="monument-content-column flex flex-col justify-between h-full">
+                                    <div>
+                                        <div class="flex items-baseline justify-between mb-4 flex-wrap gap-2">
+                                            <span class="text-5xl sm:text-6xl lg:text-7xl font-cinzel font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-brand-gold to-amber-500 tracking-tight">1946</span>
+                                            <span class="text-xs uppercase tracking-widest text-amber-300 font-serif border border-amber-600/50 bg-amber-950/50 px-3 py-1 font-semibold">Tháng 7 • Paris, Pháp</span>
+                                        </div>
+
+                                        <h3 class="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold text-amber-50 mb-4 leading-tight">
+                                            Thành lập Liên hiệp FISE Quốc tế
+                                        </h3>
+
+                                        <p class="text-base sm:text-lg text-stone-200 leading-relaxed font-serif font-light mb-6">
+                                            Tại thủ đô Paris hoa lệ, tổ chức quốc tế của các nhà giáo tiến bộ mang tên <strong>FISE</strong> (Liên hiệp quốc tế các Công đoàn Giáo dục) chính thức ra đời. Sự kiện đánh dấu bước ngoặt đoàn kết các lực lượng giáo dục tiến bộ toàn cầu trong cuộc đấu tranh chống chủ nghĩa đế quốc, bảo vệ hòa bình và quyền lợi chính đáng của nhà giáo.
+                                        </p>
+
+                                        <blockquote class="pl-5 border-l-2 border-brand-gold text-base sm:text-lg text-amber-300 font-serif italic leading-relaxed mb-6 bg-amber-950/20 py-2.5 pr-4">
+                                            "Đặt viên gạch đầu tiên hình thành phong trào quốc tế bảo vệ vị thế và sứ mệnh thiêng liêng của người thầy."
+                                        </blockquote>
+                                    </div>
+
+                                    <div class="pt-4 border-t border-brand-gold/20 flex items-center justify-between text-xs sm:text-sm font-serif text-stone-400 flex-wrap gap-2">
+                                        <span class="text-brand-gold font-bold">● Ý NGHĨA THỜI ĐẠI:</span>
+                                        <span class="italic text-stone-300">Khởi nguồn cho ngày hội giáo giới tiến bộ thế giới</span>
+                                    </div>
+                                </div>
                             </div>
-
-                            <h3 class="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold text-amber-50 mb-4 leading-tight">
-                                Thành lập Liên hiệp FISE Quốc tế
-                            </h3>
-
-                            <p class="text-base sm:text-lg text-stone-300 leading-relaxed font-serif font-light mb-6">
-                                Tại thủ đô Paris hoa lệ, tổ chức quốc tế của các nhà giáo tiến bộ mang tên <strong>FISE</strong> (Liên hiệp quốc tế các Công đoàn Giáo dục) chính thức ra đời. Sự kiện đánh dấu bước ngoặt đoàn kết các lực lượng giáo dục tiến bộ toàn cầu trong cuộc đấu tranh chống chủ nghĩa đế quốc, bảo vệ hòa bình và quyền lợi chính đáng của nhà giáo.
-                            </p>
-
-                            <blockquote class="pl-5 border-l-2 border-brand-gold text-base sm:text-lg text-amber-300 font-serif italic leading-relaxed">
-                                "Đặt viên gạch đầu tiên hình thành phong trào quốc tế bảo vệ vị thế và sứ mệnh thiêng liêng của người thầy."
-                            </blockquote>
                         </div>
                     </div>
-                    <div class="hidden sm:block sm:w-1/2"></div>
                 </div>
 
-                <!-- MỐC 2: 1949 -->
-                <div class="timeline-node relative flex flex-col sm:flex-row items-start sm:items-center group">
-                    <div class="absolute left-4 sm:left-1/2 -translate-x-1/2 w-11 h-11 sm:w-13 sm:h-13 bg-[#18130e] border-2 border-brand-gold rotate-45 flex items-center justify-center z-20 shadow-xl shadow-brand-gold/30 group-hover:scale-125 transition-transform duration-300">
+                <!-- MỐC 2: 1949 (BÊN PHẢI PHÓNG NGANG SANG TRÁI) -->
+                <div class="timeline-node relative flex items-center group" data-side="right" data-index="1">
+                    <div class="milestone-marker-node absolute left-4 sm:left-1/2 -translate-x-1/2 w-11 h-11 sm:w-13 sm:h-13 bg-[#12100d] border-2 border-brand-gold rotate-45 flex items-center justify-center z-50 shadow-xl shadow-brand-gold/30">
                         <span class="-rotate-45 font-cinzel font-black text-brand-gold text-xs sm:text-sm">II</span>
                     </div>
 
-                    <div class="hidden sm:block sm:w-1/2"></div>
-                    <div class="ml-14 sm:ml-0 sm:w-1/2 sm:pl-14 w-[calc(100%-3.5rem)]">
-                        <div class="timeline-monument-tablet p-7 sm:p-11 relative">
+                    <div class="monument-wrapper ml-12 sm:ml-0">
+                        <div class="timeline-monument-tablet p-6 sm:p-9 lg:p-11 relative overflow-hidden">
                             <div class="monument-corner monument-tl"></div>
                             <div class="monument-corner monument-tr"></div>
                             <div class="monument-corner monument-bl"></div>
                             <div class="monument-corner monument-br"></div>
 
-                            <div class="flex items-baseline justify-between border-b border-brand-gold/25 pb-4 mb-5">
-                                <span class="text-4xl sm:text-5xl lg:text-6xl font-cinzel font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-brand-gold to-amber-500 tracking-tight">1949</span>
-                                <span class="text-xs uppercase tracking-widest text-amber-300/90 font-serif border border-amber-600/40 bg-amber-950/40 px-3 py-1 font-semibold">Warszawa, Ba Lan</span>
+                            <div class="monument-grid-layout">
+                                <!-- CỘT ẢNH TƯ LIỆU: MẶC ĐỊNH ẨN HOÀN TOÀN, CHỈ XUẤT HIỆN KHI EXPANDED (SAU 2S) -->
+                                <div class="monument-photo-dossier">
+                                    <div>
+                                        <div class="flex items-center gap-2 mb-3 text-[11px] font-cinzel text-brand-gold tracking-widest font-bold">
+                                            <i data-lucide="file-text" class="w-4 h-4 text-brand-gold"></i>
+                                            <span>NGUYÊN BẢN HIẾN CHƯƠNG</span>
+                                        </div>
+                                        <div class="border border-brand-gold/50 p-2 bg-[#0d0b09] shadow-2xl mb-3 group/img overflow-hidden">
+                                            <div class="aspect-[16/10] w-full overflow-hidden border border-brand-gold/30 bg-[#16120e] relative">
+                                                <img src="timeline_1949.jpg" alt="Ảnh tư liệu: Hội nghị Vacsava thông qua Hiến chương Nhà giáo" class="w-full h-full object-cover transition-transform duration-700 group-hover/img:scale-105" loading="lazy">
+                                                <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none"></div>
+                                            </div>
+                                            <div class="text-[11px] font-serif italic text-amber-200/90 text-center mt-2 px-1">
+                                                Ảnh tư liệu: Hội nghị Vacsava (Warszawa) thông qua Hiến chương các nhà giáo (1949)
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex items-center justify-between pt-3 border-t border-brand-gold/20 text-[11px] font-cinzel text-red-400 tracking-widest font-bold">
+                                        <div class="flex items-center gap-2">
+                                            <span class="w-2 h-2 rounded-full bg-red-600 animate-pulse"></span>
+                                            <span>CHUẨN MỰC QUỐC TẾ • 15 CHƯƠNG</span>
+                                        </div>
+                                        <span class="text-[10px] text-stone-500 font-serif uppercase tracking-normal">Warszawa 1949</span>
+                                    </div>
+                                </div>
+
+                                <!-- CỘT VĂN BẢN TƯ LIỆU: MẶC ĐỊNH CHIẾM 100% CHIỀU RỘNG THẺ THOÁNG ĐÃNG -->
+                                <div class="monument-content-column flex flex-col justify-between h-full">
+                                    <div>
+                                        <div class="flex items-baseline justify-between mb-4 flex-wrap gap-2">
+                                            <span class="text-5xl sm:text-6xl lg:text-7xl font-cinzel font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-brand-gold to-amber-500 tracking-tight">1949</span>
+                                            <span class="text-xs uppercase tracking-widest text-amber-300 font-serif border border-amber-600/50 bg-amber-950/50 px-3 py-1 font-semibold">Warszawa, Ba Lan</span>
+                                        </div>
+
+                                        <h3 class="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold text-amber-50 mb-4 leading-tight">
+                                            Thông qua Hiến Chương Các Nhà Giáo
+                                        </h3>
+
+                                        <p class="text-base sm:text-lg text-stone-200 leading-relaxed font-serif font-light mb-6">
+                                            Tại Hội nghị Vacsava (Warszawa), FISE đã soạn thảo và thông qua bản <strong>"Hiến chương các nhà giáo"</strong> gồm 15 chương. Văn kiện xác lập chuẩn mực quốc tế về bảo đảm quyền lợi vật chất, tinh thần và đề cao vị thế xã hội của người làm nghề dạy học.
+                                        </p>
+
+                                        <blockquote class="pl-5 border-l-2 border-brand-gold text-base sm:text-lg text-amber-300 font-serif italic leading-relaxed mb-6 bg-amber-950/20 py-2.5 pr-4">
+                                            "Bản tuyên ngôn đạo đức và pháp lý quốc tế đầu tiên bảo vệ phẩm giá và quyền tự do của người thầy."
+                                        </blockquote>
+                                    </div>
+
+                                    <div class="pt-4 border-t border-brand-gold/20 flex items-center justify-between text-xs sm:text-sm font-serif text-stone-400 flex-wrap gap-2">
+                                        <span class="text-brand-gold font-bold">● VĂN KIỆN NỀN TẢNG:</span>
+                                        <span class="italic text-stone-300">Cương lĩnh bảo vệ nhà giáo toàn cầu</span>
+                                    </div>
+                                </div>
                             </div>
-
-                            <h3 class="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold text-amber-50 mb-4 leading-tight">
-                                Thông qua Hiến Chương Các Nhà Giáo
-                            </h3>
-
-                            <p class="text-base sm:text-lg text-stone-300 leading-relaxed font-serif font-light mb-6">
-                                Tại Hội nghị Vacsava (Warszawa), FISE đã soạn thảo và thông qua bản <strong>"Hiến chương các nhà giáo"</strong> gồm 15 chương. Văn kiện xác lập chuẩn mực quốc tế về bảo đảm quyền lợi vật chất, tinh thần và đề cao vị thế xã hội của người làm nghề dạy học.
-                            </p>
-
-                            <blockquote class="pl-5 border-l-2 border-brand-gold text-base sm:text-lg text-amber-300 font-serif italic leading-relaxed">
-                                "Bản tuyên ngôn đạo đức và pháp lý quốc tế đầu tiên bảo vệ phẩm giá và quyền tự do của người thầy."
-                            </blockquote>
                         </div>
                     </div>
                 </div>
 
-                <!-- MỐC 3: 1953 -->
-                <div class="timeline-node relative flex flex-col sm:flex-row items-start sm:items-center group">
-                    <div class="absolute left-4 sm:left-1/2 -translate-x-1/2 w-11 h-11 sm:w-13 sm:h-13 bg-[#18130e] border-2 border-brand-gold rotate-45 flex items-center justify-center z-20 shadow-xl shadow-brand-gold/30 group-hover:scale-125 transition-transform duration-300">
+                <!-- MỐC 3: 1953 (BÊN TRÁI PHÓNG NGANG SANG PHẢI) -->
+                <div class="timeline-node relative flex items-center group" data-side="left" data-index="2">
+                    <div class="milestone-marker-node absolute left-4 sm:left-1/2 -translate-x-1/2 w-11 h-11 sm:w-13 sm:h-13 bg-[#12100d] border-2 border-brand-gold rotate-45 flex items-center justify-center z-50 shadow-xl shadow-brand-gold/30">
                         <span class="-rotate-45 font-cinzel font-black text-brand-gold text-xs sm:text-sm">III</span>
                     </div>
 
-                    <div class="ml-14 sm:ml-0 sm:w-1/2 sm:pr-14 w-[calc(100%-3.5rem)]">
-                        <div class="timeline-monument-tablet p-7 sm:p-11 relative">
+                    <div class="monument-wrapper ml-12 sm:ml-0">
+                        <div class="timeline-monument-tablet p-6 sm:p-9 lg:p-11 relative overflow-hidden">
                             <div class="monument-corner monument-tl"></div>
                             <div class="monument-corner monument-tr"></div>
                             <div class="monument-corner monument-bl"></div>
                             <div class="monument-corner monument-br"></div>
 
-                            <div class="flex items-baseline justify-between border-b border-brand-gold/25 pb-4 mb-5">
-                                <span class="text-4xl sm:text-5xl lg:text-6xl font-cinzel font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-brand-gold to-amber-500 tracking-tight">1953</span>
-                                <span class="text-xs uppercase tracking-widest text-amber-300/90 font-serif border border-amber-600/40 bg-amber-950/40 px-3 py-1 font-semibold">Tháng 7 • Việt Nam & FISE</span>
+                            <div class="monument-grid-layout">
+                                <!-- CỘT ẢNH TƯ LIỆU: MẶC ĐỊNH ẨN HOÀN TOÀN, CHỈ XUẤT HIỆN KHI EXPANDED (SAU 2S) -->
+                                <div class="monument-photo-dossier">
+                                    <div>
+                                        <div class="flex items-center gap-2 mb-3 text-[11px] font-cinzel text-brand-gold tracking-widest font-bold">
+                                            <i data-lucide="globe" class="w-4 h-4 text-brand-gold"></i>
+                                            <span>KẾT NẠP QUỐC TẾ</span>
+                                        </div>
+                                        <div class="border border-brand-gold/50 p-2 bg-[#0d0b09] shadow-2xl mb-3 group/img overflow-hidden">
+                                            <div class="aspect-[16/10] w-full overflow-hidden border border-brand-gold/30 bg-[#16120e] relative">
+                                                <img src="timeline_1953.jpg" alt="Ảnh tư liệu: Đại biểu Công đoàn Giáo dục VN gia nhập FISE" class="w-full h-full object-cover transition-transform duration-700 group-hover/img:scale-105" loading="lazy">
+                                                <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none"></div>
+                                            </div>
+                                            <div class="text-[11px] font-serif italic text-amber-200/90 text-center mt-2 px-1">
+                                                Ảnh tư liệu: Đoàn đại biểu giáo giới VN thời kháng chiến gia nhập FISE (1953)
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex items-center justify-between pt-3 border-t border-brand-gold/20 text-[11px] font-cinzel text-red-400 tracking-widest font-bold">
+                                        <div class="flex items-center gap-2">
+                                            <span class="w-2 h-2 rounded-full bg-red-600 animate-pulse"></span>
+                                            <span>HỘI NHẬP GIÁO DỤC • KHÁNG CHIẾN KIẾN QUỐC</span>
+                                        </div>
+                                        <span class="text-[10px] text-stone-500 font-serif uppercase tracking-normal">Việt Nam 1953</span>
+                                    </div>
+                                </div>
+
+                                <!-- CỘT VĂN BẢN TƯ LIỆU: MẶC ĐỊNH CHIẾM 100% CHIỀU RỘNG THẺ THOÁNG ĐÃNG -->
+                                <div class="monument-content-column flex flex-col justify-between h-full">
+                                    <div>
+                                        <div class="flex items-baseline justify-between mb-4 flex-wrap gap-2">
+                                            <span class="text-5xl sm:text-6xl lg:text-7xl font-cinzel font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-brand-gold to-amber-500 tracking-tight">1953</span>
+                                            <span class="text-xs uppercase tracking-widest text-amber-300 font-serif border border-amber-600/50 bg-amber-950/50 px-3 py-1 font-semibold">Tháng 7 • Việt Nam & FISE</span>
+                                        </div>
+
+                                        <h3 class="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold text-amber-50 mb-4 leading-tight">
+                                            Giáo Dục Việt Nam Hội Nhập Quốc Tế
+                                        </h3>
+
+                                        <p class="text-base sm:text-lg text-stone-200 leading-relaxed font-serif font-light mb-6">
+                                            Giữa những năm tháng kháng chiến kiến quốc gian khổ, <strong>Công đoàn Giáo dục Việt Nam</strong> (thành lập năm 1951) chính thức được kết nạp làm thành viên của FISE. Sự kiện thể hiện tinh thần quốc tế vô sản sâu sắc và sự ủng hộ to lớn của bạn bè năm châu đối với nền giáo dục cách mạng Việt Nam.
+                                        </p>
+
+                                        <blockquote class="pl-5 border-l-2 border-brand-gold text-base sm:text-lg text-amber-300 font-serif italic leading-relaxed mb-6 bg-amber-950/20 py-2.5 pr-4">
+                                            "Khẳng định vị thế và tiếng nói của nền giáo dục cách mạng Việt Nam trên trường quốc tế."
+                                        </blockquote>
+                                    </div>
+
+                                    <div class="pt-4 border-t border-brand-gold/20 flex items-center justify-between text-xs sm:text-sm font-serif text-stone-400 flex-wrap gap-2">
+                                        <span class="text-brand-gold font-bold">● VỊ THẾ QUỐC TẾ:</span>
+                                        <span class="italic text-stone-300">Tiếng nói tự hào của nhà giáo cách mạng Việt Nam</span>
+                                    </div>
+                                </div>
                             </div>
-
-                            <h3 class="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold text-amber-50 mb-4 leading-tight">
-                                Giáo Dục Việt Nam Hội Nhập Quốc Tế
-                            </h3>
-
-                            <p class="text-base sm:text-lg text-stone-300 leading-relaxed font-serif font-light mb-6">
-                                Giữa những năm tháng kháng chiến kiến quốc gian khổ, <strong>Công đoàn Giáo dục Việt Nam</strong> (thành lập năm 1951) chính thức được kết nạp làm thành viên của FISE. Sự kiện thể hiện tinh thần quốc tế vô sản sâu sắc và sự ủng hộ to lớn của bạn bè năm châu đối với nền giáo dục cách mạng Việt Nam.
-                            </p>
-
-                            <blockquote class="pl-5 border-l-2 border-brand-gold text-base sm:text-lg text-amber-300 font-serif italic leading-relaxed">
-                                "Khẳng định vị thế và tiếng nói của nền giáo dục cách mạng Việt Nam trên trường quốc tế."
-                            </blockquote>
                         </div>
                     </div>
-                    <div class="hidden sm:block sm:w-1/2"></div>
                 </div>
 
-                <!-- MỐC 4: 1957 -->
-                <div class="timeline-node relative flex flex-col sm:flex-row items-start sm:items-center group">
-                    <div class="absolute left-4 sm:left-1/2 -translate-x-1/2 w-11 h-11 sm:w-13 sm:h-13 bg-[#18130e] border-2 border-brand-gold rotate-45 flex items-center justify-center z-20 shadow-xl shadow-brand-gold/30 group-hover:scale-125 transition-transform duration-300">
+                <!-- MỐC 4: 1957 (BÊN PHẢI PHÓNG NGANG SANG TRÁI) -->
+                <div class="timeline-node relative flex items-center group" data-side="right" data-index="3">
+                    <div class="milestone-marker-node absolute left-4 sm:left-1/2 -translate-x-1/2 w-11 h-11 sm:w-13 sm:h-13 bg-[#12100d] border-2 border-brand-gold rotate-45 flex items-center justify-center z-50 shadow-xl shadow-brand-gold/30">
                         <span class="-rotate-45 font-cinzel font-black text-brand-gold text-xs sm:text-sm">IV</span>
                     </div>
 
-                    <div class="hidden sm:block sm:w-1/2"></div>
-                    <div class="ml-14 sm:ml-0 sm:w-1/2 sm:pl-14 w-[calc(100%-3.5rem)]">
-                        <div class="timeline-monument-tablet p-7 sm:p-11 relative">
+                    <div class="monument-wrapper ml-12 sm:ml-0">
+                        <div class="timeline-monument-tablet p-6 sm:p-9 lg:p-11 relative overflow-hidden">
                             <div class="monument-corner monument-tl"></div>
                             <div class="monument-corner monument-tr"></div>
                             <div class="monument-corner monument-bl"></div>
                             <div class="monument-corner monument-br"></div>
 
-                            <div class="flex items-baseline justify-between border-b border-brand-gold/25 pb-4 mb-5">
-                                <span class="text-4xl sm:text-5xl lg:text-6xl font-cinzel font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-brand-gold to-amber-500 tracking-tight">1957</span>
-                                <span class="text-xs uppercase tracking-widest text-amber-300/90 font-serif border border-amber-600/40 bg-amber-950/40 px-3 py-1 font-semibold">26 - 30/08 • Ba Lan</span>
+                            <div class="monument-grid-layout">
+                                <!-- CỘT ẢNH TƯ LIỆU: MẶC ĐỊNH ẨN HOÀN TOÀN, CHỈ XUẤT HIỆN KHI EXPANDED (SAU 2S) -->
+                                <div class="monument-photo-dossier">
+                                    <div>
+                                        <div class="flex items-center gap-2 mb-3 text-[11px] font-cinzel text-brand-gold tracking-widest font-bold">
+                                            <i data-lucide="check-circle" class="w-4 h-4 text-brand-gold"></i>
+                                            <span>QUYẾT NGHỊ QUỐC TẾ</span>
+                                        </div>
+                                        <div class="border border-brand-gold/50 p-2 bg-[#0d0b09] shadow-2xl mb-3 group/img overflow-hidden">
+                                            <div class="aspect-[16/10] w-full overflow-hidden border border-brand-gold/30 bg-[#16120e] relative">
+                                                <img src="timeline_1957.jpg" alt="Ảnh tư liệu: Hội nghị FISE quyết định chọn ngày 20/11" class="w-full h-full object-cover transition-transform duration-700 group-hover/img:scale-105" loading="lazy">
+                                                <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none"></div>
+                                            </div>
+                                            <div class="text-[11px] font-serif italic text-amber-200/90 text-center mt-2 px-1">
+                                                Ảnh tư liệu: 57 quốc gia biểu quyết chọn ngày 20/11 làm Ngày Hiến chương Nhà giáo (1957)
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex items-center justify-between pt-3 border-t border-brand-gold/20 text-[11px] font-cinzel text-red-400 tracking-widest font-bold">
+                                        <div class="flex items-center gap-2">
+                                            <span class="w-2 h-2 rounded-full bg-red-600 animate-pulse"></span>
+                                            <span>BIỂU QUYẾT LỊCH SỬ • 57 QUỐC GIA</span>
+                                        </div>
+                                        <span class="text-[10px] text-stone-500 font-serif uppercase tracking-normal">Ba Lan 1957</span>
+                                    </div>
+                                </div>
+
+                                <!-- CỘT VĂN BẢN TƯ LIỆU: MẶC ĐỊNH CHIẾM 100% CHIỀU RỘNG THẺ THOÁNG ĐÃNG -->
+                                <div class="monument-content-column flex flex-col justify-between h-full">
+                                    <div>
+                                        <div class="flex items-baseline justify-between mb-4 flex-wrap gap-2">
+                                            <span class="text-5xl sm:text-6xl lg:text-7xl font-cinzel font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-brand-gold to-amber-500 tracking-tight">1957</span>
+                                            <span class="text-xs uppercase tracking-widest text-amber-300 font-serif border border-amber-600/50 bg-amber-950/50 px-3 py-1 font-semibold">26 - 30/08 • Ba Lan</span>
+                                        </div>
+
+                                        <h3 class="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold text-amber-50 mb-4 leading-tight">
+                                            Quyết Định Chọn Ngày 20/11 Lịch Sử
+                                        </h3>
+
+                                        <p class="text-base sm:text-lg text-stone-200 leading-relaxed font-serif font-light mb-6">
+                                            Hội nghị FISE với 57 quốc gia tham dự đã đồng thuận quyết định lấy ngày <strong>20 tháng 11</strong> hằng năm làm ngày <em>"Quốc tế Hiến chương các Nhà giáo"</em>, nhắc nhở toàn thể xã hội về nghĩa vụ tôn trọng, bảo vệ người thầy và chăm lo nâng cao chất lượng giáo dục.
+                                        </p>
+
+                                        <blockquote class="pl-5 border-l-2 border-brand-gold text-base sm:text-lg text-amber-300 font-serif italic leading-relaxed mb-6 bg-amber-950/20 py-2.5 pr-4">
+                                            "Ngày 20/11 chính thức trở thành biểu tượng chung tôn vinh sự nghiệp trồng người trên toàn thế giới."
+                                        </blockquote>
+                                    </div>
+
+                                    <div class="pt-4 border-t border-brand-gold/20 flex items-center justify-between text-xs sm:text-sm font-serif text-stone-400 flex-wrap gap-2">
+                                        <span class="text-brand-gold font-bold">● BIỂU TƯỢNG TOÀN CẦU:</span>
+                                        <span class="italic text-stone-300">Khai sinh ngày Hiến chương Nhà giáo</span>
+                                    </div>
+                                </div>
                             </div>
-
-                            <h3 class="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold text-amber-50 mb-4 leading-tight">
-                                Quyết Định Chọn Ngày 20/11 Lịch Sử
-                            </h3>
-
-                            <p class="text-base sm:text-lg text-stone-300 leading-relaxed font-serif font-light mb-6">
-                                Hội nghị FISE với 57 quốc gia tham dự đã đồng thuận quyết định lấy ngày <strong>20 tháng 11</strong> hằng năm làm ngày <em>"Quốc tế Hiến chương các Nhà giáo"</em>, nhắc nhở toàn thể xã hội về nghĩa vụ tôn trọng, bảo vệ người thầy và chăm lo nâng cao chất lượng giáo dục.
-                            </p>
-
-                            <blockquote class="pl-5 border-l-2 border-brand-gold text-base sm:text-lg text-amber-300 font-serif italic leading-relaxed">
-                                "Ngày 20/11 chính thức trở thành biểu tượng chung tôn vinh sự nghiệp trồng người trên toàn thế giới."
-                            </blockquote>
                         </div>
                     </div>
                 </div>
 
-                <!-- MỐC 5: 1958 -->
-                <div class="timeline-node relative flex flex-col sm:flex-row items-start sm:items-center group">
-                    <div class="absolute left-4 sm:left-1/2 -translate-x-1/2 w-11 h-11 sm:w-13 sm:h-13 bg-[#18130e] border-2 border-brand-gold rotate-45 flex items-center justify-center z-20 shadow-xl shadow-brand-gold/30 group-hover:scale-125 transition-transform duration-300">
+                <!-- MỐC 5: 1958 (BÊN TRÁI PHÓNG NGANG SANG PHẢI) -->
+                <div class="timeline-node relative flex items-center group" data-side="left" data-index="4">
+                    <div class="milestone-marker-node absolute left-4 sm:left-1/2 -translate-x-1/2 w-11 h-11 sm:w-13 sm:h-13 bg-[#12100d] border-2 border-brand-gold rotate-45 flex items-center justify-center z-50 shadow-xl shadow-brand-gold/30">
                         <span class="-rotate-45 font-cinzel font-black text-brand-gold text-xs sm:text-sm">V</span>
                     </div>
 
-                    <div class="ml-14 sm:ml-0 sm:w-1/2 sm:pr-14 w-[calc(100%-3.5rem)]">
-                        <div class="timeline-monument-tablet p-7 sm:p-11 relative">
+                    <div class="monument-wrapper ml-12 sm:ml-0">
+                        <div class="timeline-monument-tablet p-6 sm:p-9 lg:p-11 relative overflow-hidden">
                             <div class="monument-corner monument-tl"></div>
                             <div class="monument-corner monument-tr"></div>
                             <div class="monument-corner monument-bl"></div>
                             <div class="monument-corner monument-br"></div>
 
-                            <div class="flex items-baseline justify-between border-b border-brand-gold/25 pb-4 mb-5">
-                                <span class="text-4xl sm:text-5xl lg:text-6xl font-cinzel font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-brand-gold to-amber-500 tracking-tight">1958</span>
-                                <span class="text-xs uppercase tracking-widest text-amber-300/90 font-serif border border-amber-600/40 bg-amber-950/40 px-3 py-1 font-semibold">20/11/1958 • Việt Nam</span>
+                            <div class="monument-grid-layout">
+                                <!-- CỘT ẢNH TƯ LIỆU: MẶC ĐỊNH ẨN HOÀN TOÀN, CHỈ XUẤT HIỆN KHI EXPANDED (SAU 2S) -->
+                                <div class="monument-photo-dossier">
+                                    <div>
+                                        <div class="flex items-center gap-2 mb-3 text-[11px] font-cinzel text-brand-gold tracking-widest font-bold">
+                                            <i data-lucide="flame" class="w-4 h-4 text-brand-gold"></i>
+                                            <span>HÀO KHÍ THỜI CHIẾN</span>
+                                        </div>
+                                        <div class="border border-brand-gold/50 p-2 bg-[#0d0b09] shadow-2xl mb-3 group/img overflow-hidden">
+                                            <div class="aspect-[16/10] w-full overflow-hidden border border-brand-gold/30 bg-[#16120e] relative">
+                                                <img src="timeline_1958.jpg" alt="Ảnh tư liệu: Lễ kỷ niệm 20/11 đầu tiên tại miền Bắc" class="w-full h-full object-cover transition-transform duration-700 group-hover/img:scale-105" loading="lazy">
+                                                <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none"></div>
+                                            </div>
+                                            <div class="text-[11px] font-serif italic text-amber-200/90 text-center mt-2 px-1">
+                                                Ảnh tư liệu: Lớp học miền Bắc chào mừng Ngày 20/11 đầu tiên tại Việt Nam (20/11/1958)
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex items-center justify-between pt-3 border-t border-brand-gold/20 text-[11px] font-cinzel text-red-400 tracking-widest font-bold">
+                                        <div class="flex items-center gap-2">
+                                            <span class="w-2 h-2 rounded-full bg-red-600 animate-pulse"></span>
+                                            <span>LỄ KỶ NIỆM ĐẦU TIÊN • Ý CHÍ KIÊN CƯỜNG</span>
+                                        </div>
+                                        <span class="text-[10px] text-stone-500 font-serif uppercase tracking-normal">Việt Nam 1958</span>
+                                    </div>
+                                </div>
+
+                                <!-- CỘT VĂN BẢN TƯ LIỆU: MẶC ĐỊNH CHIẾM 100% CHIỀU RỘNG THẺ THOÁNG ĐÃNG -->
+                                <div class="monument-content-column flex flex-col justify-between h-full">
+                                    <div>
+                                        <div class="flex items-baseline justify-between mb-4 flex-wrap gap-2">
+                                            <span class="text-5xl sm:text-6xl lg:text-7xl font-cinzel font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-brand-gold to-amber-500 tracking-tight">1958</span>
+                                            <span class="text-xs uppercase tracking-widest text-amber-300 font-serif border border-amber-600/50 bg-amber-950/50 px-3 py-1 font-semibold">20/11/1958 • Việt Nam</span>
+                                        </div>
+
+                                        <h3 class="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold text-amber-50 mb-4 leading-tight">
+                                            Lễ Kỷ Niệm 20/11 Đầu Tiên Tại Việt Nam
+                                        </h3>
+
+                                        <p class="text-base sm:text-lg text-stone-200 leading-relaxed font-serif font-light mb-6">
+                                            Ngày Quốc tế Hiến chương các Nhà giáo lần đầu tiên được tổ chức trang trọng trên toàn miền Bắc, sau đó lan tỏa mạnh mẽ vào các lớp học dưới hầm hào của vùng giải phóng miền Nam trong thời kỳ chống Mỹ cứu nước gian khổ.
+                                        </p>
+
+                                        <blockquote class="pl-5 border-l-2 border-brand-gold text-base sm:text-lg text-amber-300 font-serif italic leading-relaxed mb-6 bg-amber-950/20 py-2.5 pr-4">
+                                            "Ý chí hiếu học và lòng tri ân người thầy bền bỉ vượt lên trên mọi mưa bom bão đạn chiến tranh."
+                                        </blockquote>
+                                    </div>
+
+                                    <div class="pt-4 border-t border-brand-gold/20 flex items-center justify-between text-xs sm:text-sm font-serif text-stone-400 flex-wrap gap-2">
+                                        <span class="text-brand-gold font-bold">● SỨC SỐNG BẤT DIỆT:</span>
+                                        <span class="italic text-stone-300">Ngọn lửa tri thức sáng rực trong khói lửa</span>
+                                    </div>
+                                </div>
                             </div>
-
-                            <h3 class="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold text-amber-50 mb-4 leading-tight">
-                                Lễ Kỷ Niệm 20/11 Đầu Tiên Tại Việt Nam
-                            </h3>
-
-                            <p class="text-base sm:text-lg text-stone-300 leading-relaxed font-serif font-light mb-6">
-                                Ngày Quốc tế Hiến chương các Nhà giáo lần đầu tiên được tổ chức trang trọng trên toàn miền Bắc, sau đó lan tỏa mạnh mẽ vào các lớp học dưới hầm hào của vùng giải phóng miền Nam trong thời kỳ chống Mỹ cứu nước gian khổ.
-                            </p>
-
-                            <blockquote class="pl-5 border-l-2 border-brand-gold text-base sm:text-lg text-amber-300 font-serif italic leading-relaxed">
-                                "Ý chí hiếu học và lòng tri ân người thầy bền bỉ vượt lên trên mọi mưa bom bão đạn chiến tranh."
-                            </blockquote>
                         </div>
                     </div>
-                    <div class="hidden sm:block sm:w-1/2"></div>
                 </div>
 
-                <!-- MỐC 6: 1982 -->
-                <div class="timeline-node relative flex flex-col sm:flex-row items-start sm:items-center group">
-                    <div class="absolute left-4 sm:left-1/2 -translate-x-1/2 w-13 h-13 sm:w-16 sm:h-16 bg-gradient-to-tr from-brand-amber via-brand-gold to-yellow-200 rotate-45 flex items-center justify-center z-20 shadow-2xl shadow-brand-gold/50 group-hover:scale-125 transition-transform duration-300">
+                <!-- MỐC 6: 1982 (BÊN PHẢI PHÓNG NGANG SANG TRÁI - CAO TRÀO LỊCH SỬ) -->
+                <div class="timeline-node relative flex items-center group" data-side="right" data-index="5">
+                    <div class="milestone-marker-node absolute left-4 sm:left-1/2 -translate-x-1/2 w-13 h-13 sm:w-16 sm:h-16 bg-gradient-to-tr from-brand-amber via-brand-gold to-yellow-200 rotate-45 flex items-center justify-center z-50 shadow-2xl shadow-brand-gold/50 border-2 border-brand-gold">
                         <span class="-rotate-45 font-cinzel font-black text-black text-xs sm:text-base">VI</span>
                     </div>
 
-                    <div class="hidden sm:block sm:w-1/2"></div>
-                    <div class="ml-14 sm:ml-0 sm:w-1/2 sm:pl-14 w-[calc(100%-3.5rem)]">
-                        <div class="timeline-monument-tablet p-8 sm:p-12 relative border-2 border-brand-gold shadow-2xl shadow-brand-gold/20">
+                    <div class="monument-wrapper ml-12 sm:ml-0">
+                        <div class="timeline-monument-tablet p-6 sm:p-9 lg:p-11 relative overflow-hidden border-2 border-brand-gold shadow-2xl shadow-brand-gold/20">
                             <div class="monument-corner monument-tl"></div>
                             <div class="monument-corner monument-tr"></div>
                             <div class="monument-corner monument-bl"></div>
                             <div class="monument-corner monument-br"></div>
 
-                            <div class="flex items-baseline justify-between border-b border-brand-gold/40 pb-4 mb-5">
-                                <span class="text-5xl sm:text-6xl lg:text-7xl font-cinzel font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-brand-gold to-yellow-100 tracking-tight">1982</span>
-                                <span class="text-xs uppercase tracking-widest text-brand-gold font-serif border border-brand-gold/60 bg-amber-950/60 px-3.5 py-1.5 font-bold">Quyết định 167-HĐBT</span>
+                            <div class="monument-grid-layout">
+                                <!-- CỘT ẢNH TƯ LIỆU: MẶC ĐỊNH ẨN HOÀN TOÀN, CHỈ XUẤT HIỆN KHI EXPANDED (SAU 2S) -->
+                                <div class="monument-photo-dossier">
+                                    <div>
+                                        <div class="flex items-center gap-2 mb-3 text-xs font-cinzel text-brand-gold tracking-widest font-black">
+                                            <i data-lucide="award" class="w-4 h-4 text-brand-gold"></i>
+                                            <span>SẮC LỆNH LỊCH SỬ</span>
+                                        </div>
+                                        <div class="border-2 border-brand-gold/70 p-2 bg-[#0d0b09] shadow-2xl mb-3 group/img overflow-hidden">
+                                            <div class="aspect-[16/10] w-full overflow-hidden border border-brand-gold/40 bg-[#16120e] relative">
+                                                <img src="timeline_1982.jpg" alt="Ảnh tư liệu: Lễ mít-tinh Ngày Nhà giáo Việt Nam 20/11/1982" class="w-full h-full object-cover transition-transform duration-700 group-hover/img:scale-105" loading="lazy">
+                                                <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none"></div>
+                                            </div>
+                                            <div class="text-[11px] font-serif italic text-brand-gold text-center mt-2 px-1 font-bold">
+                                                Ảnh tư liệu: Đại lễ kỷ niệm Ngày Nhà giáo Việt Nam 20/11/1982 lần thứ nhất (Hà Nội)
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex items-center justify-between pt-3 border-t border-brand-gold/30 text-xs font-cinzel text-brand-gold tracking-widest font-black">
+                                        <div class="flex items-center gap-2">
+                                            <span class="w-2.5 h-2.5 rounded-full bg-brand-gold animate-ping"></span>
+                                            <span>QUỐC SÁCH HÀNG ĐẦU • TÔN SƯ TRỌNG ĐẠO</span>
+                                        </div>
+                                        <span class="text-[10px] text-amber-300/80 font-serif uppercase tracking-normal">Hà Nội 1982</span>
+                                    </div>
+                                </div>
+
+                                <!-- CỘT VĂN BẢN TƯ LIỆU: MẶC ĐỊNH CHIẾM 100% CHIỀU RỘNG THẺ THOÁNG ĐÃNG -->
+                                <div class="monument-content-column flex flex-col justify-between h-full">
+                                    <div>
+                                        <div class="flex items-baseline justify-between mb-4 flex-wrap gap-2">
+                                            <span class="text-6xl sm:text-7xl lg:text-8xl font-cinzel font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-brand-gold to-yellow-100 tracking-tight">1982</span>
+                                            <span class="text-xs uppercase tracking-widest text-brand-gold font-serif border border-brand-gold/60 bg-amber-950/60 px-3.5 py-1.5 font-bold">Quyết định 167-HĐBT</span>
+                                        </div>
+
+                                        <h3 class="font-serif text-3xl sm:text-4xl lg:text-5xl font-extrabold text-amber-50 mb-4 leading-tight">
+                                            Khai Sinh Ngày Nhà Giáo Việt Nam
+                                        </h3>
+
+                                        <p class="text-base sm:text-lg text-stone-200 leading-relaxed font-serif font-light mb-6">
+                                            Ngày 28/09/1982, Hội đồng Bộ trưởng (nay là Chính phủ) ban hành <strong>Quyết định 167-HĐBT</strong> chính thức lấy ngày <strong>20 tháng 11</strong> hằng năm là <strong>"Ngày Nhà giáo Việt Nam"</strong>. Kể từ đó, ngày 20/11 đã trở thành ngày hội truyền thống vẻ vang nhằm phát huy đạo lý Tôn sư Trọng đạo của toàn thể dân tộc.
+                                        </p>
+
+                                        <blockquote class="pl-5 border-l-4 border-brand-gold text-base sm:text-lg lg:text-xl text-brand-gold italic font-serif font-medium mb-6 bg-amber-950/30 py-3 pr-4">
+                                            "Mốc son thời đại khắc sâu truyền thống 'Uống nước nhớ nguồn', khẳng định giáo dục là quốc sách hàng đầu dựng xây đất nước."
+                                        </blockquote>
+                                    </div>
+
+                                    <div class="pt-4 border-t border-brand-gold/30 flex items-center justify-between text-xs sm:text-sm font-serif text-amber-200 flex-wrap gap-2">
+                                        <span class="text-brand-gold font-bold">● MỐC SON THỜI ĐẠI:</span>
+                                        <span class="italic font-bold text-amber-100">Ngày hội tri ân của toàn thể nhân dân Việt Nam</span>
+                                    </div>
+                                </div>
                             </div>
-
-                            <h3 class="font-serif text-3xl sm:text-4xl lg:text-5xl font-extrabold text-amber-50 mb-4 leading-tight">
-                                Khai Sinh Ngày Nhà Giáo Việt Nam
-                            </h3>
-
-                            <p class="text-base sm:text-lg text-stone-300 leading-relaxed font-serif font-light mb-6">
-                                Ngày 28/09/1982, Hội đồng Bộ trưởng (nay là Chính phủ) ban hành <strong>Quyết định 167-HĐBT</strong> chính thức lấy ngày <strong>20 tháng 11</strong> hằng năm là <strong>"Ngày Nhà giáo Việt Nam"</strong>. Kể từ đó, ngày 20/11 đã trở thành ngày hội truyền thống vẻ vang nhằm phát huy đạo lý Tôn sư Trọng đạo của toàn thể dân tộc.
-                            </p>
-
-                            <blockquote class="pl-5 border-l-4 border-brand-gold text-base sm:text-lg lg:text-xl text-brand-gold italic font-serif font-medium">
-                                "Mốc son thời đại khắc sâu truyền thống 'Uống nước nhớ nguồn', khẳng định giáo dục là quốc sách hàng đầu dựng xây đất nước."
-                            </blockquote>
                         </div>
                     </div>
                 </div>
@@ -532,9 +1055,19 @@
             </p>
         </div>
 
-        <div class="stage-3d-viewport w-full flex justify-center items-center">
+        <div class="stage-3d-viewport w-full flex flex-col justify-center items-center">
             
-            <div id="cinema-newspaper" class="newspaper-fullscreen-book relative w-full rounded-sm min-h-[780px] sm:min-h-[860px] lg:min-h-[920px] opacity-0" style="transform: perspective(3200px) rotateX(15deg) translateY(60px) scale(0.92);">
+            <!-- THANH ĐIỀU HƯỚNG TRANG BÁO TRÊN ĐIỆN THOẠI & TABLET (Ẩn trên desktop) -->
+            <div class="lg:hidden w-full max-w-xl mx-auto mb-5 px-3">
+                <div class="flex items-center justify-between bg-[#14110e] p-1.5 border border-brand-gold/40 rounded-xl shadow-2xl gap-1.5">
+                    <button type="button" class="news-mobile-tab flex-1 py-2 px-1 text-center font-serif text-xs font-bold rounded-lg transition-all bg-brand-gold text-stone-950 shadow" data-tab="1">Trang 1</button>
+                    <button type="button" class="news-mobile-tab flex-1 py-2 px-1 text-center font-serif text-xs font-bold rounded-lg transition-all text-amber-200/90 hover:text-white" data-tab="2">Trang 2</button>
+                    <button type="button" class="news-mobile-tab flex-1 py-2 px-1 text-center font-serif text-xs font-bold rounded-lg transition-all text-amber-200/90 hover:text-white" data-tab="3">Trang 3 (Thơ)</button>
+                    <button type="button" class="news-mobile-tab flex-1 py-2 px-1 text-center font-serif text-xs font-bold rounded-lg transition-all text-amber-200/90 hover:text-white" data-tab="4">Trang 4</button>
+                </div>
+            </div>
+
+            <div id="cinema-newspaper" class="newspaper-fullscreen-book relative w-full rounded-sm min-h-0 lg:min-h-[920px] opacity-0" style="transform: perspective(3200px) rotateX(15deg) translateY(60px) scale(0.92);">
                 
                 <div class="spine-center-crease hidden lg:block"></div>
 
@@ -542,7 +1075,7 @@
                 <div class="w-full h-full flex flex-col lg:flex-row">
                     
                     <!-- NỬA BÊN TRÁI CỐ ĐỊNH: TRANG 1 (TRANG NHẤT BÁO TRI ÂN) -->
-                    <div class="w-full lg:w-1/2 news-paper-sheet p-6 sm:p-9 lg:p-12 flex flex-col justify-between border-b lg:border-b-0 lg:border-r border-[#1c1815]/30 relative">
+                    <div id="news-page-1" class="news-mobile-page active-mobile-page w-full lg:w-1/2 news-paper-sheet p-6 sm:p-9 lg:p-12 flex flex-col justify-between border-b lg:border-b-0 lg:border-r border-[#1c1815]/30 relative">
                         <div>
                             <div class="border-b-4 border-[#1c1815] pb-3 mb-4">
                                 <div class="flex items-center justify-between text-xs sm:text-sm font-serif italic text-gray-800 border-b border-[#1c1815]/30 pb-1 mb-2">
@@ -553,7 +1086,7 @@
                                     BÁO TRI ÂN
                                 </h1>
                                 <div class="text-center text-sm font-script text-news-red font-bold mt-1">
-                                    Tiếng lòng học trò kính dâng người đưa đò
+                                    Tiếng lòng bỡ ngỡ tuổi 15 gửi Thầy Cô mến yêu
                                 </div>
                                 <div class="rule-double mt-3"></div>
                             </div>
@@ -563,83 +1096,81 @@
                                     CHÀO MỪNG NGÀY NHÀ GIÁO VIỆT NAM 20-11:
                                 </h2>
                                 <h3 class="font-serif text-base sm:text-xl font-bold text-[#1c1815] uppercase mt-1">
-                                    TRỌN VẸN TẤM LÒNG TRI ÂN THẦY CÔ
+                                    TRỌN VẸN TẤM LÒNG TRI ÂN TỪ CHI ĐOÀN 10I
                                 </h3>
                             </div>
 
                             <div class="text-sm sm:text-base lg:text-[17px] text-gray-900 font-serif leading-relaxed text-justify mb-4">
                                 <p class="mb-3">
-                                    <span class="news-drop-cap">C</span>ó một nghề bụi phấn bám đầy tay, người ta bảo là nghề trong sạch nhất. Có một nghề không trồng cây vào đất, nhưng lại nở cho đời muôn vạn đóa hoa thơm. Đó chính là nghề dạy học – nghề chở đạo, ươm mầm tri thức và nâng đỡ những tâm hồn non trẻ bước vào đời.
+                                    <span class="news-drop-cap">M</span>ới ngày nào chúng em còn hồi hộp cầm giấy báo trúng tuyển bước qua cánh cổng Chuyên Quang Trung, ngước nhìn dãy hành lang rợp bóng cây với bao bỡ ngỡ xen lẫn âu lo. Vài tháng đầu năm lớp 10, tụi em đứa nào cũng từng "choáng ngợp" trước những tập chuyên đề dày cộm, những công thức mở rộng hay bài tập hóc búa. Đã có những buổi chiều ngồi lại lớp nhìn nhau thở dài vì sợ mình chưa đủ giỏi.
                                 </p>
                                 <p>
-                                    Năm tháng trôi qua như bóng câu qua cửa sổ, nhưng bến đỗ bình yên của mái trường xưa vẫn luôn vẹn nguyên trong ký ức. Từng lời giảng trầm ấm giữa những buổi chiều mưa, từng nét chữ nghiêng nắn nót... tất cả đã trở thành hành trang vô giá theo bước chân chúng con.
+                                    Nhưng chính ánh mắt kiên nhẫn của thầy cô sau mỗi tiết học, lời động viên chân tình "cứ bình tĩnh suy nghĩ lại xem nào" và nụ cười ấm áp mỗi khi cả lớp vỡ òa hiểu bài... đã giúp lũ học trò lớp 10 tụi em nhận ra trường Chuyên không chỉ có áp lực, mà còn là một gia đình ấm áp lạ thường. Mùa 20/11 đầu tiên dưới mái trường cấp 3, tập thể 10I xin gói trọn tất cả lòng biết ơn mộc mạc và chân thành nhất kính dâng quý thầy cô!
                                 </p>
                             </div>
 
-                            <div class="news-photo-frame p-3 text-center my-3">
-                                <div class="aspect-[16/9] w-full border border-[#1c1815] bg-[#dfd3b9] flex items-center justify-center text-xs sm:text-sm font-serif text-[#1c1815] font-bold">
-                                    [Khung ảnh Tập thể lớp chụp cùng Thầy Cô]
+                            <div class="news-photo-frame p-3 text-center my-4 border-2 border-[#1c1815] bg-[#f5eedb] shadow-md">
+                                <div class="w-full overflow-hidden border border-[#1c1815] bg-stone-900/5">
+                                    <img src="2aOboRCo1f5GMW5dygoVtEOLQZ135rcVGMhN5HM0.jpg" alt="Tập thể Hội đồng Sư phạm Trường THPT Chuyên Quang Trung" class="w-full h-auto object-contain max-h-[380px] mx-auto transition-transform duration-500 hover:scale-[1.02]" loading="lazy">
                                 </div>
-                                <div class="text-xs font-serif italic text-gray-700 mt-1">Ảnh: Khoảnh khắc thầy trò bên bục giảng thân thương</div>
+                                <div class="text-xs sm:text-sm font-serif italic text-gray-900 mt-2 font-bold">Ảnh tư liệu: Tập thể Hội đồng Sư phạm Trường THPT Chuyên Quang Trung nhân Lễ kỷ niệm 20 năm thành lập trường (2004 - 2024)</div>
                             </div>
                         </div>
 
                         <div class="pt-3 border-t border-[#1c1815]/20 flex justify-between items-center text-xs sm:text-sm font-serif italic text-gray-800">
                             <span>Trang 1 • Trang Nhất Báo In</span>
-                            <span>Phát hành: Tập thể Chi đoàn • Lưu hành nội bộ</span>
+                            <span>Phát hành: Chi đoàn 10I • Trường THPT Chuyên Quang Trung</span>
                         </div>
                     </div>
 
-                    <!-- NỬA BÊN PHẢI CỐ ĐỊNH: TRANG 4 (TRANG CUỐI & RADIO PODCAST) -->
-                    <div class="w-full lg:w-1/2 news-paper-sheet p-6 sm:p-9 lg:p-12 flex flex-col justify-between relative">
+                    <!-- NỬA BÊN PHẢI CỐ ĐỊNH: TRANG 4 (TRANG CUỐI & BỨC TÂM THƯ TRI ÂN) -->
+                    <div id="news-page-4" class="news-mobile-page w-full lg:w-1/2 news-paper-sheet p-6 sm:p-9 lg:p-12 flex flex-col justify-between relative">
                         <div>
                             <div class="flex items-center justify-between border-b-2 border-[#1c1815] pb-2 mb-4">
-                                <span class="text-xs sm:text-sm font-sans font-black uppercase text-news-red tracking-wider">CHUYÊN TRANG ĐA PHƯƠNG TIỆN MULTIMEDIA</span>
+                                <span class="text-xs sm:text-sm font-sans font-black uppercase text-news-red tracking-wider">CHUYÊN TRANG TÂM THƯ TRI ÂN & LƯU BÚT TRUYỀN THỐNG</span>
                                 <span class="text-xs sm:text-sm font-serif font-bold text-gray-700">TRANG 4 (TRANG CUỐI)</span>
                             </div>
 
-                            <h4 class="font-serif text-2xl sm:text-3xl font-bold text-[#1c1815] mb-4 leading-tight">
-                                Podcast Radio: Lời Tri Ân Gửi Người Lái Đò
+                            <h4 class="font-serif text-2xl sm:text-3xl font-bold text-[#1c1815] mb-3 leading-tight">
+                                Tự Hào Truyền Thống: Nối Dài Khát Vọng Tri Thức
                             </h4>
 
-                            <div class="border-2 border-[#1c1815] p-5 bg-[#ede2c8] shadow-sm mb-5">
-                                <div class="flex items-center justify-between border-b border-[#1c1815]/30 pb-2 mb-3">
+                            <!-- Ảnh thành tích Olympic quốc tế to rõ ràng -->
+                            <div class="news-photo-frame p-3 text-center mb-4 border-2 border-[#1c1815] bg-[#f5eedb] shadow-md">
+                                <div class="w-full overflow-hidden border border-[#1c1815] bg-stone-900/5">
+                                    <img src="2aOboRCoBzLFeIy7P9qjHNhGNpAuPkNabrxq8yi8.jpg" alt="Chào đón Thầy và Trò đạt Huy chương Đồng Olympic Hóa học Quốc tế" class="w-full h-auto object-contain max-h-[300px] mx-auto transition-transform duration-500 hover:scale-[1.02]" loading="lazy">
+                                </div>
+                                <div class="text-xs sm:text-sm font-serif italic text-gray-900 mt-2 font-bold text-news-red">
+                                    Dấu ấn rạng danh: Đón Thầy Lữ Văn Tập và anh Nguyễn Phúc Lâm đạt Huy chương Đồng Olympic Quốc tế - Tấm gương sáng cho đàn em 10I noi theo
+                                </div>
+                            </div>
+
+                            <!-- Hộp thư tri ân / Bức tâm thư người thầy -->
+                            <div class="border-2 border-[#1c1815] p-4 bg-[#ede2c8] shadow-sm mb-4">
+                                <div class="flex items-center justify-between border-b border-[#1c1815]/30 pb-2 mb-2">
                                     <div class="flex items-center gap-2">
-                                        <div class="w-3.5 h-3.5 rounded-full bg-news-red animate-pulse"></div>
-                                        <span class="text-xs sm:text-sm font-sans font-bold uppercase tracking-wider text-news-red">RADIO CHI ĐOÀN</span>
+                                        <i data-lucide="mail-heart" class="w-4 h-4 text-news-red"></i>
+                                        <span class="text-xs sm:text-sm font-sans font-bold uppercase tracking-wider text-news-red">HỘP THƯ TRI ÂN: LỜI GỬI THẦY CÔ TỪ 10I</span>
                                     </div>
-                                    <span class="text-xs font-mono text-gray-700">PHÁT THANH 20/11</span>
+                                    <span class="text-xs font-mono text-gray-700">SỐ ĐẶC BIỆT 20/11</span>
                                 </div>
 
-                                <p class="text-xs sm:text-sm lg:text-base font-serif text-gray-800 leading-relaxed mb-4">
-                                    Bản tin phát thanh đặc biệt do Chi đoàn tự thu âm lời tri ân gửi tặng Quý Thầy Cô.
+                                <p class="text-xs sm:text-sm lg:text-[15px] font-serif text-gray-900 leading-relaxed italic mb-3 text-justify">
+                                    "Kính gửi Thầy Cô của chúng em!<br>
+                                    Lớp 10 tụi em mới vào trường chưa được bao lâu, đôi khi còn ngơ ngác, thỉnh thoảng quên vở bài tập hay lơ đãng nhìn ra tán phượng ngoài sân. Có những buổi kiểm tra xong cả lớp mặt buồn thiu, thầy cô nghiêm khắc nhắc nhở nhưng giờ ra chơi lại ân cần hỏi: 'Bài khó chỗ nào, vào đây cô chỉ lại cho'. Ba năm cấp ba của tụi em mới chỉ bắt đầu, nhưng có thầy cô ở bên, chúng em tin mình sẽ trưởng thành và vững vàng hơn mỗi ngày. Cảm ơn thầy cô vì đã luôn bao dung cho những vụng dại của lứa tuổi 15 chúng em!"
                                 </p>
 
-                                <div class="p-3.5 border border-[#1c1815] bg-[#f5eedb] flex items-center justify-between gap-4">
-                                    <button id="radio-play-btn" onclick="toggleRadioPlay(event)" class="w-12 h-12 rounded-full bg-[#1c1815] text-white flex items-center justify-center hover:bg-news-red transition-colors shrink-0 cursor-pointer shadow-md">
-                                        <i data-lucide="play" id="radio-play-icon" class="w-5 h-5 ml-0.5"></i>
-                                    </button>
-                                    <div class="flex-1">
-                                        <div class="text-sm sm:text-base font-bold text-[#1c1815]">Tập 01: Lời Chưa Kịp Nói</div>
-                                        <div class="text-xs text-gray-600 font-serif">Thời lượng: 03:45 • Lớp tự thu âm</div>
-                                    </div>
-                                    <div class="text-xs sm:text-sm font-mono text-news-red font-bold" id="radio-timer-display">00:00</div>
+                                <div class="pt-2 border-t border-[#1c1815]/20 flex items-center justify-between text-xs font-serif text-gray-800">
+                                    <span class="font-bold">Đại diện tập thể Chi đoàn 10I</span>
+                                    <span class="text-news-red font-script text-xl font-bold">Kính dâng Quý Thầy Cô</span>
                                 </div>
                             </div>
 
-                            <div class="p-4 border border-[#1c1815] bg-white/40 mb-4">
-                                <div class="font-serif text-sm text-gray-900 leading-relaxed italic text-center">
-                                    "Kính chúc Quý thầy cô luôn dồi dào sức khỏe, giữ mãi ngọn lửa nhiệt huyết trên con đường ươm mầm tri thức."
+                            <div class="p-3 border border-[#1c1815] bg-white/50 mb-3 text-center">
+                                <div class="font-serif text-xs sm:text-sm text-gray-900 leading-relaxed italic">
+                                    "Nhân ngày 20/11, tập thể 10I kính chúc Quý Thầy Cô luôn nhiều sức khỏe, ngày nào lên lớp cũng thấy vui, và mãi giữ nụ cười thật tươi bên đàn em 10I chúng em!"
                                 </div>
-                                <div class="text-center font-script text-3xl text-news-red mt-2 font-bold">Tập thể Chi đoàn kính tặng</div>
-                            </div>
-
-                            <div class="border border-[#1c1815] p-3 text-center bg-[#f7f2e4]">
-                                <div class="w-24 h-24 mx-auto border border-[#1c1815] bg-[#ede3cc] flex flex-col items-center justify-center p-1 mb-1">
-                                    <i data-lucide="qr-code" class="w-8 h-8 text-[#1c1815] mb-0.5"></i>
-                                    <span class="text-[9px] font-bold">[MÃ QR POSTER]</span>
-                                </div>
-                                <div class="text-xs font-serif font-bold text-[#1c1815]">Quét Mã Truy Cập Trang Web Số</div>
+                                <div class="text-center font-script text-2xl text-news-red mt-1 font-bold">Tập thể Chi đoàn 10I kính tặng</div>
                             </div>
                         </div>
 
@@ -652,10 +1183,10 @@
                 </div>
 
                 <!-- CÁNH LẬT 3D CHÂN THỰC 180 ĐỘ (CHUYỂN ĐỔI GIỮA SPREAD 1 VÀ SPREAD 2) -->
-                <div id="flipping-leaf-3d" class="flip-leaf-3d hidden lg:block">
+                <div id="flipping-leaf-3d" class="flip-leaf-3d">
                     
                     <!-- MẶT TRƯỚC CỦA CÁNH LẬT (CHƯA LẬT Ở BÊN PHẢI): TRANG 2 (PHỎNG VẤN THẦY CÔ) -->
-                    <div class="leaf-face news-paper-sheet p-6 sm:p-9 lg:p-12 flex flex-col justify-between">
+                    <div id="news-page-2" class="news-mobile-page leaf-face news-paper-sheet p-6 sm:p-9 lg:p-12 flex flex-col justify-between">
                         <div>
                             <div class="flex items-center justify-between border-b-2 border-[#1c1815] pb-2 mb-4">
                                 <span class="text-xs sm:text-sm font-sans font-black uppercase text-news-red tracking-wider">CHUYÊN TRANG ĐỐI THOẠI ĐẶC BIỆT</span>
@@ -669,51 +1200,51 @@
                             <div class="space-y-5 text-sm sm:text-base lg:text-[17px] font-serif leading-relaxed text-gray-900">
                                 <div class="p-4 border-l-4 border-news-red bg-[#eee4cb]">
                                     <div class="font-bold text-news-red mb-1 font-sans text-xs sm:text-sm">
-                                        PHÓNG VIÊN CHI ĐOÀN HỎI:
+                                        PHÓNG VIÊN CHI ĐOÀN 10I HỎI:
                                     </div>
                                     <p class="italic mb-2 font-serif">
-                                        "Thưa Thầy/Cô, khoảnh khắc nào trong suốt những năm tháng đứng trên bục giảng khiến Thầy/Cô nhớ và xúc động nhất?"
+                                        "Thưa Thầy Cô, đối với lứa học trò lớp 10 tụi em mới chập chững vào trường Chuyên còn nhiều bỡ ngỡ, điều gì ở tụi em khiến Thầy Cô ấn tượng hoặc 'đau đầu' nhất ạ?"
                                     </p>
                                     <div class="font-bold text-[#1c1815] mb-1 font-sans text-xs sm:text-sm">
                                         THẦY/CÔ CHIA SẺ:
                                     </div>
                                     <p>
-                                        "Đó là những ánh mắt trong veo khi các em hiểu ra một bài toán khó, và nụ cười rạng rỡ của cả lớp trong ngày bế giảng. Hạnh phúc của nghề giáo đơn sơ lắm, chỉ cần thấy học trò mình lớn khôn, trưởng thành và sống tử tế là phần thưởng lớn nhất của cuộc đời thầy cô."
+                                        "Lớp 10 các em vào trường lúc nào cũng như một đàn chim non, vừa tò mò lại vừa rụt rè. Thầy cô ấn tượng nhất là ánh mắt sáng bừng khi các em cùng nhau tìm ra cách giải một bài toán hóc búa hay tranh luận sôi nổi trong giờ học. Còn 'đau đầu' thì chỉ thương các em tự tạo áp lực điểm số quá nhiều thôi. Thầy cô chỉ mong các em cứ thoải mái sai và sửa, vì trường Chuyên là nơi rèn bản lĩnh chứ không phải chỉ có những điểm mười tròn trĩnh."
                                     </p>
                                 </div>
 
                                 <div class="p-4 border-l-4 border-news-red bg-[#eee4cb]">
                                     <div class="font-bold text-news-red mb-1 font-sans text-xs sm:text-sm">
-                                        PHÓNG VIÊN CHI ĐOÀN HỎI:
+                                        PHÓNG VIÊN CHI ĐOÀN 10I HỎI:
                                     </div>
                                     <p class="italic mb-2 font-serif">
-                                        "Lời nhắn nhủ nào Thầy/Cô muốn gửi đến tập thể học sinh trước những ngã rẽ tương lai?"
+                                        "Bước vào cấp ba với bao hoài bão nhưng cũng không ít lo âu về các kỳ thi chuyên, Thầy Cô có lời dặn dò gì giúp tụi em tự tin hơn không ạ?"
                                     </p>
                                     <div class="font-bold text-[#1c1815] mb-1 font-sans text-xs sm:text-sm">
                                         THẦY/CÔ CHIA SẺ:
                                     </div>
                                     <p>
-                                        "Hãy dũng cảm theo đuổi ước mơ và đừng bao giờ sợ vấp ngã. Mỗi thất bại hôm nay sẽ là bài học tôi luyện nên bản lĩnh ngày mai. Cánh cửa lớp học và tấm lòng thầy cô sẽ luôn rộng mở chào đón các em trở về."
+                                        "Đừng so sánh bản thân với bất kỳ ai, hãy cố gắng tốt hơn chính mình của ngày hôm qua một chút là đủ rồi. Chặng đường 3 năm ở Chuyên Quang Trung phía trước còn dài, bài tập chắc chắn sẽ còn nhiều thử thách hơn nữa, nhưng đừng sợ. Cứ kiên nhẫn từng ngày, chỗ nào chưa hiểu thì gõ cửa hỏi thầy cô ngay, thầy cô luôn ở đây đồng hành và sát cánh cùng 10I!"
                                     </p>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="news-photo-frame p-3 text-center mt-6">
-                            <div class="aspect-[21/9] w-full border border-[#1c1815] bg-[#dfd3b9] flex items-center justify-center text-xs sm:text-sm font-serif text-[#1c1815] font-bold">
-                                [Khung ảnh Chân dung Thầy/Cô hoặc Khoảnh khắc đối thoại ấm áp]
+                        <div class="news-photo-frame p-3 text-center mt-5 border-2 border-[#1c1815] bg-[#f5eedb] shadow-md">
+                            <div class="w-full overflow-hidden border border-[#1c1815] bg-stone-900/5">
+                                <img src="2aOboRCoBzh6bxRGloh8T7p4HEoA04uc1oHRhNcu.jpg" alt="Thầy miệt mài bên trang giáo án" class="w-full h-auto object-contain max-h-[360px] mx-auto transition-transform duration-500 hover:scale-[1.02]" loading="lazy">
                             </div>
-                            <div class="text-xs font-serif italic text-gray-700 mt-1.5">Ảnh: Ghi lại tại phòng học thân thương nhân tuần lễ 20/11</div>
+                            <div class="text-xs sm:text-sm font-serif italic text-gray-900 mt-2 font-bold">Ảnh tư liệu: Thầy giáo lặng thầm bên trang giáo án sau giờ lên lớp - Nguồn cảm hứng cho học sinh 10I</div>
                         </div>
 
                         <div class="pt-4 border-t border-[#1c1815]/20 flex justify-between items-center text-xs font-serif italic text-gray-700">
-                            <span>Trang 2 • Chuyên mục Đối thoại tri ân</span>
-                            <span>Báo Tri Ân 20/11</span>
+                            <span>Trang 2 • Chuyên mục Phỏng vấn - Chi đoàn 10I</span>
+                            <span>Báo Tri Ân 20/11 • THPT Chuyên Quang Trung</span>
                         </div>
                     </div>
 
                     <!-- MẶT SAU CỦA CÁNH LẬT (KHI ĐÃ LẬT SANG TRÁI): TRANG 3 (VĂN NGHỆ & THƠ CA HỌC TRÒ) -->
-                    <div class="leaf-face leaf-face-back news-paper-sheet p-6 sm:p-9 lg:p-12 flex flex-col justify-between">
+                    <div id="news-page-3" class="news-mobile-page leaf-face leaf-face-back news-paper-sheet p-6 sm:p-9 lg:p-12 flex flex-col justify-between">
                         <div>
                             <div class="flex items-center justify-between border-b-2 border-[#1c1815] pb-2 mb-4">
                                 <span class="text-xs sm:text-sm font-sans font-black uppercase text-news-red tracking-wider">CHUYÊN TRANG VĂN NGHỆ & THƠ CA</span>
@@ -721,45 +1252,58 @@
                             </div>
 
                             <h4 class="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold text-[#1c1815] mb-4 leading-tight">
-                                Những Dòng Thơ Viết Vội Bên Ô Cửa Sổ
+                                Những Vần Thơ Sâu Lắng Tri Ân Người Đưa Đò
                             </h4>
 
-                            <div class="p-5 border-2 border-[#1c1815] bg-[#f2e9d2] mb-5">
+                            <div class="p-5 border-2 border-[#1c1815] bg-[#f2e9d2] mb-4">
                                 <div class="font-serif italic text-sm sm:text-base lg:text-[17px] text-gray-900 leading-relaxed space-y-2 text-center">
-                                    <p class="font-bold font-sans not-italic text-news-red text-xs sm:text-sm">BÀI THƠ: BÀN TAY THẦY</p>
+                                    <p class="font-bold font-sans not-italic text-news-red text-xs sm:text-sm">BÀI THƠ: NGƯỜI LÁI ĐÒ (Tác giả: Thảo Nguyên - Chi đoàn 10I kính tặng)</p>
                                     <p>
-                                        Bàn tay gieo những hạt mầm,<br>
-                                        Âm thầm qua những tháng năm nhọc nhằn.<br>
-                                        Mỗi trang vở trắng tinh khôi,<br>
-                                        Là bao tâm huyết một đời người trao.
+                                        Một đời người - một dòng sông...<br>
+                                        Mấy ai làm kẻ đứng trông bến bờ,<br>
+                                        "Muốn qua sông phải lụy đò"<br>
+                                        Đường đời muôn bước cậy nhờ người đưa.
                                     </p>
-                                    <div class="w-16 h-[1px] bg-[#1c1815]/30 mx-auto my-2"></div>
-                                    <p class="font-bold font-sans not-italic text-news-red text-xs sm:text-sm">BÀI THƠ: ƠN THẦY SÂU NẶNG</p>
+                                    <div class="w-16 h-[1px] bg-[#1c1815]/30 mx-auto my-3"></div>
+                                    <p class="font-bold font-sans not-italic text-news-red text-xs sm:text-sm">TRÍCH THƠ: KHI THẦY VIẾT BẢNG (Tác giả: Trần Đăng Khoa - Chi đoàn 10I trân trọng giới thiệu)</p>
                                     <p>
-                                        Dẫu đếm hết sao trời đêm nay,<br>
-                                        Dẫu đếm hết lá mùa thu bay.<br>
-                                        Sao đếm hết công ơn người thầy,<br>
-                                        Dìu dắt chúng con từng ngày thơ ấu.
+                                        Khi thầy viết bảng<br>
+                                        Bụi phấn bay bay<br>
+                                        Có hạt bụi nào<br>
+                                        Rơi trên bục giảng<br>
+                                        Có hạt bụi nào<br>
+                                        Rơi trên tóc thầy...
                                     </p>
                                 </div>
                             </div>
 
-                            <div class="news-photo-frame p-3 text-center">
-                                <div class="aspect-[16/9] w-full border border-[#1c1815] bg-[#dfd3b9] flex items-center justify-center text-xs sm:text-sm font-serif text-[#1c1815] font-bold">
-                                    [Khung ảnh Tranh vẽ học trò / Nét bút tri ân]
+                            <div class="news-photo-frame p-3 text-center border-2 border-[#1c1815] bg-[#f5eedb] shadow-md my-4">
+                                <div class="w-full overflow-hidden border border-[#1c1815] bg-stone-900/5">
+                                    <img src="2aOboRCnzhcE1tyJ8IMZ60Bx7ktUnlldrK9meL2G.jpg" alt="Thầy giáo tận tình hướng dẫn học sinh" class="w-full h-auto object-contain max-h-[480px] mx-auto transition-transform duration-500 hover:scale-[1.02]" style="object-position: top center;" loading="lazy">
                                 </div>
-                                <div class="text-xs font-serif italic text-gray-700 mt-1.5">Ảnh: Bức họa do học sinh trong lớp tự tay thực hiện</div>
+                                <div class="text-xs sm:text-sm font-serif italic text-gray-900 mt-2 font-bold">Ảnh tư liệu: Thầy giáo tận tình chỉ bảo từng bài toán khó cho học sinh tại THPT Chuyên Quang Trung</div>
                             </div>
                         </div>
 
                         <div class="pt-4 border-t border-[#1c1815]/20 flex justify-between items-center text-xs font-serif italic text-gray-700">
-                            <span>Báo Tri Ân 20/11</span>
-                            <span>Trang 3 • Văn nghệ & Thơ ca học trò</span>
+                            <span>Báo Tri Ân 20/11 • Chi đoàn 10I</span>
+                            <span>Trang 3 • Tuyển tập Thơ ca Tri Ân</span>
                         </div>
                     </div>
 
                 </div>
 
+            </div>
+
+            <!-- NÚT CHUYỂN TRANG NHANH TRÊN DI ĐỘNG (Ẩn trên desktop) -->
+            <div class="lg:hidden flex items-center justify-between w-full max-w-xl mx-auto mt-4 px-3">
+                <button id="mobile-prev-page-btn" type="button" class="px-4 py-2 bg-[#16120e] border border-brand-gold/40 text-amber-200 text-xs font-serif font-bold rounded-lg flex items-center gap-1.5 hover:text-white transition-colors">
+                    <i data-lucide="chevron-left" class="w-4 h-4"></i> Trang trước
+                </button>
+                <span id="mobile-page-indicator" class="text-xs font-mono text-amber-200/90 font-bold">Trang 1 / 4</span>
+                <button id="mobile-next-page-btn" type="button" class="px-4 py-2 bg-[#16120e] border border-brand-gold/40 text-amber-200 text-xs font-serif font-bold rounded-lg flex items-center gap-1.5 hover:text-white transition-colors">
+                    Trang sau <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                </button>
             </div>
 
         </div>
@@ -769,18 +1313,11 @@
     <!-- ==================== PHẦN 3: ĐIỂM NHẤN 3D - TRIỂN LÃM ẢO "THANH XUÂN CÓ THẦY CÔ" (PHÂN KHU III BẮT BUỘC) ==================== -->
     <section id="virtual-gallery-3d-section" class="relative z-10 py-24 sm:py-36 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-white/10">
         
-        <div class="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
-            <div class="inline-flex items-center gap-2.5 px-6 py-2 border-2 border-brand-gold/60 bg-[#16120e] text-brand-gold text-xs font-cinzel font-black tracking-[0.25em] uppercase mb-4 shadow-2xl">
-                <i data-lucide="box" class="w-4 h-4"></i>
-                PHÂN KHU III: BẢO TÀNG TRIỂN LÃM ẢO 3D
-            </div>
+        <div class="text-center max-w-3xl mx-auto mb-10 sm:mb-14">
             <h2 class="font-serif text-4xl sm:text-6xl font-bold text-white mb-4 tracking-tight">
-                Không Gian 3D: <span class="text-brand-gold italic">Thanh Xuân Có Thầy Cô</span>
+                Bảo tàng số: <span class="text-brand-gold italic">Thanh Xuân Có Thầy Cô</span>
             </h2>
-            <div class="w-24 h-[2px] bg-gradient-to-r from-transparent via-brand-gold to-transparent mx-auto mt-4 mb-4"></div>
-            <p class="text-sm sm:text-base text-gray-300 font-light max-w-xl mx-auto">
-                Bảo tàng ký ức tương tác 360 độ • Dùng chuột hoặc ngón tay xoay quả cầu tri thức & các khung ảnh kỷ niệm lơ lửng trong không gian
-            </p>
+            <div class="w-24 h-[2px] bg-gradient-to-r from-transparent via-brand-gold to-transparent mx-auto mt-4 mb-2"></div>
         </div>
 
         <!-- KHUNG CANVAS 3D INTERACTIVE TRIỂN LÃM ẢO -->
@@ -790,18 +1327,11 @@
             <div id="gallery-canvas-container"></div>
 
             <!-- Lớp phủ hướng dẫn tương tác -->
-            <div class="absolute bottom-5 left-0 right-0 pointer-events-none flex justify-center items-center gap-3 text-xs text-amber-200/90 font-mono tracking-wider">
+            <div id="gallery-drag-hint" class="absolute bottom-5 left-0 right-0 pointer-events-none flex justify-center items-center gap-3 text-xs text-amber-200/90 font-mono tracking-wider transition-all duration-1000 ease-out">
                 <span class="flex items-center gap-2 bg-[#0e0c0a]/90 backdrop-blur-md px-5 py-2 border border-brand-gold/40 shadow-2xl">
                     <i data-lucide="move" class="w-4 h-4 text-brand-gold animate-pulse"></i>
                     <span>KÉO CHUỘT / VUỐT MÀN HÌNH ĐỂ XOAY KHÔNG GIAN 3D 360°</span>
                 </span>
-            </div>
-
-            <!-- Tên tác phẩm kỷ niệm đang ngắm -->
-            <div class="absolute top-4 left-4 pointer-events-none">
-                <div class="bg-[#0e0c0a]/90 backdrop-blur-md px-4 py-2 border border-brand-gold/40 text-[11px] font-mono text-gray-200 shadow-2xl">
-                    <span class="text-brand-gold font-bold">● TÁC PHẨM:</span> QUẢ CẦU TRI THỨC & VÒNG KÝ ỨC
-                </div>
             </div>
         </div>
 
@@ -811,7 +1341,8 @@
     <footer class="relative z-10 py-16 px-6 text-center border-t border-white/10 text-gray-400 text-xs sm:text-sm bg-[#060608]">
         <p class="font-script text-4xl text-brand-gold mb-2">Tri Ân Người Gieo Hạt</p>
         <p class="font-sans font-light max-w-xl mx-auto">
-            Sản phẩm số dự thi Cuộc thi thiết kế Không gian truyền thông số "Dấu ấn Tri ân" chào mừng kỷ niệm Ngày Nhà giáo Việt Nam 20/11.
+            Sản phẩm số dự thi Cuộc thi thiết kế Không gian truyền thông số "Dấu ấn Tri ân" chào mừng kỷ niệm Ngày Nhà giáo Việt Nam 20/11.<br>
+            <span class="text-amber-200/90 font-medium mt-1 inline-block">Thực hiện bởi: Chi đoàn 10I • Trường THPT Chuyên Quang Trung</span>
         </p>
     </footer>
 
@@ -909,31 +1440,9 @@
         let isLeafFlipped = false;
         const flippingLeaf = document.getElementById('flipping-leaf-3d');
 
-        function playPaperSound() {
-            try {
-                const ctx = new (window.AudioContext || window.webkitAudioContext)();
-                const bufferSize = ctx.sampleRate * 0.22;
-                const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-                const data = buffer.getChannelData(0);
-                for (let i = 0; i < bufferSize; i++) {
-                    data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bufferSize * 0.35));
-                }
-                const noise = ctx.createBufferSource();
-                noise.buffer = buffer;
-                const filter = ctx.createBiquadFilter();
-                filter.type = "bandpass";
-                filter.frequency.value = 1100;
-                filter.Q.value = 1.3;
-                noise.connect(filter);
-                filter.connect(ctx.destination);
-                noise.start();
-            } catch(e) {}
-        }
-
         function setLeafFlip(open) {
             if (open === isLeafFlipped) return;
             isLeafFlipped = open;
-            playPaperSound();
 
             if (flippingLeaf) {
                 if (isLeafFlipped) {
@@ -944,9 +1453,62 @@
             }
         }
 
+        // ĐIỀU HƯỚNG TRANG BÁO TRÊN ĐIỆN THOẠI (MOBILE TABS & PREV/NEXT)
+        let activeMobilePage = 1;
+        function switchMobileNewsPage(pageNum) {
+            if (pageNum < 1 || pageNum > 4) return;
+            activeMobilePage = pageNum;
+            for (let i = 1; i <= 4; i++) {
+                const pageEl = document.getElementById(`news-page-${i}`);
+                if (pageEl) {
+                    if (i === activeMobilePage) {
+                        pageEl.classList.add('active-mobile-page');
+                    } else {
+                        pageEl.classList.remove('active-mobile-page');
+                    }
+                }
+            }
+            document.querySelectorAll('.news-mobile-tab').forEach(btn => {
+                const tabIndex = parseInt(btn.getAttribute('data-tab'), 10);
+                if (tabIndex === activeMobilePage) {
+                    btn.classList.add('bg-brand-gold', 'text-stone-950', 'shadow');
+                    btn.classList.remove('text-amber-200/90');
+                } else {
+                    btn.classList.remove('bg-brand-gold', 'text-stone-950', 'shadow');
+                    btn.classList.add('text-amber-200/90');
+                }
+            });
+            const indicator = document.getElementById('mobile-page-indicator');
+            if (indicator) indicator.textContent = `Trang ${activeMobilePage} / 4`;
+        }
+
+        document.querySelectorAll('.news-mobile-tab').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tab = parseInt(btn.getAttribute('data-tab'), 10);
+                switchMobileNewsPage(tab);
+            });
+        });
+
+        const prevBtn = document.getElementById('mobile-prev-page-btn');
+        if (prevBtn) {
+            prevBtn.addEventListener('click', () => {
+                const prev = activeMobilePage > 1 ? activeMobilePage - 1 : 4;
+                switchMobileNewsPage(prev);
+            });
+        }
+
+        const nextBtn = document.getElementById('mobile-next-page-btn');
+        if (nextBtn) {
+            nextBtn.addEventListener('click', () => {
+                const next = activeMobilePage < 4 ? activeMobilePage + 1 : 1;
+                switchMobileNewsPage(next);
+            });
+        }
+
         if (cinemaNewspaper) {
             cinemaNewspaper.addEventListener('click', (e) => {
-                if (e.target.closest('#radio-play-btn') || e.target.closest('a')) return;
+                if (window.innerWidth < 1024) return; // Trên mobile sử dụng tabs & nút chuyển trang
+                if (e.target.closest('#radio-play-btn') || e.target.closest('a') || e.target.closest('button')) return;
 
                 const rect = cinemaNewspaper.getBoundingClientRect();
                 const clickX = e.clientX - rect.left;
@@ -967,9 +1529,60 @@
             cinemaNewspaper.addEventListener('touchend', (e) => {
                 const touchEndX = e.changedTouches[0].clientX;
                 const diff = touchStartX - touchEndX;
-                if (diff > 40) setLeafFlip(true);
-                else if (diff < -40) setLeafFlip(false);
+                if (window.innerWidth < 1024) {
+                    if (diff > 45) {
+                        switchMobileNewsPage(activeMobilePage < 4 ? activeMobilePage + 1 : 1);
+                    } else if (diff < -45) {
+                        switchMobileNewsPage(activeMobilePage > 1 ? activeMobilePage - 1 : 4);
+                    }
+                } else {
+                    if (diff > 40) setLeafFlip(true);
+                    else if (diff < -40) setLeafFlip(false);
+                }
             }, { passive: true });
+        }
+
+        // XỬ LÝ KHÓA XOAY NGANG MÀN HÌNH ĐIỆN THOẠI (ORIENTATION LOCK & OVERLAY)
+        function checkMobileOrientation() {
+            const overlay = document.getElementById('mobile-orientation-overlay');
+            if (!overlay) return;
+            if (overlay.dataset.dismissed === 'true') {
+                overlay.style.display = 'none';
+                document.body.classList.remove('overflow-hidden');
+                return;
+            }
+
+            const isMobile = window.innerWidth <= 900;
+            const isPortrait = window.innerHeight > window.innerWidth;
+
+            if (isMobile && isPortrait) {
+                overlay.style.display = 'flex';
+                document.body.classList.add('overflow-hidden');
+            } else {
+                overlay.style.display = 'none';
+                document.body.classList.remove('overflow-hidden');
+            }
+        }
+
+        window.addEventListener('resize', () => {
+            checkMobileOrientation();
+        });
+        window.addEventListener('orientationchange', () => {
+            setTimeout(checkMobileOrientation, 150);
+        });
+        checkMobileOrientation();
+
+        const dismissBtn = document.getElementById('dismiss-orientation-overlay-btn');
+        if (dismissBtn) {
+            dismissBtn.addEventListener('click', () => {
+                const overlay = document.getElementById('mobile-orientation-overlay');
+                if (overlay) {
+                    overlay.dataset.dismissed = 'true';
+                    overlay.style.display = 'none';
+                    document.body.classList.remove('overflow-hidden');
+                    window.dispatchEvent(new Event('resize'));
+                }
+            });
         }
 
         // 4. Radio Phát Thanh Podcast
@@ -997,21 +1610,119 @@
             lucide.createIcons();
         }
 
-        // 5. Vạch tiến trình cuộn Timeline
+        // 5. Vạch tiến trình cuộn Timeline & Hiệu ứng Đợi 2s Phóng to ngang + Đẩy trục tiến trình
         const progressLine = document.getElementById('scroll-progress-line');
-        window.addEventListener('scroll', () => {
+        const railTrack = document.getElementById('timeline-rail-track');
+        const timelineNodes = document.querySelectorAll('.timeline-node');
+
+        let expandTimer = null;
+        let currentFocusedIndex = -1;
+
+        function updateTimelineExpansion() {
             const timelineSection = document.getElementById('timeline-section');
-            if (!timelineSection || !progressLine) return;
+            if (!timelineSection) return;
             const rect = timelineSection.getBoundingClientRect();
             const windowHeight = window.innerHeight;
+            const viewportCenter = windowHeight / 2;
 
-            const startOffset = windowHeight * 0.6;
-            const totalScrollable = rect.height;
-            const currentScrolled = Math.max(0, startOffset - rect.top);
-            const progress = Math.min(1, Math.max(0, currentScrolled / totalScrollable));
+            // 1. Cập nhật chiều cao vạch vàng tiến trình dọc tức thì
+            if (progressLine) {
+                const startOffset = windowHeight * 0.6;
+                const totalScrollable = rect.height;
+                const currentScrolled = Math.max(0, startOffset - rect.top);
+                const progress = Math.min(1, Math.max(0, currentScrolled / totalScrollable));
+                progressLine.style.height = `${progress * 100}%`;
+            }
 
-            progressLine.style.height = `${progress * 100}%`;
+            // 2. Tìm mốc thời gian đang ở vùng trung tâm màn hình
+            let focusedIndex = -1;
+            let minDistance = Infinity;
+
+            timelineNodes.forEach((node, index) => {
+                const nodeRect = node.getBoundingClientRect();
+                const nodeCenter = nodeRect.top + nodeRect.height / 2;
+                const dist = Math.abs(nodeCenter - viewportCenter);
+
+                if (dist < windowHeight * 0.36 && dist < minDistance) {
+                    minDistance = dist;
+                    focusedIndex = index;
+                }
+            });
+
+            // 3. Nếu vị trí focus thay đổi (người dùng đang lướt qua):
+            // ĐÓNG LẠI TỨC THÌ MỌI MỐC VÀ TRẢ THANH RAY VỀ VỊ TRÍ CŨ ĐỂ XEM ĐƯỢC TIẾN TRÌNH RÕ RÀNG
+            if (focusedIndex !== currentFocusedIndex) {
+                if (expandTimer) {
+                    clearTimeout(expandTimer);
+                    expandTimer = null;
+                }
+
+                // Thu nhỏ lại ngay lập tức
+                timelineNodes.forEach((node) => {
+                    node.classList.remove('is-expanded');
+                    const marker = node.querySelector('.milestone-marker-node');
+                    if (marker) {
+                        if (window.innerWidth >= 768) {
+                            marker.style.transform = 'translate(-50%, -50%) translateX(0px) rotate(45deg) scale(1)';
+                        } else {
+                            marker.style.transform = 'translate(-50%, -50%) rotate(45deg) scale(1)';
+                        }
+                    }
+                });
+
+                // Trả thanh ray và tiến trình về giữa tức thì
+                if (railTrack && progressLine && window.innerWidth >= 768) {
+                    railTrack.style.transform = 'translateX(0px)';
+                    progressLine.style.transform = 'translateX(0px)';
+                }
+
+                currentFocusedIndex = focusedIndex;
+
+                // 4. Nếu người dùng dừng lại ở mốc này: ĐỢI ĐỦ 2 GIÂY RỒI MỚI PHÓNG TO
+                if (focusedIndex !== -1) {
+                    const targetNode = timelineNodes[focusedIndex];
+                    expandTimer = setTimeout(() => {
+                        // Sau 2 giây dừng ngắm -> Phóng to ra và dạt thanh ray sang một bên
+                        targetNode.classList.add('is-expanded');
+                        lucide.createIcons();
+
+                        const isLeft = targetNode.getAttribute('data-side') === 'left';
+                        const marker = targetNode.querySelector('.milestone-marker-node');
+                        const railShift = isLeft ? 'min(44vw, 530px)' : 'max(-44vw, -530px)';
+
+                        if (railTrack && progressLine && window.innerWidth >= 768) {
+                            railTrack.style.transform = `translateX(${railShift})`;
+                            progressLine.style.transform = `translateX(${railShift})`;
+                        }
+
+                        if (marker) {
+                            if (window.innerWidth >= 768) {
+                                marker.style.transform = `translate(-50%, -50%) translateX(${railShift}) rotate(45deg) scale(1.35)`;
+                            } else {
+                                marker.style.transform = 'translate(-50%, -50%) rotate(45deg) scale(1.15)';
+                            }
+                        }
+                    }, 2000); // ĐÚNG 2 GIÂY CHỜ THEO YÊU CẦU
+                }
+            }
+        }
+
+        let isTimelineTicking = false;
+        window.addEventListener('scroll', () => {
+            if (!isTimelineTicking) {
+                requestAnimationFrame(() => {
+                    updateTimelineExpansion();
+                    isTimelineTicking = false;
+                });
+                isTimelineTicking = true;
+            }
         }, { passive: true });
+
+        window.addEventListener('resize', () => {
+            currentFocusedIndex = -999;
+            updateTimelineExpansion();
+        });
+        setTimeout(updateTimelineExpansion, 100);
 
         // ================= 6. ĐIỂM NHẤN 3D: PHÒNG TRIỂN LÃM ẢO 3D "THANH XUÂN CÓ THẦY CÔ" =================
         (function initVirtualGallery3D() {
@@ -1022,24 +1733,76 @@
             scene.fog = new THREE.FogExp2(0x0a0a0f, 0.0018);
 
             const camera = new THREE.PerspectiveCamera(55, container.clientWidth / container.clientHeight, 1, 2000);
-            camera.position.set(0, 20, 260);
+            const radius = 175;
+
+            function updateCamera() {
+                if (!container) return;
+                const aspect = container.clientWidth / container.clientHeight;
+                camera.aspect = aspect;
+                if (aspect < 1.0) {
+                    // Màn hình di động hẹp: Đẩy camera ra xa tương ứng để khung tranh không bị cắt viền
+                    camera.position.set(0, 8, radius + (70 / Math.tan((camera.fov * Math.PI) / 360) / aspect));
+                } else {
+                    camera.position.set(0, 8, 320);
+                }
+                camera.lookAt(0, -6, 0);
+                camera.updateProjectionMatrix();
+                renderer.setSize(container.clientWidth, container.clientHeight);
+            }
 
             const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
             renderer.setSize(container.clientWidth, container.clientHeight);
             renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
             renderer.shadowMap.enabled = true;
             container.appendChild(renderer.domElement);
+            updateCamera();
+
+            // Hiệu ứng gợi ý kéo chuột: Hiện 1 giây rồi mờ dần và ẩn đi
+            const dragHint = document.getElementById('gallery-drag-hint');
+            if (dragHint) {
+                let hintFaded = false;
+                const fadeOutHint = () => {
+                    if (hintFaded) return;
+                    hintFaded = true;
+                    dragHint.style.transition = 'opacity 1s ease-out, transform 1s ease-out';
+                    dragHint.style.opacity = '0';
+                    dragHint.style.transform = 'translateY(12px)';
+                    setTimeout(() => {
+                        dragHint.style.display = 'none';
+                    }, 1000);
+                };
+
+                const startHintTimer = () => {
+                    setTimeout(fadeOutHint, 1000); // Hiện 1 giây rồi mờ dần
+                };
+
+                const gallerySection = document.getElementById('virtual-gallery-3d-section');
+                if ('IntersectionObserver' in window && gallerySection) {
+                    const hintObs = new IntersectionObserver((entries) => {
+                        if (entries[0].isIntersecting) {
+                            startHintTimer();
+                            hintObs.disconnect();
+                        }
+                    }, { threshold: 0.15 });
+                    hintObs.observe(gallerySection);
+                } else {
+                    startHintTimer();
+                }
+
+                // Nếu người dùng bắt đầu tương tác trước khi hết 1s, lập tức kích hoạt fade out
+                container.addEventListener('pointerdown', fadeOutHint, { once: true });
+            }
 
             // Ánh sáng bảo tàng số
-            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.65);
             scene.add(ambientLight);
 
-            const pointLight = new THREE.PointLight(0xFACC15, 2.5, 600);
-            pointLight.position.set(0, 100, 100);
+            const pointLight = new THREE.PointLight(0xFACC15, 2.8, 700);
+            pointLight.position.set(0, 110, 120);
             scene.add(pointLight);
 
-            const blueLight = new THREE.PointLight(0x38bdf8, 1.2, 500);
-            blueLight.position.set(-150, -50, -50);
+            const blueLight = new THREE.PointLight(0x38bdf8, 1.4, 550);
+            blueLight.position.set(-160, -60, -60);
             scene.add(blueLight);
 
             // Group xoay tương tác 360 độ
@@ -1077,89 +1840,203 @@
             ringMesh2.rotation.y = Math.PI / 4;
             galleryGroup.add(ringMesh2);
 
-            // 3. 5 Khung Tranh Kỷ Niệm 3D lơ lửng hình vòng cung (Floating Memory Frames)
-            const frameCount = 5;
-            const radius = 135;
-            const memoryFrames = [];
-
-            const sampleTitles = [
-                "Bên Bục Giảng", 
-                "Nụ Cười Bế Giảng", 
-                "Tri Ân 20/11", 
-                "Giờ Học Ngoại Khóa", 
-                "Lưu Bút Tuổi Hồng"
+            // 3. 5 Khung Tranh Kỷ Niệm 3D lơ lửng mang ảnh thật của Thầy Cô
+            const defaultPhotos = [
+                {
+                    file: '2aOboRCoBzxrKnV8hTuhv3EF9DPmNdobVKsJmDce.jpg',
+                    src: '2aOboRCoBzxrKnV8hTuhv3EF9DPmNdobVKsJmDce.jpg',
+                    title: 'Tiết Dạy Ấm Áp Của Cô',
+                    caption: 'Tận tụy giảng từng bài học cho đàn em 10I'
+                },
+                {
+                    file: '2aOboRCo4tUkGRs66sV4hON4eQqRdkwyFaC0W6zY.jpg',
+                    src: '2aOboRCo4tUkGRs66sV4hON4eQqRdkwyFaC0W6zY.jpg',
+                    title: 'Ngát Hương Hoa Tri Ân 20/11',
+                    caption: 'Tình cảm mộc mạc học trò kính dâng Thầy Cô'
+                },
+                {
+                    file: '2aOboRCoBzGXjhyd0ExnyvxNtrb7wdcyXXzonROC.jpg',
+                    src: '2aOboRCoBzGXjhyd0ExnyvxNtrb7wdcyXXzonROC.jpg',
+                    title: 'Tự Hào Người Gieo Hạt',
+                    caption: 'Vinh danh những cống hiến thầm lặng của Thầy Cô'
+                },
+                {
+                    file: '2aOboRCoBzmg2d96FIoGKzLKbaVnVpwNVaY3GukC.jpg',
+                    src: '2aOboRCoBzmg2d96FIoGKzLKbaVnVpwNVaY3GukC.jpg',
+                    title: 'Kỷ Niệm 20/11 Trường Chuyên',
+                    caption: 'Nối dài truyền thống hiếu học Chuyên Quang Trung'
+                },
+                {
+                    file: '2aOboRCo2l0Q4zoyRKUG6DFCGVAyvUUM1DGi0V4C.jpg',
+                    src: '2aOboRCo2l0Q4zoyRKUG6DFCGVAyvUUM1DGi0V4C.jpg',
+                    title: 'Mái Nhà Chuyên Quang Trung',
+                    caption: 'Tập thể Thầy Cô kính yêu của chúng em'
+                }
             ];
 
-            for (let i = 0; i < frameCount; i++) {
+            const galleryPhotos = (window.GALLERY_PHOTOS && window.GALLERY_PHOTOS.length > 0)
+                ? window.GALLERY_PHOTOS
+                : defaultPhotos;
+
+            const frameCount = galleryPhotos.length;
+            const memoryFrames = [];
+            const texLoader = new THREE.TextureLoader();
+
+            galleryPhotos.forEach((item, i) => {
                 const angle = (i / frameCount) * Math.PI * 2;
-                
-                // Khung viền tranh 3D
-                const frameGeo = new THREE.BoxGeometry(44, 30, 2);
+
+                // Thân khung tranh 3D nguyên khối bằng đồng đen (Kích thước lớn 108x92x3.8)
+                const frameGeo = new THREE.BoxGeometry(108, 92, 3.8);
                 const frameMat = new THREE.MeshStandardMaterial({
-                    color: 0x1f1f28,
-                    metalness: 0.7,
-                    roughness: 0.3,
+                    color: 0x151210,
+                    metalness: 0.85,
+                    roughness: 0.25,
                 });
                 const frame = new THREE.Mesh(frameGeo, frameMat);
 
-                // Mặt tranh phát sáng bên trong
-                const canvasTexture = document.createElement('canvas');
-                canvasTexture.width = 256;
-                canvasTexture.height = 180;
-                const ctx = canvasTexture.getContext('2d');
-                ctx.fillStyle = '#161622';
-                ctx.fillRect(0, 0, 256, 180);
-                ctx.strokeStyle = '#FACC15';
-                ctx.lineWidth = 4;
-                ctx.strokeRect(8, 8, 240, 164);
-                ctx.fillStyle = '#FACC15';
-                ctx.font = 'bold 20px serif';
-                ctx.textAlign = 'center';
-                ctx.fillText(sampleTitles[i], 128, 90);
-                ctx.fillStyle = '#9ca3af';
-                ctx.font = '12px sans-serif';
-                ctx.fillText('[Ảnh Kỷ Niệm Chi Đoàn]', 128, 115);
+                // Viền mạ vàng hoàng gia bao bọc bên ngoài khung tranh (111x95x3.4)
+                const borderGeo = new THREE.BoxGeometry(111, 95, 3.4);
+                const borderMat = new THREE.MeshStandardMaterial({
+                    color: 0xFACC15,
+                    metalness: 0.95,
+                    roughness: 0.15
+                });
+                const borderMesh = new THREE.Mesh(borderGeo, borderMat);
+                frame.add(borderMesh);
 
-                const tex = new THREE.CanvasTexture(canvasTexture);
-                const pictureGeo = new THREE.PlaneGeometry(40, 26);
-                const pictureMat = new THREE.MeshBasicMaterial({ map: tex });
-                const picture = new THREE.Mesh(pictureGeo, pictureMat);
-                picture.position.z = 1.1;
-                frame.add(picture);
+                // Thanh nẹp kim loại vàng ngăn cách tinh tế giữa khu vực ảnh và bảng tên
+                const dividerGeo = new THREE.BoxGeometry(82, 1.2, 4.2);
+                const dividerMesh = new THREE.Mesh(dividerGeo, borderMat);
+                dividerMesh.position.set(0, -23.5, 0);
+                frame.add(dividerMesh);
+
+                // Hàm gắn ảnh Thầy Cô lên cả 2 mặt (Mặt trước hướng tâm & Mặt sau hướng ngoại)
+                // Kích thước ảnh phóng to lên 100x64 (rõ nét tuyệt đối, chiêm ngưỡng trọn vẹn)
+                // Ảnh được đưa ra z = 2.05 (mặt trước) và z = -2.05 (mặt sau), cách mặt khung (z = 1.90) một khoảng +0.15 đơn vị
+                // Kết hợp polygonOffset và depthTest: true triệt tiêu hoàn toàn 100% hiện tượng z-fighting hay vết cắt chéo!
+                const applyTextureToFrame = (tex) => {
+                    if (THREE.SRGBColorSpace) tex.colorSpace = THREE.SRGBColorSpace;
+                    const pictureGeo = new THREE.PlaneGeometry(100, 64);
+                    const pictureMat = new THREE.MeshBasicMaterial({
+                        map: tex,
+                        depthTest: true,
+                        polygonOffset: true,
+                        polygonOffsetFactor: -1,
+                        polygonOffsetUnits: -1
+                    });
+
+                    // Mặt trước
+                    const picFront = new THREE.Mesh(pictureGeo, pictureMat);
+                    picFront.position.set(0, 10, 2.05);
+                    frame.add(picFront);
+
+                    // Mặt sau (Xoay 180 độ để quan sát từ mọi góc 360 độ)
+                    const picBack = new THREE.Mesh(pictureGeo, pictureMat);
+                    picBack.position.set(0, 10, -2.05);
+                    picBack.rotation.y = Math.PI;
+                    frame.add(picBack);
+                };
+
+                const photoSrc = item.src || item.file;
+                const img = new Image();
+                img.crossOrigin = 'anonymous';
+                img.onload = () => {
+                    const tex = new THREE.Texture(img);
+                    tex.needsUpdate = true;
+                    applyTextureToFrame(tex);
+                };
+                img.onerror = () => {
+                    texLoader.load(item.file || item.src, (loadedTexture) => {
+                        applyTextureToFrame(loadedTexture);
+                    });
+                };
+                img.src = photoSrc;
+
+                // Bảng tên mạ vàng độ nét cực cao (800x200), gắn trực tiếp lên phần chân đế của khung tranh
+                const tagCanvas = document.createElement('canvas');
+                tagCanvas.width = 800;
+                tagCanvas.height = 200;
+                const tctx = tagCanvas.getContext('2d');
+                tctx.fillStyle = '#100e0b';
+                tctx.fillRect(0, 0, 800, 200);
+                tctx.strokeStyle = '#FACC15';
+                tctx.lineWidth = 5;
+                tctx.strokeRect(10, 10, 780, 180);
+                tctx.fillStyle = '#FACC15';
+                tctx.font = 'bold 36px "Cinzel", "Playfair Display", serif';
+                tctx.textAlign = 'center';
+                tctx.fillText(item.title, 400, 76);
+                tctx.fillStyle = '#f1f5f9';
+                tctx.font = '26px sans-serif';
+                tctx.fillText(item.caption, 400, 138);
+
+                const tagTex = new THREE.CanvasTexture(tagCanvas);
+                const tagGeo = new THREE.PlaneGeometry(78, 18);
+                const tagMat = new THREE.MeshBasicMaterial({
+                    map: tagTex,
+                    depthTest: true,
+                    polygonOffset: true,
+                    polygonOffsetFactor: -1,
+                    polygonOffsetUnits: -1
+                });
+
+                // Bảng tên mặt trước (gắn chắc chắn trên thân khung tại y = -34, z = 2.05)
+                const tagMeshFront = new THREE.Mesh(tagGeo, tagMat);
+                tagMeshFront.position.set(0, -34, 2.05);
+                frame.add(tagMeshFront);
+
+                // Bảng tên mặt sau
+                const tagMeshBack = new THREE.Mesh(tagGeo, tagMat);
+                tagMeshBack.position.set(0, -34, -2.05);
+                tagMeshBack.rotation.y = Math.PI;
+                frame.add(tagMeshBack);
 
                 frame.position.x = Math.sin(angle) * radius;
                 frame.position.z = Math.cos(angle) * radius;
-                frame.position.y = (i % 2 === 0 ? 10 : -10);
-                frame.lookAt(0, 0, 0); // Hướng vào trung tâm
+                frame.position.y = (i % 2 === 0 ? 12 : 2);
+                frame.lookAt(0, 0, 0); // Luôn hướng tâm về quả cầu tri thức
 
                 galleryGroup.add(frame);
                 memoryFrames.push(frame);
-            }
+            });
 
-            // Tương tác Kéo Chuột / Vuốt Chạm xoay 360 độ (Orbit Drag Interaction)
+            // Tương tác Kéo Chuột / Vuốt Chạm xoay 360 độ mượt mà (Orbit Drag & Touch Gestures)
             let isDragging = false;
             let previousMouseX = 0;
+            let previousMouseY = 0;
             let targetRotationY = 0;
             let targetRotationX = 0;
 
             container.addEventListener('pointerdown', (e) => {
                 isDragging = true;
                 previousMouseX = e.clientX;
+                previousMouseY = e.clientY;
+                try {
+                    container.setPointerCapture(e.pointerId);
+                } catch (_) {}
             });
 
-            window.addEventListener('pointerup', () => {
+            const handlePointerUp = (e) => {
                 isDragging = false;
-            });
+                try {
+                    container.releasePointerCapture(e.pointerId);
+                } catch (_) {}
+            };
+            container.addEventListener('pointerup', handlePointerUp);
+            container.addEventListener('pointercancel', handlePointerUp);
 
             container.addEventListener('pointermove', (e) => {
                 if (isDragging) {
                     const deltaX = e.clientX - previousMouseX;
-                    targetRotationY += deltaX * 0.008;
+                    const deltaY = e.clientY - previousMouseY;
+                    targetRotationY += deltaX * 0.007;
+                    targetRotationX = Math.max(-0.15, Math.min(0.15, targetRotationX + deltaY * 0.003));
                     previousMouseX = e.clientX;
+                    previousMouseY = e.clientY;
                 }
             });
 
-            // Tự động xoay chậm nhẹ nhàng khi không kéo
+            // Tự động xoay chậm nhẹ nhàng khi không kéo & phản hồi chuyển động
             function animateGallery() {
                 requestAnimationFrame(animateGallery);
 
@@ -1168,6 +2045,7 @@
                 }
 
                 galleryGroup.rotation.y += (targetRotationY - galleryGroup.rotation.y) * 0.08;
+                galleryGroup.rotation.x += (targetRotationX - galleryGroup.rotation.x) * 0.08;
                 
                 // Hiệu ứng bồng bềnh
                 coreSphere.rotation.x += 0.005;
@@ -1180,16 +2058,12 @@
                     frame.position.y += Math.sin(time + idx) * 0.12;
                 });
 
+                camera.lookAt(0, -6, 0);
                 renderer.render(scene, camera);
             }
             animateGallery();
 
-            window.addEventListener('resize', () => {
-                if (!container) return;
-                camera.aspect = container.clientWidth / container.clientHeight;
-                camera.updateProjectionMatrix();
-                renderer.setSize(container.clientWidth, container.clientHeight);
-            });
+            window.addEventListener('resize', updateCamera);
         })();
     </script>
 </body>
