@@ -1,0 +1,571 @@
+* {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .hero-bg {
+            background-image: url('https://images.unsplash.com/photo-1522748906645-95d8ad852c22?q=80&w=2070&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .text-glow {
+            text-shadow: 0 2px 15px rgba(52, 76, 99, 0.15), 0 0 25px rgba(130, 116, 155, 0.2);
+        }
+
+        #webgl-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* ================= VĂN BIA KỶ NIỆM LỊCH SỬ (MONUMENT TABLETS) - HIỆU ỨNG PHÓNG NGANG & ĐẨY TRỤC ================= */
+        .timeline-node {
+            position: relative;
+            min-height: 85vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4rem 0.5rem;
+            transition: all 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Khung wrapper cho phép phóng ngang */
+        .monument-wrapper {
+            width: 100%;
+            transition: width 0.85s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s cubic-bezier(0.16, 1, 0.3, 1), margin 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: width, transform;
+            z-index: 20;
+        }
+
+        @media (min-width: 768px) {
+            .timeline-node[data-side="left"] .monument-wrapper {
+                width: 45%;
+                margin-right: auto;
+                margin-left: 0;
+            }
+            .timeline-node[data-side="right"] .monument-wrapper {
+                width: 45%;
+                margin-left: auto;
+                margin-right: 0;
+            }
+
+            /* KHI EXPANDED (SAU KHI DỪNG 2S): Phóng to rộng nhưng chừa hẳn mép thoáng, không đè lên thanh tiến trình */
+            .timeline-node[data-side="left"].is-expanded .monument-wrapper {
+                width: 80% !important;
+                max-width: 1040px;
+                margin-right: auto !important;
+                margin-left: 0 !important;
+                z-index: 15;
+            }
+            .timeline-node[data-side="right"].is-expanded .monument-wrapper {
+                width: 80% !important;
+                max-width: 1040px;
+                margin-left: auto !important;
+                margin-right: 0 !important;
+                z-index: 15;
+            }
+        }
+
+        /* Bảng Bia Ký Lịch Sử Sơn Mài Đồng Cổ */
+        .timeline-monument-tablet {
+            background: #FFFFFF;
+            border: 1.5px solid #C6E2E5;
+            outline: 1px solid rgba(130, 116, 155, 0.25);
+            outline-offset: -8px;
+            box-shadow: 0 20px 45px -10px rgba(52, 76, 99, 0.08);
+            position: relative;
+            transition: all 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+            opacity: 0.85;
+            transform: scale(0.97);
+            will-change: transform, opacity, box-shadow, border-color;
+        }
+
+        /* Khi active: bừng sáng viền Lavender và Terracotta */
+        .timeline-node.is-expanded .timeline-monument-tablet {
+            opacity: 1;
+            transform: scale(1);
+            border-color: #82749B;
+            outline-color: rgba(197, 143, 121, 0.4);
+            box-shadow: 0 25px 60px -15px rgba(52, 76, 99, 0.15), 0 0 40px rgba(198, 226, 229, 0.45);
+        }
+
+        /* GÓC KHẢM LAVENDER VÀ TERRACOTTA */
+        .monument-corner {
+            position: absolute;
+            width: 14px;
+            height: 14px;
+            border-color: #82749B;
+            pointer-events: none;
+            transition: all 0.5s ease;
+        }
+
+        .monument-tl { top: -1px; left: -1px; border-top: 1.5px solid; border-left: 1.5px solid; }
+        .monument-tr { top: -1px; right: -1px; border-top: 1.5px solid; border-right: 1.5px solid; }
+        .monument-bl { bottom: -1px; left: -1px; border-bottom: 1.5px solid; border-left: 1.5px solid; }
+        .monument-br { bottom: -1px; right: -1px; border-bottom: 1.5px solid; border-right: 1.5px solid; }
+
+        .timeline-node.is-expanded .monument-corner {
+            width: 18px;
+            height: 18px;
+            border-color: #C58F79;
+            border-top-width: 1.5px;
+            border-left-width: 1.5px;
+            border-right-width: 1.5px;
+            border-bottom-width: 1.5px;
+        }
+
+        /* Bố cục văn bia: Lúc đầu chỉ có chữ thuần khiết, khi mở rộng mới hiện khung ảnh */
+        .monument-grid-layout {
+            display: block;
+            width: 100%;
+        }
+
+        .monument-content-column {
+            width: 100%;
+        }
+
+        /* KHUNG ẢNH TƯ LIỆU: MẶC ĐỊNH ẨN HOÀN TOÀN TRƯỚC KHI MỞ RỘNG */
+        .monument-photo-dossier {
+            display: none !important;
+        }
+
+        /* KHI EXPANDED (SAU 2S DỪNG LẠI): Chuyển sang 2 cột tư liệu và hiện khung ảnh */
+        .timeline-node.is-expanded .monument-grid-layout {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            align-items: stretch;
+        }
+
+        @media (min-width: 1024px) {
+            .timeline-node.is-expanded .monument-grid-layout {
+                display: grid;
+                grid-template-columns: 4.6fr 7.4fr;
+                gap: 2.5rem;
+                align-items: stretch;
+            }
+        }
+
+        .timeline-node.is-expanded .monument-photo-dossier {
+            display: flex !important;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+            border-bottom: 1px solid rgba(250, 204, 21, 0.2);
+            padding-bottom: 1.5rem;
+            animation: fadeInDossier 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @media (min-width: 1024px) {
+            .timeline-node.is-expanded .monument-photo-dossier {
+                border-bottom: none;
+                border-right: 1px solid rgba(250, 204, 21, 0.25);
+                padding-bottom: 0;
+                padding-right: 2rem;
+            }
+        }
+
+        @keyframes fadeInDossier {
+            0% { opacity: 0; transform: translateY(14px) scale(0.98); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* Thanh ray tiến trình: Luôn nằm ở lớp đáy (z-index: 5) để KHÔNG BAO GIỜ ĐÈ LÊN SỐ */
+        #timeline-rail-track, #scroll-progress-line {
+            transition: transform 0.85s cubic-bezier(0.16, 1, 0.3, 1), height 0.15s ease-out;
+            will-change: transform;
+            z-index: 5 !important;
+        }
+
+        /* Huy hiệu thoi mốc son: Luôn nằm trên cùng (z-index: 50) và nền đặc 100%, che đường ray chạy qua */
+        .milestone-marker-node {
+            position: absolute;
+            top: 50%;
+            width: 52px !important;
+            height: 52px !important;
+            background-color: #344C63 !important;
+            border: 3px solid #C58F79 !important;
+            transition: transform 0.85s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.6s ease, background-color 0.6s ease, border-color 0.6s ease;
+            will-change: transform;
+            z-index: 50 !important;
+            box-shadow: 0 4px 18px rgba(52, 76, 99, 0.45), 0 0 12px rgba(197, 143, 121, 0.35) !important;
+        }
+        @media (min-width: 640px) {
+            .milestone-marker-node {
+                width: 62px !important;
+                height: 62px !important;
+            }
+        }
+        .milestone-marker-node span {
+            position: relative;
+            z-index: 60 !important;
+            display: inline-block;
+            font-size: 1.25rem !important;
+            font-weight: 900 !important;
+            color: #FFFFFF !important;
+            line-height: 1 !important;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+        }
+        @media (min-width: 640px) {
+            .milestone-marker-node span {
+                font-size: 1.45rem !important;
+            }
+        }
+        .timeline-node.is-expanded .milestone-marker-node {
+            box-shadow: 0 0 35px rgba(197, 143, 121, 0.95), 0 0 60px rgba(130, 116, 155, 0.7) !important;
+            background-color: #C58F79 !important;
+            border-color: #344C63 !important;
+        }
+        .timeline-node.is-expanded .milestone-marker-node span {
+            color: #FFFFFF !important;
+            font-weight: 900 !important;
+        }
+
+        .timeline-rail {
+            background: linear-gradient(to bottom, rgba(250,204,21,0.15), rgba(250,204,21,0.85), rgba(217,119,6,0.2));
+        }
+
+        /* ================= SÂN KHẤU 3D BÁO IN TOÀN MÀN HÌNH ================= */
+        .stage-3d-viewport {
+            perspective: 3200px;
+            perspective-origin: center 40%;
+        }
+
+        .newspaper-fullscreen-book {
+            transform-style: preserve-3d;
+            transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 1.2s ease, opacity 0.8s ease;
+            will-change: transform, opacity;
+            cursor: pointer;
+        }
+
+        .news-paper-sheet {
+            background-color: #f7f1e1;
+            background-image: 
+                radial-gradient(#d8cca8 0.85px, transparent 0.85px),
+                linear-gradient(180deg, rgba(255,255,255,0.4) 0%, rgba(0,0,0,0.02) 100%);
+            background-size: 14px 14px, 100% 100%;
+            color: #161311;
+            box-shadow: 
+                0 35px 100px -20px rgba(0, 0, 0, 0.95),
+                0 0 60px rgba(0, 0, 0, 0.6),
+                inset 0 0 80px rgba(180, 150, 100, 0.18);
+            border: 2px solid #d4c5a5;
+        }
+
+        .spine-center-crease {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 8px;
+            background: linear-gradient(to right, 
+                rgba(0,0,0,0.35) 0%, 
+                rgba(0,0,0,0.05) 25%, 
+                rgba(255,255,255,0.45) 50%, 
+                rgba(0,0,0,0.05) 75%, 
+                rgba(0,0,0,0.35) 100%);
+            transform: translateX(-50%);
+            pointer-events: none;
+            z-index: 45;
+        }
+
+        /* CÁNH LẬT 3D 180 ĐỘ CHÂN THỰC VỚI BÓNG ĐỔ VÀ CHIỀU SÂU GIẤY IN */
+        .flip-leaf-3d {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 50%;
+            transform-origin: left center;
+            transform-style: preserve-3d;
+            transition: transform 1.25s cubic-bezier(0.2, 0.85, 0.3, 1), box-shadow 1.25s ease;
+            z-index: 40;
+            will-change: transform;
+            box-shadow: -20px 0 45px -10px rgba(0, 0, 0, 0.55);
+        }
+
+        .flip-leaf-3d.flipped {
+            transform: rotateY(-180deg);
+            box-shadow: 20px 0 45px -10px rgba(0, 0, 0, 0.55);
+        }
+
+        .leaf-face {
+            position: absolute;
+            inset: 0;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            overflow: hidden;
+        }
+        .leaf-face-back {
+            transform: rotateY(180deg);
+        }
+
+        .news-drop-cap {
+            float: left;
+            font-family: 'Playfair Display', serif;
+            font-size: 4rem;
+            line-height: 0.8;
+            padding-right: 12px;
+            padding-top: 4px;
+            color: #941b1b;
+            font-weight: 900;
+        }
+
+        .rule-double {
+            border-top: 3px double #1c1815;
+            border-bottom: 1px solid #1c1815;
+            height: 6px;
+        }
+        .rule-col-divider {
+            border-right: 1.5px solid rgba(28, 24, 21, 0.28);
+        }
+
+        .news-photo-frame {
+            background: #ede2c5;
+            border: 1.5px solid #1c1815;
+        }
+
+        /* ================= MOBILE TIMELINE: CHỐNG CO RÚT, HIỂN THỊ MỞ SẴN TOÀN BỘ 6 MỐC ================= */
+        @media (max-width: 767px), (max-height: 550px) and (max-width: 1023px) {
+            .timeline-node {
+                min-height: auto !important;
+                padding: 2.25rem 0.25rem !important;
+            }
+            .timeline-monument-tablet {
+                opacity: 1 !important;
+                transform: scale(1) !important;
+                border-color: rgba(250, 204, 21, 0.6) !important;
+                box-shadow: 0 15px 40px -10px rgba(0, 0, 0, 0.9) !important;
+            }
+            .monument-grid-layout {
+                display: flex !important;
+                flex-direction: column !important;
+                gap: 1.5rem !important;
+            }
+            .monument-photo-dossier {
+                display: flex !important;
+                opacity: 1 !important;
+                transform: none !important;
+                animation: none !important;
+                border-bottom: 1px solid rgba(250, 204, 21, 0.2) !important;
+                padding-bottom: 1.25rem !important;
+            }
+            .monument-corner {
+                width: 16px !important;
+                height: 16px !important;
+                border-color: #FACC15 !important;
+            }
+            .milestone-marker-node {
+                width: 52px !important;
+                height: 52px !important;
+                background-color: #344C63 !important;
+                border: 3px solid #C58F79 !important;
+                box-shadow: 0 4px 18px rgba(52, 76, 99, 0.5) !important;
+            }
+            .milestone-marker-node span {
+                color: #FFFFFF !important;
+                font-size: 1.25rem !important;
+                font-weight: 900 !important;
+                text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7) !important;
+            }
+        }
+
+        /* ================= HIỆU ỨNG ANIMATION LẬT BÁO 3D (FORWARD & BACKWARD) ================= */
+        @keyframes pageTurnForward3D {
+            0% {
+                opacity: 0.2;
+                transform: perspective(1400px) rotateY(42deg) translateX(35px) scale(0.96);
+                transform-origin: left center;
+                box-shadow: -20px 0 35px -5px rgba(52, 76, 99, 0.35);
+            }
+            50% {
+                opacity: 0.85;
+                transform: perspective(1400px) rotateY(12deg) translateX(8px) scale(0.99);
+                box-shadow: -10px 0 20px -5px rgba(52, 76, 99, 0.2);
+            }
+            100% {
+                opacity: 1;
+                transform: perspective(1400px) rotateY(0deg) translateX(0) scale(1);
+                transform-origin: center center;
+                box-shadow: none;
+            }
+        }
+
+        @keyframes pageTurnBackward3D {
+            0% {
+                opacity: 0.2;
+                transform: perspective(1400px) rotateY(-42deg) translateX(-35px) scale(0.96);
+                transform-origin: right center;
+                box-shadow: 20px 0 35px -5px rgba(52, 76, 99, 0.35);
+            }
+            50% {
+                opacity: 0.85;
+                transform: perspective(1400px) rotateY(-12deg) translateX(-8px) scale(0.99);
+                box-shadow: 10px 0 20px -5px rgba(52, 76, 99, 0.2);
+            }
+            100% {
+                opacity: 1;
+                transform: perspective(1400px) rotateY(0deg) translateX(0) scale(1);
+                transform-origin: center center;
+                box-shadow: none;
+            }
+        }
+
+        .news-page-turn-forward {
+            animation: pageTurnForward3D 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+        }
+
+        .news-page-turn-backward {
+            animation: pageTurnBackward3D 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+        }
+
+        /* ================= RESPONSIVE NEWSPAPER: CLEAN TABS & NATURAL DOCUMENT FLOW ================= */
+        @media (max-width: 1023px) {
+            .stage-3d-viewport {
+                perspective: none !important;
+                perspective-origin: unset !important;
+                height: auto !important;
+                min-height: auto !important;
+            }
+            .newspaper-fullscreen-book {
+                transform: none !important;
+                transform-style: flat !important;
+                opacity: 1 !important;
+                box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.85) !important;
+                height: auto !important;
+                min-height: auto !important;
+                cursor: pointer !important;
+            }
+            #newspaper-cinema-section {
+                height: auto !important;
+                min-height: auto !important;
+                overflow: visible !important;
+            }
+            #cinema-newspaper {
+                height: auto !important;
+                min-height: auto !important;
+            }
+            #cinema-newspaper > div.w-full {
+                height: auto !important;
+                min-height: auto !important;
+            }
+            #flipping-leaf-3d {
+                position: static !important;
+                width: 100% !important;
+                height: auto !important;
+                min-height: auto !important;
+                transform: none !important;
+                transform-style: flat !important;
+                box-shadow: none !important;
+                z-index: 10 !important;
+                display: block !important;
+            }
+            .leaf-face, .leaf-face-back {
+                position: static !important;
+                inset: auto !important;
+                width: 100% !important;
+                height: auto !important;
+                min-height: auto !important;
+                overflow: visible !important;
+                backface-visibility: visible !important;
+                -webkit-backface-visibility: visible !important;
+                transform: none !important;
+            }
+            .news-mobile-page {
+                display: none !important;
+                width: 100% !important;
+                height: auto !important;
+                min-height: auto !important;
+            }
+            .news-mobile-page.active-mobile-page {
+                display: flex !important;
+                flex-direction: column !important;
+                height: auto !important;
+                min-height: auto !important;
+                width: 100% !important;
+            }
+            .news-paper-sheet {
+                height: auto !important;
+                min-height: auto !important;
+            }
+            .news-mobile-tab {
+                touch-action: manipulation;
+            }
+        }
+        @media (min-width: 1024px) {
+            .news-mobile-page {
+                display: flex !important;
+            }
+        }
+
+        /* ================= LANDSCAPE MOBILE HERO OPTIMIZATION (844x390, 800x360) ================= */
+        @media (max-height: 520px) and (orientation: landscape) {
+            #hero-section {
+                min-height: auto !important;
+                padding-top: 3rem !important;
+                padding-bottom: 3rem !important;
+            }
+            .hero-script-text {
+                font-size: clamp(2rem, 6vh, 2.75rem) !important;
+                line-height: 1.1 !important;
+            }
+            .hero-title {
+                font-size: clamp(1.75rem, 7vh, 2.5rem) !important;
+                line-height: 1.2 !important;
+                margin-bottom: 0.75rem !important;
+            }
+            .hero-desc {
+                font-size: 0.875rem !important;
+                line-height: 1.4 !important;
+                max-width: 38rem !important;
+            }
+            .hero-cta {
+                margin-top: 1.25rem !important;
+            }
+        }
+
+        /* ================= 3D VIRTUAL GALLERY (BẢO TÀNG SỐ 3D) ================= */
+        #gallery-canvas-container {
+            width: 100%;
+            height: 650px;
+            position: relative;
+            cursor: grab;
+            touch-action: pan-y;
+        }
+        @media (max-width: 640px) and (orientation: portrait) {
+            #gallery-canvas-container {
+                height: min(620px, 75vh);
+            }
+        }
+        @media (max-height: 500px), (max-width: 900px) and (orientation: landscape) {
+            #gallery-canvas-container {
+                height: min(380px, 85vh);
+            }
+        }
+        @media (min-width: 1024px) {
+            #gallery-canvas-container {
+                height: 820px;
+            }
+        }
+        #gallery-canvas-container:active {
+            cursor: grabbing;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #EAF5F5;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #82749B;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #344C63;
+        }

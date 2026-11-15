@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tri Ân Thầy Cô 20/11 - Happy Teachers' Day</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="celebration.css">
+</head>
+<body>
+    <div class="device-check" id="device-check">
+        Đang khởi tạo Không gian Tri Ân 20/11...
+    </div>
+    
+    <div class="container" id="container">
+        <!-- Matrix Rain Background -->
+        <canvas id="matrix"></canvas>
+        <div class="glow"></div>
+
+        <!-- Vùng đếm ngược 3-2-1 -->
+        <div class="countdown-area" id="countdown-area"></div>
+
+        <!-- Vùng hiển thị thông điệp hạt sáng: HAPPY TEACHER DAY -> 20/11 -->
+        <div class="message-area" id="message-area"></div>
+        <div class="teacher-day-message" id="teacher-day-message">HAPPY TEACHER DAY</div>
+
+        <!-- Phong bì & Bức tâm thư tri ân Thầy Cô -->
+        <div class="envelope-container" id="envelope-container">
+            <div class="envelope" id="envelope">
+                <div class="flap"></div>
+                <div class="envelope-front">
+                    <div class="envelope-seal">💌</div>
+                    <div class="message font-script">Tri Ân Thầy Cô 20/11</div>
+                    <div class="envelope-subtitle">Chi đoàn 10I • THPT Chuyên Quang Trung</div>
+                </div>
+                <div class="envelope-back">
+                    <div class="letter">
+                        <div class="letter-badge">🌸 CHÚC MỪNG NGÀY NHÀ GIÁO VIỆT NAM 🌸</div>
+                        <h2 class="letter-title">Happy Teachers' Day!</h2>
+                        <div class="letter-body">
+                            <p><strong>Kính gửi Quý Thầy Cô kính yêu!</strong></p>
+                            <p>Nhân ngày 20/11, tập thể học sinh Chi đoàn 10I xin kính dâng lên Thầy Cô ngàn lời tri ân và lòng biết ơn sâu sắc nhất.</p>
+                            <p>Cảm ơn Thầy Cô đã luôn ân cần, nhẫn nại dìu dắt và soi sáng con đường tri thức cho chúng em dưới mái trường THPT Chuyên Quang Trung. Kính chúc Quý Thầy Cô luôn dồi dào sức khỏe, tràn đầy niềm vui và mãi giữ ngọn lửa nhiệt huyết bên bục giảng thân thương!</p>
+                        </div>
+                        <div class="letter-footer">
+                            <span class="heart">❤️</span>
+                            <div class="letter-sign">Tập thể Chi đoàn 10I kính tặng</div>
+                        </div>
+                        <a href="index.html" class="return-btn">← Trở về Báo Tường Tri Ân</a>
+                    </div>
+                </div>
+            </div>
+            <div class="instruction" id="instruction">Chạm hoặc click vào phong bì để mở lời chúc đặc biệt ✨</div>
+        </div>
+
+        <!-- Nút điều khiển âm nhạc -->
+        <div class="music-control" id="music-control" title="Bật / Tắt nhạc">
+            <div class="music-icon" id="music-icon">♪</div>
+        </div>
+
+        <!-- Nút quay lại nhanh -->
+        <a href="index.html" class="nav-back-link" title="Quay lại trang chính">
+            <span>← Báo Tường</span>
+        </a>
+
+        <div class="loading-text" id="loading-text">Tri Ân Ngày Nhà Giáo Việt Nam 20/11...</div>
+        
+        <!-- Nhạc nền phát lặp lại (Nhac.mp3) -->
+        <audio id="celebration-music" loop preload="auto">
+            <source src="Nhac.mp3" type="audio/mpeg">
+        </audio>
+    </div>
+
+    <script src="celebration.js"></script>
+</body>
+</html>

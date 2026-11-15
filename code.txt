@@ -1,0 +1,2693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Phuong!</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background-color: #000;
+            overflow: hidden;
+            height: 100vh;
+            font-family: 'Courier New', monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .device-check {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #e6d2aa;
+            font-size: 24px;
+            text-align: center;
+            z-index: 100;
+            opacity: 1;
+            transition: opacity 1s ease;
+        }
+        
+        .container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="device-check" id="device-check">
+        Loading Birthday Celebration...
+    </div>
+    
+    <div class="container" id="container"></div>
+
+    <script>
+        // Function to detect if device is mobile
+        function isMobileDevice() {
+            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
+                   (window.innerWidth <= 768);
+        }
+        
+        // Function to load the appropriate code
+        function loadBirthdayCelebration() {
+            const deviceCheck = document.getElementById('device-check');
+            const container = document.getElementById('container');
+            
+            if (isMobileDevice()) {
+                // Load mobile version (Code 2)
+                deviceCheck.textContent = "Loading Mobile Version...";
+                
+                // Create mobile version elements
+                container.innerHTML = `
+                    <canvas id="matrix"></canvas>
+                    <div class="glow"></div>
+                    <div class="countdown-area" id="countdown-area"></div>
+                    <div class="message-area" id="message-area"></div>
+                    <div class="birthday-message" id="birthday-message">Happy Birthday!</div>
+                    
+                    <!-- Mobile-optimized Envelope -->
+                    <div class="envelope-container" id="envelope-container">
+                        <div class="envelope" id="envelope">
+                            <div class="flap"></div>
+                            <div class="envelope-front">
+                                <div class="message">Happy Birthday!</div>
+                            </div>
+                            <div class="envelope-back">
+                                <div class="letter">
+                                    <div class="message">Happy Birthday Mợ Phương!</div>
+                                    <div class="birthday-text">Chúc Mợ Phương sinh nhật vui vẻ, mạnh khỏe, hạnh phúc và thành công trong mọi lĩnh vực của cuộc sống!</div>
+                                    <div class="heart">❤️</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="instruction">Tap to open your special message</div>
+                    </div>
+                    
+                    <div class="music-control" id="music-control">
+                        <div class="music-icon">♪</div>
+                    </div>
+                    <div class="loading-text" id="loading-text">Loading Birthday Celebration...</div>
+                    
+                    <!-- Hidden audio element -->
+                    <audio id="birthday-music" loop>
+                        <source src="test.html/GHÉ QUA   OFFICIAL MV  Dick x PC x Tofu - BẠN CÓ TÀI MÀ.mp3" type="audio/mpeg">
+                    </audio>
+                `;
+                
+                // Apply mobile styles
+                applyMobileStyles();
+                
+                // Initialize mobile JavaScript
+                setTimeout(() => {
+                    initializeMobileScript();
+                    deviceCheck.style.opacity = '0';
+                    setTimeout(() => {
+                        deviceCheck.style.display = 'none';
+                        container.style.opacity = '1';
+                    }, 1000);
+                }, 1000);
+            } else {
+                // Load desktop version (Code 1)
+                deviceCheck.textContent = "Loading Desktop Version...";
+                
+                // Create desktop version elements
+                container.innerHTML = `
+                    <canvas id="matrix"></canvas>
+                    <div class="glow"></div>
+                    <div class="countdown-area" id="countdown-area"></div>
+                    <div class="message-area" id="message-area"></div>
+                    <div class="birthday-message" id="birthday-message">Happy Birthday!</div>
+                    
+                    <!-- Updated Envelope Design -->
+                    <div class="envelope-container" id="envelope-container">
+                        <div class="envelope" id="envelope">
+                            <div class="flap"></div>
+                            <div class="envelope-front">
+                                <div class="message">Happy Birthday!</div>
+                            </div>
+                            <div class="envelope-back">
+                                <div class="letter">
+                                    <div class="message">Happy Birthday Mợ Phương!</div>
+                                    <div class="birthday-text">Chúc Mợ Phương sinh nhật vui vẻ, mạnh khỏe, hạnh phúc và thành công trong mọi lĩnh vực của cuộc sống!</div>
+                                    <div class="heart">❤️</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="instruction">Click to open your special message</div>
+                    </div>
+                    
+                    <div class="music-control" id="music-control">
+                        <div class="music-icon">♪</div>
+                    </div>
+                    <div class="loading-text" id="loading-text">Loading Birthday Celebration...</div>
+                    
+                    <!-- Hidden audio element -->
+                    <audio id="birthday-music" loop>
+                        <source src="test.html/GHÉ QUA   OFFICIAL MV  Dick x PC x Tofu - BẠN CÓ TÀI MÀ.mp3" type="audio/mpeg">
+                    </audio>
+                `;
+                
+                // Apply desktop styles
+                applyDesktopStyles();
+                
+                // Initialize desktop JavaScript
+                setTimeout(() => {
+                    initializeDesktopScript();
+                    deviceCheck.style.opacity = '0';
+                    setTimeout(() => {
+                        deviceCheck.style.display = 'none';
+                        container.style.opacity = '1';
+                    }, 1000);
+                }, 1000);
+            }
+        }
+        
+        // Function to apply mobile styles
+        function applyMobileStyles() {
+            const style = document.createElement('style');
+            style.textContent = `
+                .container {
+                    position: relative;
+                    width: 100vw;
+                    height: 100vh;
+                    max-width: 100%;
+                    overflow: hidden;
+                }
+                
+                canvas {
+                    display: block;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                }
+                
+                .countdown-area {
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    width: 80vw;
+                    height: 80vw;
+                    max-width: 250px;
+                    max-height: 250px;
+                    z-index: 10;
+                }
+                
+                .message-area {
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    width: 95vw;
+                    height: auto;
+                    min-height: 40vh;
+                    z-index: 10;
+                    opacity: 0;
+                    transition: opacity 0.3s ease-in-out;
+                }
+                
+                .block {
+                    position: absolute;
+                    width: 4px;
+                    height: 4px;
+                    background: linear-gradient(135deg, #e6d2aa 0%, #ffebcd 100%);
+                    border-radius: 0px;
+                    box-shadow: 0 0 4px rgba(230, 210, 170, 0.9);
+                    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+                    opacity: 0;
+                }
+                
+                .glow {
+                    position: absolute;
+                    width: 70vw;
+                    height: 70vw;
+                    max-width: 250px;
+                    max-height: 250px;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    border-radius: 50%;
+                    background: radial-gradient(circle, rgba(230, 210, 170, 0.3) 0%, rgba(230, 210, 170, 0.1) 40%, transparent 70%);
+                    z-index: 5;
+                    pointer-events: none;
+                }
+                
+                .birthday-message {
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    color: #e6d2aa;
+                    font-size: 7vw;
+                    text-align: center;
+                    text-shadow: 0 0 10px rgba(230, 210, 170, 0.7);
+                    opacity: 0;
+                    z-index: 20;
+                    width: 90%;
+                    animation: pulse 2s infinite alternate;
+                }
+                
+                @keyframes pulse {
+                    0% { text-shadow: 0 0 10px rgba(230, 210, 170, 0.7); }
+                    100% { text-shadow: 0 0 20px rgba(230, 210, 170, 1), 0 0 30px rgba(230, 210, 170, 0.8); }
+                }
+                
+                .particle {
+                    position: absolute;
+                    width: 2px;
+                    height: 2px;
+                    background-color: #e6d2aa;
+                    border-radius: 50%;
+                    pointer-events: none;
+                    z-index: 15;
+                }
+                
+                .confetti {
+                    position: absolute;
+                    width: 6px;
+                    height: 12px;
+                    opacity: 0;
+                    z-index: 5;
+                }
+                
+                /* Mobile-optimized Envelope Design */
+                .envelope-container {
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    width: 80vw;
+                    max-width: 280px;
+                    height: 60vh;
+                    max-height: 400px;
+                    perspective: 1000px;
+                    z-index: 25;
+                    opacity: 0;
+                    transition: opacity 1s ease-in-out;
+                }
+                
+                .envelope {
+                    position: relative;
+                    width: 100%;
+                    height: 100%;
+                    cursor: pointer;
+                    transform-style: preserve-3d;
+                    transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                    touch-action: manipulation;
+                }
+                
+                .envelope.open {
+                    transform: translateZ(-50px) rotateX(180deg);
+                }
+                
+                .envelope-front, .envelope-back {
+                    position: absolute;
+                    width: 100%;
+                    height: 100%;
+                    backface-visibility: hidden;
+                    border-radius: 10px;
+                    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+                }
+                
+                .envelope-front {
+                    background: linear-gradient(45deg, #1a1a1a 0%, #2d2d2d 100%);
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    z-index: 2;
+                    transform: rotateX(0deg);
+                    border: 1px solid #e6d2aa;
+                }
+                
+                .envelope-back {
+                    background: linear-gradient(45deg, #1a1a1a 0%, #2d2d2d 100%);
+                    transform: rotateX(180deg);
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    padding: 15px;
+                    border: 1px solid #e6d2aa;
+                }
+                
+                .flap {
+                    position: absolute;
+                    top: 0;
+                    width: 0;
+                    height: 0;
+                    border-left: 50% solid transparent;
+                    border-right: 50% solid transparent;
+                    border-top: 30% solid #e6d2aa;
+                    z-index: 3;
+                    transform-origin: top;
+                    transition: transform 0.5s ease-in-out;
+                }
+                
+                .envelope.open .flap {
+                    transform: rotateX(180deg);
+                }
+                
+                .letter {
+                    position: absolute;
+                    width: 90%;
+                    height: 85%;
+                    background: #1a1a1a;
+                    border-radius: 5px;
+                    padding: 15px;
+                    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+                    z-index: 1;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    text-align: center;
+                    transform: translateY(10px);
+                    transition: transform 0.5s ease-in-out;
+                    border: 1px solid #e6d2aa;
+                    overflow-y: auto;
+                }
+                
+                .envelope.open .letter {
+                    transform: translateY(-120px);
+                }
+                
+                .message {
+                    font-size: 6vw;
+                    color: #e6d2aa;
+                    margin-bottom: 15px;
+                    font-weight: bold;
+                    text-shadow: 0 0 5px rgba(230, 210, 170, 0.7);
+                }
+                
+                .birthday-text {
+                    font-size: 4vw;
+                    color: #e6d2aa;
+                    line-height: 1.5;
+                    text-shadow: 0 0 3px rgba(230, 210, 170, 0.5);
+                    margin-bottom: 10px;
+                }
+                
+                .heart {
+                    color: #e6d2aa;
+                    font-size: 8vw;
+                    margin-top: 10px;
+                    animation: heartbeat 1.5s ease-in-out infinite both;
+                    text-shadow: 0 0 5px rgba(230, 210, 170, 0.7);
+                }
+                
+                @keyframes heartbeat {
+                    from {
+                        transform: scale(1);
+                        transform-origin: center center;
+                        animation-timing-function: ease-out;
+                    }
+                    10% {
+                        transform: scale(0.91);
+                        animation-timing-function: ease-in;
+                    }
+                    17% {
+                        transform: scale(0.98);
+                        animation-timing-function: ease-out;
+                    }
+                    33% {
+                        transform: scale(0.87);
+                        animation-timing-function: ease-in;
+                    }
+                    45% {
+                        transform: scale(1);
+                        animation-timing-function: ease-out;
+                    }
+                }
+                
+                .instruction {
+                    position: absolute;
+                    bottom: -40px;
+                    width: 100%;
+                    text-align: center;
+                    color: #e6d2aa;
+                    font-style: italic;
+                    font-size: 4vw;
+                    text-shadow: 0 0 5px rgba(230, 210, 170, 0.7);
+                }
+                
+                .music-control {
+                    position: absolute;
+                    bottom: 15px;
+                    right: 15px;
+                    z-index: 30;
+                    background: rgba(0,0,0,0.7);
+                    border-radius: 50%;
+                    width: 50px;
+                    height: 50px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    cursor: pointer;
+                    border: 2px solid #e6d2aa;
+                    transition: all 0.3s ease;
+                    touch-action: manipulation;
+                }
+                
+                .music-control:hover {
+                    background: rgba(0,0,0,0.9);
+                    transform: scale(1.1);
+                }
+                
+                .music-icon {
+                    color: #e6d2aa;
+                    font-size: 24px;
+                }
+                
+                .music-control.muted .music-icon {
+                    opacity: 0.5;
+                }
+                
+                .loading-text {
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    color: #e6d2aa;
+                    font-size: 6vw;
+                    z-index: 40;
+                    text-align: center;
+                    opacity: 1;
+                    transition: opacity 1s ease;
+                    width: 80%;
+                }
+                
+                .confetti-piece {
+                    position: absolute;
+                    width: 8px;
+                    height: 8px;
+                    background-color: #f00;
+                    opacity: 0;
+                }
+                
+                @keyframes confetti-fall {
+                    0% {
+                        transform: translateY(-100px) rotate(0deg);
+                        opacity: 1;
+                    }
+                    100% {
+                        transform: translateY(1000px) rotate(360deg);
+                        opacity: 0;
+                    }
+                }
+                
+                /* Media Queries for very small screens */
+                @media (max-width: 360px) {
+                    .birthday-message {
+                        font-size: 24px;
+                    }
+                
+                    .message {
+                        font-size: 20px;
+                    }
+                
+                    .birthday-text {
+                        font-size: 14px;
+                    }
+                
+                    .instruction {
+                        font-size: 14px;
+                    }
+                
+                    .loading-text {
+                        font-size: 20px;
+                    }
+                
+                    .envelope-container {
+                        width: 90vw;
+                        height: 55vh;
+                    }
+                }
+                
+                /* Landscape orientation adjustments */
+                @media (max-height: 500px) and (orientation: landscape) {
+                    .envelope-container {
+                        height: 80vh;
+                    }
+                
+                    .letter {
+                        padding: 10px;
+                    }
+                
+                    .message {
+                        font-size: 5vw;
+                        margin-bottom: 5px;
+                    }
+                
+                    .birthday-text {
+                        font-size: 3.5vw;
+                        line-height: 1.3;
+                    }
+                
+                    .instruction {
+                        bottom: -30px;
+                        font-size: 3.5vw;
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+        
+        // Function to apply desktop styles
+        function applyDesktopStyles() {
+            const style = document.createElement('style');
+            style.textContent = `
+                .container {
+                    position: relative;
+                    width: 100vw;
+                    height: 100vh;
+                }
+                
+                canvas {
+                    display: block;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                }
+                
+                .countdown-area {
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    width: 300px;
+                    height: 300px;
+                    z-index: 10;
+                }
+                
+                .message-area {
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    width: 650px;
+                    height: 300px;
+                    z-index: 10;
+                    opacity: 0;
+                    transition: opacity 0.3s ease-in-out;
+                }
+                
+                .block {
+                    position: absolute;
+                    width: 6px;
+                    height: 6px;
+                    background: linear-gradient(135deg, #e6d2aa 0%, #ffebcd 100%);
+                    border-radius: 0px;
+                    box-shadow: 0 0 4px rgba(230, 210, 170, 0.9);
+                    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+                    opacity: 0;
+                }
+                
+                .glow {
+                    position: absolute;
+                    width: 350px;
+                    height: 350px;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    border-radius: 50%;
+                    background: radial-gradient(circle, rgba(230, 210, 170, 0.3) 0%, rgba(230, 210, 170, 0.1) 40%, transparent 70%);
+                    z-index: 5;
+                    pointer-events: none;
+                }
+                
+                .birthday-message {
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    color: #e6d2aa;
+                    font-size: 36px;
+                    text-align: center;
+                    text-shadow: 0 0 10px rgba(230, 210, 170, 0.7);
+                    opacity: 0;
+                    z-index: 20;
+                    width: 100%;
+                    animation: pulse 2s infinite alternate;
+                }
+                
+                @keyframes pulse {
+                    0% { text-shadow: 0 0 10px rgba(230, 210, 170, 0.7); }
+                    100% { text-shadow: 0 0 20px rgba(230, 210, 170, 1), 0 0 30px rgba(230, 210, 170, 0.8); }
+                }
+                
+                .particle {
+                    position: absolute;
+                    width: 3px;
+                    height: 3px;
+                    background-color: #e6d2aa;
+                    border-radius: 50%;
+                    pointer-events: none;
+                    z-index: 15;
+                }
+                
+                .confetti {
+                    position: absolute;
+                    width: 8px;
+                    height: 16px;
+                    opacity: 0;
+                    z-index: 5;
+                }
+                
+                /* Updated Envelope Design to match page style */
+                .envelope-container {
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    width: 300px;
+                    height: 400px;
+                    perspective: 1000px;
+                    z-index: 25;
+                    opacity: 0;
+                    transition: opacity 1s ease-in-out;
+                }
+                
+                .envelope {
+                    position: relative;
+                    width: 100%;
+                    height: 100%;
+                    cursor: pointer;
+                    transform-style: preserve-3d;
+                    transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                }
+                
+                .envelope.open {
+                    transform: translateZ(-100px) rotateX(180deg);
+                }
+                
+                .envelope-front, .envelope-back {
+                    position: absolute;
+                    width: 100%;
+                    height: 100%;
+                    backface-visibility: hidden;
+                    border-radius: 10px;
+                    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+                }
+                
+                .envelope-front {
+                    background: linear-gradient(45deg, #1a1a1a 0%, #2d2d2d 100%);
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    z-index: 2;
+                    transform: rotateX(0deg);
+                    border: 1px solid #e6d2aa;
+                }
+                
+                .envelope-back {
+                    background: linear-gradient(45deg, #1a1a1a 0%, #2d2d2d 100%);
+                    transform: rotateX(180deg);
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    padding: 20px;
+                    border: 1px solid #e6d2aa;
+                }
+                
+                .flap {
+                    position: absolute;
+                    top: 0;
+                    width: 0;
+                    height: 0;
+                    border-left: 150px solid transparent;
+                    border-right: 150px solid transparent;
+                    border-top: 100px solid #e6d2aa;
+                    z-index: 3;
+                    transform-origin: top;
+                    transition: transform 0.5s ease-in-out;
+                }
+                
+                .envelope.open .flap {
+                    transform: rotateX(180deg);
+                }
+                
+                .letter {
+                    position: absolute;
+                    width: 90%;
+                    height: 85%;
+                    background: #1a1a1a;
+                    border-radius: 5px;
+                    padding: 20px;
+                    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+                    z-index: 1;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    text-align: center;
+                    transform: translateY(10px);
+                    transition: transform 0.5s ease-in-out;
+                    border: 1px solid #e6d2aa;
+                }
+                
+                .envelope.open .letter {
+                    transform: translateY(-180px);
+                }
+                
+                .message {
+                    font-size: 24px;
+                    color: #e6d2aa;
+                    margin-bottom: 20px;
+                    font-weight: bold;
+                    text-shadow: 0 0 5px rgba(230, 210, 170, 0.7);
+                }
+                
+                .birthday-text {
+                    font-size: 16px;
+                    color: #e6d2aa;
+                    line-height: 1.5;
+                    text-shadow: 0 0 3px rgba(230, 210, 170, 0.5);
+                }
+                
+                .heart {
+                    color: #e6d2aa;
+                    font-size: 30px;
+                    margin-top: 10px;
+                    animation: heartbeat 1.5s ease-in-out infinite both;
+                    text-shadow: 0 0 5px rgba(230, 210, 170, 0.7);
+                }
+                
+                @keyframes heartbeat {
+                    from {
+                        transform: scale(1);
+                        transform-origin: center center;
+                        animation-timing-function: ease-out;
+                    }
+                    10% {
+                        transform: scale(0.91);
+                        animation-timing-function: ease-in;
+                    }
+                    17% {
+                        transform: scale(0.98);
+                        animation-timing-function: ease-out;
+                    }
+                    33% {
+                        transform: scale(0.87);
+                        animation-timing-function: ease-in;
+                    }
+                    45% {
+                        transform: scale(1);
+                        animation-timing-function: ease-out;
+                    }
+                }
+                
+                .instruction {
+                    position: absolute;
+                    bottom: -50px;
+                    width: 100%;
+                    text-align: center;
+                    color: #e6d2aa;
+                    font-style: italic;
+                    font-size: 16px;
+                    text-shadow: 0 0 5px rgba(230, 210, 170, 0.7);
+                }
+                
+                .music-control {
+                    position: absolute;
+                    bottom: 20px;
+                    right: 20px;
+                    z-index: 30;
+                    background: rgba(0,0,0,0.7);
+                    border-radius: 50%;
+                    width: 60px;
+                    height: 60px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    cursor: pointer;
+                    border: 2px solid #e6d2aa;
+                    transition: all 0.3s ease;
+                }
+                
+                .music-control:hover {
+                    background: rgba(0,0,0,0.9);
+                    transform: scale(1.1);
+                }
+                
+                .music-icon {
+                    color: #e6d2aa;
+                    font-size: 28px;
+                }
+                
+                .music-control.muted .music-icon {
+                    opacity: 0.5;
+                }
+                
+                .loading-text {
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    color: #e6d2aa;
+                    font-size: 24px;
+                    z-index: 40;
+                    text-align: center;
+                    opacity: 1;
+                    transition: opacity 1s ease;
+                }
+                
+                .confetti-piece {
+                    position: absolute;
+                    width: 10px;
+                    height: 10px;
+                    background-color: #f00;
+                    opacity: 0;
+                }
+                
+                @keyframes confetti-fall {
+                    0% {
+                        transform: translateY(-100px) rotate(0deg);
+                        opacity: 1;
+                    }
+                    100% {
+                        transform: translateY(1000px) rotate(360deg);
+                        opacity: 0;
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+        
+        // Initialize the page
+        window.addEventListener('load', loadBirthdayCelebration);
+        
+        // Mobile JavaScript initialization
+        function initializeMobileScript() {
+            // Canvas Matrix Background
+            const canvas = document.getElementById('matrix');
+            const ctx = canvas.getContext('2d');
+            const countdownArea = document.getElementById('countdown-area');
+            const messageArea = document.getElementById('message-area');
+            const birthdayMessage = document.getElementById('birthday-message');
+            const envelopeContainer = document.getElementById('envelope-container');
+            const envelope = document.getElementById('envelope');
+            const musicControl = document.getElementById('music-control');
+            const birthdayMusic = document.getElementById('birthday-music');
+            const loadingText = document.getElementById('loading-text');
+            
+            // Set canvas to full window size
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            resizeCanvas();
+            
+            // Happy Birthday characters only
+            const chars = "Happy Birthday Phuong 12T10";
+            const charArray = chars.split('');
+            
+            // Matrix configuration - optimized for mobile
+            const fontSize = Math.max(12, window.innerWidth / 30); // Responsive font size
+            let columns = Math.floor(canvas.width / fontSize);
+            const drops = [];
+            for (let i = 0; i < columns; i++) {
+                drops.push(Math.floor(Math.random() * canvas.height / fontSize));
+            }
+            
+            // Matrix animation
+            function animateMatrix() {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                ctx.fillStyle = '#e6d2aa';
+                ctx.font = `${fontSize}px monospace`;
+                
+                for (let i = 0; i < drops.length; i++) {
+                    const text = charArray[Math.floor(Math.random() * charArray.length)];
+                    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                    
+                    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                        drops[i] = 0;
+                    }
+                    drops[i]++;
+                }
+                
+                requestAnimationFrame(animateMatrix);
+            }
+            
+            // Simplified number patterns for mobile
+            const numberPatterns = {
+                3: [
+                    [0,0,1,1,1,1,0,0],
+                    [0,1,1,1,1,1,1,0],
+                    [1,1,0,0,0,0,1,1],
+                    [0,0,0,0,0,0,1,1],
+                    [0,0,0,0,0,1,1,0],
+                    [0,0,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,1,1],
+                    [0,1,1,1,1,1,1,0],
+                    [0,0,1,1,1,1,0,0]
+                ],
+                2: [
+                    [0,0,1,1,1,1,0,0],
+                    [0,1,1,1,1,1,1,0],
+                    [1,1,0,0,0,0,1,1],
+                    [0,0,0,0,0,0,1,1],
+                    [0,0,0,0,0,1,1,0],
+                    [0,0,0,0,1,1,0,0],
+                    [0,0,0,1,1,0,0,0],
+                    [0,0,1,1,0,0,0,0],
+                    [1,1,1,1,1,1,1,1],
+                    [1,1,1,1,1,1,1,1]
+                ],
+                1: [
+                    [0,0,0,1,1,0,0,0],
+                    [0,0,1,1,1,0,0,0],
+                    [0,1,1,1,1,0,0,0],
+                    [1,1,0,1,1,0,0,0],
+                    [0,0,0,1,1,0,0,0],
+                    [0,0,0,1,1,0,0,0],
+                    [0,0,0,1,1,0,0,0],
+                    [0,0,0,1,1,0,0,0],
+                    [1,1,1,1,1,1,1,1],
+                    [1,1,1,1,1,1,1,1]
+                ]
+            };
+            
+            // Simplified letter patterns for mobile
+            const letterPatterns = {
+                'H': [
+                    [1,1,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,1,1],
+                    [1,1,1,1,1,1,1,1],
+                    [1,1,1,1,1,1,1,1],
+                    [1,1,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,1,1]
+                ],
+                'A': [
+                    [0,0,1,1,1,1,0,0],
+                    [0,1,1,1,1,1,1,0],
+                    [1,1,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,1,1],
+                    [1,1,1,1,1,1,1,1],
+                    [1,1,1,1,1,1,1,1],
+                    [1,1,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,1,1]
+                ],
+                'P': [
+                    [1,1,1,1,1,1,0,0],
+                    [1,1,1,1,1,1,1,0],
+                    [1,1,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,1,1],
+                    [1,1,1,1,1,1,1,0],
+                    [1,1,1,1,1,1,0,0],
+                    [1,1,0,0,0,0,0,0],
+                    [1,1,0,0,0,0,0,0]
+                ],
+                'Y': [
+                    [1,1,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,1,1],
+                    [0,1,1,0,0,1,1,0],
+                    [0,0,1,1,1,1,0,0],
+                    [0,0,0,1,1,0,0,0],
+                    [0,0,0,1,1,0,0,0],
+                    [0,0,0,1,1,0,0,0],
+                    [0,0,0,1,1,0,0,0]
+                ],
+                'B': [
+                    [1,1,1,1,1,1,0,0],
+                    [1,1,1,1,1,1,1,0],
+                    [1,1,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,1,1],
+                    [1,1,1,1,1,1,1,0],
+                    [1,1,1,1,1,1,1,0],
+                    [1,1,0,0,0,0,1,1],
+                    [1,1,1,1,1,1,1,1]
+                ],
+                'I': [
+                    [1,1,1,1,1,1,1,1],
+                    [1,1,1,1,1,1,1,1],
+                    [0,0,0,1,1,0,0,0],
+                    [0,0,0,1,1,0,0,0],
+                    [0,0,0,1,1,0,0,0],
+                    [0,0,0,1,1,0,0,0],
+                    [1,1,1,1,1,1,1,1],
+                    [1,1,1,1,1,1,1,1]
+                ],
+                'R': [
+                    [1,1,1,1,1,1,0,0],
+                    [1,1,1,1,1,1,1,0],
+                    [1,1,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,1,1],
+                    [1,1,1,1,1,1,1,0],
+                    [1,1,1,1,1,1,0,0],
+                    [1,1,0,0,1,1,0,0],
+                    [1,1,0,0,0,1,1,1]
+                ],
+                'T': [
+                    [1,1,1,1,1,1,1,1],
+                    [1,1,1,1,1,1,1,1],
+                    [0,0,0,1,1,0,0,0],
+                    [0,0,0,1,1,0,0,0],
+                    [0,0,0,1,1,0,0,0],
+                    [0,0,0,1,1,0,0,0],
+                    [0,0,0,1,1,0,0,0],
+                    [0,0,0,1,1,0,0,0]
+                ],
+                'D': [
+                    [1,1,1,1,1,1,0,0],
+                    [1,1,1,1,1,1,1,0],
+                    [1,1,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,1,1],
+                    [1,1,1,1,1,1,1,0],
+                    [1,1,1,1,1,1,0,0]
+                ],
+                'U': [
+                    [1,1,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,1,1],
+                    [1,1,1,1,1,1,1,1],
+                    [1,1,1,1,1,1,1,1]
+                ],
+                'O': [
+                    [0,0,1,1,1,1,0,0],
+                    [0,1,1,1,1,1,1,0],
+                    [1,1,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,1,1],
+                    [0,1,1,1,1,1,1,0],
+                    [0,0,1,1,1,1,0,0]
+                ],
+                'N': [
+                    [1,1,0,0,0,0,1,1],
+                    [1,1,1,0,0,0,1,1],
+                    [1,1,1,1,0,0,1,1],
+                    [1,1,0,1,1,0,1,1],
+                    [1,1,0,0,1,1,1,1],
+                    [1,1,0,0,0,1,1,1],
+                    [1,1,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,1,1]
+                ],
+                'G': [
+                    [0,0,1,1,1,1,0,0],
+                    [0,1,1,1,1,1,1,0],
+                    [1,1,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,0,0],
+                    [1,1,0,0,1,1,1,1],
+                    [1,1,0,0,0,0,1,1],
+                    [1,1,1,0,0,0,1,1],
+                    [0,1,1,1,1,1,1,0]
+                ],
+                '1': [
+                    [0,0,0,1,1,0,0,0],
+                    [0,0,1,1,1,0,0,0],
+                    [0,1,1,1,1,0,0,0],
+                    [1,1,0,1,1,0,0,0],
+                    [0,0,0,1,1,0,0,0],
+                    [0,0,0,1,1,0,0,0],
+                    [1,1,1,1,1,1,1,1],
+                    [1,1,1,1,1,1,1,1]
+                ],
+                '2': [
+                    [0,0,1,1,1,1,0,0],
+                    [0,1,1,1,1,1,1,0],
+                    [1,1,0,0,0,0,1,1],
+                    [0,0,0,0,0,0,1,1],
+                    [0,0,0,0,0,1,1,0],
+                    [0,0,0,0,1,1,0,0],
+                    [1,1,1,1,1,1,1,1],
+                    [1,1,1,1,1,1,1,1]
+                ],
+                '0': [
+                    [0,0,1,1,1,1,0,0],
+                    [0,1,1,1,1,1,1,0],
+                    [1,1,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,1,1],
+                    [0,1,1,1,1,1,1,0],
+                    [0,0,1,1,1,1,0,0]
+                ]
+            };
+            
+            let currentBlocks = [];
+            let countdownValue = 3;
+            let confettiCount = 0;
+            let confettiInterval;
+            let currentMessageIndex = 0;
+            const messages = ["HAPPY BIRTHDAY", "PHUONG", "12T10"];
+            const messageDurations = [1500, 1200, 800]; // Faster for mobile
+            
+            // Music control
+            let isMusicPlaying = false;
+            let isEnvelopeOpen = false;
+            
+            function toggleMusic() {
+                if (isMusicPlaying) {
+                    birthdayMusic.pause();
+                    musicControl.classList.add('muted');
+                } else {
+                    birthdayMusic.play().catch(e => {
+                        console.log("Audio play failed:", e);
+                    });
+                    musicControl.classList.remove('muted');
+                }
+                isMusicPlaying = !isMusicPlaying;
+            }
+            
+            function createNumber(number, isFirst = false) {
+                const pattern = numberPatterns[number];
+                if (!pattern) return;
+                
+                const blockSize = 6;
+                const gap = 2;
+                const rows = pattern.length;
+                const cols = pattern[0].length;
+                
+                const totalWidth = cols * (blockSize + gap) - gap;
+                const totalHeight = rows * (blockSize + gap) - gap;
+                
+                const startX = (countdownArea.offsetWidth - totalWidth) / 2;
+                const startY = (countdownArea.offsetHeight - totalHeight) / 2;
+                
+                // Clear existing blocks
+                currentBlocks.forEach(block => {
+                    if (block.parentNode === countdownArea) {
+                        countdownArea.removeChild(block);
+                    }
+                });
+                currentBlocks = [];
+                
+                for (let row = 0; row < rows; row++) {
+                    for (let col = 0; col < cols; col++) {
+                        if (pattern[row][col] === 1) {
+                            const block = document.createElement('div');
+                            block.className = 'block';
+                            block.style.width = `${blockSize}px`;
+                            block.style.height = `${blockSize}px`;
+                            
+                            const finalX = startX + col * (blockSize + gap);
+                            const finalY = startY + row * (blockSize + gap);
+                            
+                            // For first number, start from random positions
+                            let startPosX, startPosY;
+                            if (isFirst) {
+                                startPosX = Math.random() * countdownArea.offsetWidth;
+                                startPosY = Math.random() * countdownArea.offsetHeight;
+                            } else {
+                                startPosX = finalX;
+                                startPosY = finalY;
+                                block.style.opacity = '0';
+                            }
+                            
+                            block.style.left = `${startPosX}px`;
+                            block.style.top = `${startPosY}px`;
+                            
+                            const startTime = Date.now();
+                            const duration = 150 + Math.random() * 100; // Faster animation for mobile
+                            
+                            function animateBlock() {
+                                const elapsed = Date.now() - startTime;
+                                const progress = Math.min(elapsed / duration, 1);
+                                
+                                // Easing function for smooth motion
+                                const ease = 1 - Math.pow(1 - progress, 3);
+                                
+                                const currentX = startPosX + (finalX - startPosX) * ease;
+                                const currentY = startPosY + (finalY - startPosY) * ease;
+                                
+                                block.style.left = `${currentX}px`;
+                                block.style.top = `${currentY}px`;
+                                block.style.opacity = progress.toString();
+                                
+                                if (progress < 1) {
+                                    requestAnimationFrame(animateBlock);
+                                }
+                            }
+                            
+                            // Minimal stagger for faster effect
+                            setTimeout(() => {
+                                requestAnimationFrame(animateBlock);
+                            }, Math.random() * 20); // Reduced stagger for mobile
+                            
+                            countdownArea.appendChild(block);
+                            currentBlocks.push(block);
+                        }
+                    }
+                }
+            }
+            
+            function createMessage(text, duration = 1500) {
+                // Clear existing blocks
+                currentBlocks.forEach(block => {
+                    if (block.parentNode === messageArea) {
+                        messageArea.removeChild(block);
+                    }
+                });
+                currentBlocks = [];
+                
+                const blockSize = 4;
+                const gap = 1;
+                const letterSpacing = 8;
+                
+                // Calculate total width
+                let totalWidth = 0;
+                for (let i = 0; i < text.length; i++) {
+                    const letter = text[i];
+                    if (letter === ' ') {
+                        totalWidth += 15;
+                    } else {
+                        totalWidth += letterPatterns[letter][0].length * (blockSize + gap) - gap;
+                        if (i < text.length - 1) totalWidth += letterSpacing;
+                    }
+                }
+                
+                const startX = (messageArea.offsetWidth - totalWidth) / 2;
+                const startY = (messageArea.offsetHeight - 8 * (blockSize + gap) - gap) / 2;
+                
+                let currentX = startX;
+                
+                // Calculate timing for specified duration assembly
+                const totalLetters = text.replace(/ /g, '').length;
+                const timePerLetter = duration / totalLetters;
+                
+                // Create blocks for each letter with precise timing
+                function createLetter(index, startTime) {
+                    if (index >= text.length) {
+                        // Schedule next message after a delay
+                        setTimeout(() => {
+                            currentMessageIndex++;
+                            if (currentMessageIndex < messages.length) {
+                                explodeCurrentMessage();
+                            } else {
+                                // After last message, show the envelope
+                                setTimeout(showEnvelope, 300); // Reduced delay for mobile
+                            }
+                        }, 300); // Reduced delay before next message
+                        return;
+                    }
+                    
+                    const letter = text[index];
+                    
+                    if (letter === ' ') {
+                        currentX += 15;
+                        createLetter(index + 1, startTime);
+                        return;
+                    }
+                    
+                    const pattern = letterPatterns[letter];
+                    if (!pattern) {
+                        createLetter(index + 1, startTime);
+                        return;
+                    }
+                    
+                    const rows = pattern.length;
+                    const cols = pattern[0].length;
+                    const letterWidth = cols * (blockSize + gap) - gap;
+                    
+                    const letterBlocks = [];
+                    
+                    for (let row = 0; row < rows; row++) {
+                        for (let col = 0; col < cols; col++) {
+                            if (pattern[row][col] === 1) {
+                                const block = document.createElement('div');
+                                block.className = 'block';
+                                block.style.width = `${blockSize}px`;
+                                block.style.height = `${blockSize}px`;
+                                
+                                const finalX = currentX + col * (blockSize + gap);
+                                const finalY = startY + row * (blockSize + gap);
+                                
+                                // Start from random positions for animation
+                                const startPosX = Math.random() * messageArea.offsetWidth;
+                                const startPosY = Math.random() * messageArea.offsetHeight;
+                                
+                                block.style.left = `${startPosX}px`;
+                                block.style.top = `${startPosY}px`;
+                                block.style.opacity = '0';
+                                
+                                messageArea.appendChild(block);
+                                currentBlocks.push(block);
+                                letterBlocks.push({
+                                    block,
+                                    startPosX,
+                                    startPosY,
+                                    finalX,
+                                    finalY
+                                });
+                            }
+                        }
+                    }
+                    
+                    // Animate this letter's blocks
+                    const targetDuration = timePerLetter * (letterBlocks.length / 10);
+                    animateLetterBlocks(letterBlocks, 0, startTime, targetDuration, () => {
+                        currentX += letterWidth + letterSpacing;
+                        createLetter(index + 1, startTime + targetDuration);
+                    });
+                }
+                
+                // Start creating letters
+                createLetter(0, Date.now());
+            }
+            
+            function animateLetterBlocks(letterBlocks, index, startTime, targetDuration, callback) {
+                if (index >= letterBlocks.length) {
+                    callback();
+                    return;
+                }
+                
+                const blockData = letterBlocks[index];
+                const { block, startPosX, startPosY, finalX, finalY } = blockData;
+                
+                // Faster animation speeds for mobile
+                const duration = 30 + Math.random() * 40; // Very fast animation
+                
+                function animateBlock() {
+                    const elapsed = Date.now() - startTime;
+                    const progress = Math.min(elapsed / duration, 1);
+                    
+                    // Easing function for smooth motion
+                    const ease = 1 - Math.pow(1 - progress, 3);
+                    
+                    const currentX = startPosX + (finalX - startPosX) * ease;
+                    const currentY = startPosY + (finalY - startPosY) * ease;
+                    
+                    block.style.left = `${currentX}px`;
+                    block.style.top = `${currentY}px`;
+                    block.style.opacity = progress.toString();
+                    
+                    if (progress < 1) {
+                        requestAnimationFrame(animateBlock);
+                    } else {
+                        // Move to next block immediately
+                        animateLetterBlocks(letterBlocks, index + 1, startTime, targetDuration, callback);
+                    }
+                }
+                
+                // Start animation immediately
+                requestAnimationFrame(animateBlock);
+            }
+            
+            function explodeCurrentMessage() {
+                // Create particles during explosion
+                createParticles();
+                
+                currentBlocks.forEach((block, index) => {
+                    const startX = parseFloat(block.style.left);
+                    const startY = parseFloat(block.style.top);
+                    
+                    const angle = Math.random() * Math.PI * 2;
+                    const distance = 30 + Math.random() * 50;
+                    const targetX = startX + Math.cos(angle) * distance;
+                    const targetY = startY + Math.sin(angle) * distance;
+                    
+                    const startTime = Date.now();
+                    const duration = 100 + Math.random() * 80; // Faster explosion for mobile
+                    
+                    function animateExplosion() {
+                        const elapsed = Date.now() - startTime;
+                        const progress = Math.min(elapsed / duration, 1);
+                        
+                        // Easing function for explosion
+                        const ease = Math.pow(progress, 0.7);
+                        
+                        const currentX = startX + (targetX - startX) * ease;
+                        const currentY = startY + (targetY - startY) * ease;
+                        const rotation = progress * 360;
+                        const opacity = 1 - progress;
+                        
+                        block.style.left = `${currentX}px`;
+                        block.style.top = `${currentY}px`;
+                        block.style.transform = `rotate(${rotation}deg)`;
+                        block.style.opacity = opacity.toString();
+                        
+                        if (progress < 1) {
+                            requestAnimationFrame(animateExplosion);
+                        } else {
+                            // Remove block after explosion
+                            if (block.parentNode === messageArea) {
+                                block.parentNode.removeChild(block);
+                            }
+                        }
+                    }
+                    
+                    // Minimal stagger for faster explosions
+                    setTimeout(() => {
+                        requestAnimationFrame(animateExplosion);
+                    }, index * 2); // Reduced stagger for mobile
+                });
+                
+                // After explosion, show next message
+                setTimeout(() => {
+                    showNextMessage();
+                }, 200); // Reduced delay for mobile
+            }
+            
+            function showNextMessage() {
+                if (currentMessageIndex < messages.length) {
+                    const message = messages[currentMessageIndex];
+                    const duration = messageDurations[currentMessageIndex];
+                    createMessage(message, duration);
+                }
+            }
+            
+            function showEnvelope() {
+                // Clear message area
+                messageArea.style.opacity = '0';
+                
+                // Show envelope with animation
+                setTimeout(() => {
+                    envelopeContainer.style.opacity = '1';
+                    // Start music when envelope appears
+                    toggleMusic();
+                }, 200); // Reduced delay for mobile
+            }
+            
+            function createParticles() {
+                for (let i = 0; i < 10; i++) { // Fewer particles for mobile
+                    const particle = document.createElement('div');
+                    particle.className = 'particle';
+                    
+                    // Position particles around the center
+                    const centerX = messageArea.offsetWidth / 2;
+                    const centerY = messageArea.offsetHeight / 2;
+                    
+                    particle.style.left = `${centerX}px`;
+                    particle.style.top = `${centerY}px`;
+                    
+                    document.querySelector('.container').appendChild(particle);
+                    
+                    // Animate particles
+                    const angle = Math.random() * Math.PI * 2;
+                    const distance = 50 + Math.random() * 80;
+                    const targetX = centerX + Math.cos(angle) * distance;
+                    const targetY = centerY + Math.sin(angle) * distance;
+                    
+                    const startTime = Date.now();
+                    const duration = 150 + Math.random() * 100; // Faster particles for mobile
+                    
+                    function animateParticle() {
+                        const elapsed = Date.now() - startTime;
+                        const progress = Math.min(elapsed / duration, 1);
+                        
+                        const currentX = centerX + (targetX - centerX) * progress;
+                        const currentY = centerY + (targetY - centerY) * progress;
+                        const opacity = 1 - progress;
+                        
+                        particle.style.left = `${currentX}px`;
+                        particle.style.top = `${currentY}px`;
+                        particle.style.opacity = opacity.toString();
+                        
+                        if (progress < 1) {
+                            requestAnimationFrame(animateParticle);
+                        } else {
+                            // Remove particle after animation
+                            if (particle.parentNode) {
+                                particle.parentNode.removeChild(particle);
+                            }
+                        }
+                    }
+                    
+                    requestAnimationFrame(animateParticle);
+                }
+            }
+            
+            function createConfetti() {
+                const colors = ['#e6d2aa', '#ffebcd', '#f5deb3', '#fff8dc', '#faf0e6'];
+                
+                for (let i = 0; i < 40; i++) { // Fewer confetti for mobile
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    
+                    // Random color
+                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    
+                    // Random position at top of screen
+                    confetti.style.left = `${Math.random() * 100}vw`;
+                    confetti.style.top = '-20px';
+                    
+                    // Random rotation
+                    confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+                    
+                    document.querySelector('.container').appendChild(confetti);
+                    
+                    // Animate confetti falling
+                    const startTime = Date.now();
+                    const duration = 1000 + Math.random() * 800;
+                    const endY = window.innerHeight + 20;
+                    
+                    function animateConfetti() {
+                        const elapsed = Date.now() - startTime;
+                        const progress = Math.min(elapsed / duration, 1);
+                        
+                        const currentY = -20 + (endY + 20) * progress;
+                        const currentX = parseFloat(confetti.style.left) + Math.sin(progress * 10) * 20;
+                        const opacity = progress < 0.1 ? progress * 10 :
+                                      progress > 0.9 ? 1 - (progress - 0.9) * 10 : 1;
+                        const rotation = parseFloat(confetti.style.transform.replace('rotate(', '').replace('deg)', '')) + 5;
+                        
+                        confetti.style.left = `${currentX}px`;
+                        confetti.style.top = `${currentY}px`;
+                        confetti.style.transform = `rotate(${rotation}deg)`;
+                        confetti.style.opacity = opacity.toString();
+                        
+                        if (progress < 1) {
+                            requestAnimationFrame(animateConfetti);
+                        } else {
+                            // Remove confetti after animation
+                            if (confetti.parentNode) {
+                                confetti.parentNode.removeChild(confetti);
+                            }
+                        }
+                    }
+                    
+                    // Minimal stagger
+                    setTimeout(() => {
+                        requestAnimationFrame(animateConfetti);
+                    }, Math.random() * 200);
+                }
+            }
+            
+            function showBirthdayMessage() {
+                // Show message area immediately
+                messageArea.style.opacity = '1';
+                
+                // Start with first message (Happy Birthday)
+                currentMessageIndex = 0;
+                showNextMessage();
+                
+                // Start confetti celebration
+                startConfettiCelebration();
+            }
+            
+            function startConfettiCelebration() {
+                confettiCount = 0;
+                
+                // Create confetti bursts
+                createConfetti();
+                confettiCount++;
+                
+                confettiInterval = setInterval(() => {
+                    if (confettiCount < 2) { // Fewer bursts for mobile
+                        createConfetti();
+                        confettiCount++;
+                    } else {
+                        clearInterval(confettiInterval);
+                    }
+                }, 1200);
+            }
+            
+            function startCountdown() {
+                countdownValue = 3;
+                createNumber(countdownValue, true);
+                
+                const countdownInterval = setInterval(() => {
+                    if (countdownValue === 3) {
+                        explodeBlocks();
+                        setTimeout(() => {
+                            countdownValue--;
+                            createNumber(countdownValue);
+                        }, 300); // Faster transitions for mobile
+                    } else if (countdownValue === 2) {
+                        setTimeout(() => {
+                            explodeBlocks();
+                        }, 600); // Faster transitions for mobile
+                        
+                        setTimeout(() => {
+                            countdownValue--;
+                            createNumber(countdownValue);
+                        }, 900); // Faster transitions for mobile
+                    } else if (countdownValue === 1) {
+                        clearInterval(countdownInterval);
+                        setTimeout(() => {
+                            explodeBlocks();
+                            // Show birthday message after final explosion
+                            setTimeout(showBirthdayMessage, 200); // Faster transition for mobile
+                        }, 400); // Faster transition for mobile
+                    }
+                }, 1000); // Faster countdown for mobile
+            }
+            
+            function explodeBlocks() {
+                // Create particles during explosion
+                createParticles();
+                
+                currentBlocks.forEach((block, index) => {
+                    const startX = parseFloat(block.style.left);
+                    const startY = parseFloat(block.style.top);
+                    
+                    const angle = Math.random() * Math.PI * 2;
+                    const distance = 30 + Math.random() * 50;
+                    const targetX = startX + Math.cos(angle) * distance;
+                    const targetY = startY + Math.sin(angle) * distance;
+                    
+                    const startTime = Date.now();
+                    const duration = 100 + Math.random() * 80; // Faster explosions for mobile
+                    
+                    function animateExplosion() {
+                        const elapsed = Date.now() - startTime;
+                        const progress = Math.min(elapsed / duration, 1);
+                        
+                        // Easing function for explosion
+                        const ease = Math.pow(progress, 0.7);
+                        
+                        const currentX = startX + (targetX - startX) * ease;
+                        const currentY = startY + (targetY - startY) * ease;
+                        const rotation = progress * 360;
+                        const opacity = 1 - progress;
+                        
+                        block.style.left = `${currentX}px`;
+                        block.style.top = `${currentY}px`;
+                        block.style.transform = `rotate(${rotation}deg)`;
+                        block.style.opacity = opacity.toString();
+                        
+                        if (progress < 1) {
+                            requestAnimationFrame(animateExplosion);
+                        } else {
+                            // Remove block after explosion
+                            if (block.parentNode === countdownArea) {
+                                block.parentNode.removeChild(block);
+                            }
+                        }
+                    }
+                    
+                    // Minimal stagger for faster explosions
+                    setTimeout(() => {
+                        requestAnimationFrame(animateExplosion);
+                    }, index * 2); // Reduced stagger for mobile
+                });
+            }
+            
+            // Envelope click handler
+            envelope.addEventListener('click', function() {
+                if (!isEnvelopeOpen) {
+                    envelope.classList.add('open');
+                    isEnvelopeOpen = true;
+                }
+            });
+            
+            // Music control click handler
+            musicControl.addEventListener('click', toggleMusic);
+            
+            // Start everything when page loads
+            // Start matrix animation
+            animateMatrix();
+            
+            // Hide loading text after 1.5 seconds (faster for mobile)
+            setTimeout(() => {
+                loadingText.style.opacity = '0';
+                setTimeout(() => {
+                    loadingText.style.display = 'none';
+                }, 800);
+            }, 1500);
+            
+            // Start countdown
+            startCountdown();
+            
+            // Handle window resize
+            window.addEventListener('resize', function() {
+                resizeCanvas();
+                
+                // Recalculate columns for matrix
+                columns = Math.floor(canvas.width / fontSize);
+                while (drops.length < columns) {
+                    drops.push(Math.floor(Math.random() * canvas.height / fontSize));
+                }
+                while (drops.length > columns) {
+                    drops.pop();
+                }
+            });
+        }
+        
+        // Desktop JavaScript initialization
+        function initializeDesktopScript() {
+            // Canvas Matrix Background
+            const canvas = document.getElementById('matrix');
+            const ctx = canvas.getContext('2d');
+            const countdownArea = document.getElementById('countdown-area');
+            const messageArea = document.getElementById('message-area');
+            const birthdayMessage = document.getElementById('birthday-message');
+            const envelopeContainer = document.getElementById('envelope-container');
+            const envelope = document.getElementById('envelope');
+            const musicControl = document.getElementById('music-control');
+            const birthdayMusic = document.getElementById('birthday-music');
+            const loadingText = document.getElementById('loading-text');
+            
+            // Set canvas to full window size
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            
+            // Happy Birthday characters only
+            const chars = "Happy Birthday Phuong 12T10";
+            const charArray = chars.split('');
+            
+            // Matrix configuration - slower animation
+            const fontSize = 16;
+            const columns = Math.floor(canvas.width / fontSize);
+            
+            // Create drops array
+            const drops = [];
+            for (let i = 0; i < columns; i++) {
+                drops[i] = Math.floor(Math.random() * canvas.height / fontSize);
+            }
+            
+            // Draw function
+            function drawMatrix() {
+                // Semi-transparent black rectangle to create fading effect
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.03)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                // Set text color to beige
+                ctx.fillStyle = '#e6d2aa';
+                ctx.font = `${fontSize}px monospace`;
+                
+                // Draw characters
+                for (let i = 0; i < drops.length; i++) {
+                    // Random character from Happy Birthday
+                    const text = charArray[Math.floor(Math.random() * charArray.length)];
+                    
+                    // Draw character
+                    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                    
+                    // Reset drop if it reaches the bottom or randomly (less frequent)
+                    if (drops[i] * fontSize > canvas.height && Math.random() > 0.985) {
+                        drops[i] = 0;
+                    }
+                    
+                    // Move drop down slower
+                    drops[i] += 0.5;
+                }
+            }
+            
+            // Animation loop for matrix
+            function animateMatrix() {
+                drawMatrix();
+                requestAnimationFrame(animateMatrix);
+            }
+            
+            // Number patterns
+            const numberPatterns = {
+                3: [
+                    [0,0,1,1,1,1,1,1,0,0],
+                    [0,1,1,1,1,1,1,1,1,0],
+                    [1,1,1,0,0,0,0,1,1,1],
+                    [1,1,0,0,0,0,0,0,1,1],
+                    [0,0,0,0,0,0,0,0,1,1],
+                    [0,0,0,0,0,0,0,1,1,0],
+                    [0,0,0,0,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,0,0,1,1],
+                    [1,1,1,0,0,0,0,1,1,1],
+                    [0,1,1,1,1,1,1,1,1,0],
+                    [0,0,1,1,1,1,1,1,0,0]
+                ],
+                2: [
+                    [0,0,1,1,1,1,1,1,0,0],
+                    [0,1,1,1,1,1,1,1,1,0],
+                    [1,1,1,0,0,0,0,1,1,1],
+                    [1,1,0,0,0,0,0,0,1,1],
+                    [0,0,0,0,0,0,0,0,1,1],
+                    [0,0,0,0,0,0,0,1,1,0],
+                    [0,0,0,0,0,0,1,1,0,0],
+                    [0,0,0,0,0,1,1,0,0,0],
+                    [0,0,0,0,1,1,0,0,0,0],
+                    [0,0,0,1,1,0,0,0,0,0],
+                    [1,1,1,1,1,1,1,1,1,1],
+                    [1,1,1,1,1,1,1,1,1,1]
+                ],
+                1: [
+                    [0,0,0,0,1,1,0,0,0,0],
+                    [0,0,0,1,1,1,0,0,0,0],
+                    [0,0,1,1,1,1,0,0,0,0],
+                    [0,1,1,0,1,1,0,0,0,0],
+                    [1,1,0,0,1,1,0,0,0,0],
+                    [0,0,0,0,1,1,0,0,0,0],
+                    [0,0,0,0,1,1,0,0,0,0],
+                    [0,0,0,0,1,1,0,0,0,0],
+                    [0,0,0,0,1,1,0,0,0,0],
+                    [0,0,0,0,1,1,0,0,0,0],
+                    [1,1,1,1,1,1,1,1,1,1],
+                    [1,1,1,1,1,1,1,1,1,1]
+                ]
+            };
+            
+            // Letter patterns including numbers and T
+            const letterPatterns = {
+                'H': [
+                    [1,1,0,0,0,0,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,0,0,0,0,1,1],
+                    [1,1,1,1,1,1,1,1,1,1,1,1],
+                    [1,1,1,1,1,1,1,1,1,1,1,1],
+                    [1,1,0,0,0,0,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,0,0,0,0,1,1]
+                ],
+                'A': [
+                    [0,0,0,0,1,1,0,0,0,0],
+                    [0,0,0,1,1,1,1,0,0,0],
+                    [0,0,1,1,0,0,1,1,0,0],
+                    [0,1,1,0,0,0,0,1,1,0],
+                    [1,1,0,0,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,0,0,1,1],
+                    [1,1,1,1,1,1,1,1,1,1],
+                    [1,1,1,1,1,1,1,1,1,1],
+                    [1,1,0,0,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,0,0,1,1]
+                ],
+                'P': [
+                    [1,1,1,1,1,1,1,1,0,0],
+                    [1,1,1,1,1,1,1,1,1,0],
+                    [1,1,0,0,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,0,0,1,1],
+                    [1,1,1,1,1,1,1,1,1,0],
+                    [1,1,1,1,1,1,1,1,0,0],
+                    [1,1,0,0,0,0,0,0,0,0],
+                    [1,1,0,0,0,0,0,0,0,0],
+                    [1,1,0,0,0,0,0,0,0,0],
+                    [1,1,0,0,0,0,0,0,0,0],
+                    [1,1,0,0,0,0,0,0,0,0]
+                ],
+                'Y': [
+                    [1,1,0,0,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,0,0,1,1],
+                    [0,1,1,0,0,0,0,1,1,0],
+                    [0,0,1,1,0,0,1,1,0,0],
+                    [0,0,0,1,1,1,1,0,0,0],
+                    [0,0,0,0,1,1,0,0,0,0],
+                    [0,0,0,0,1,1,0,0,0,0],
+                    [0,0,0,0,1,1,0,0,0,0],
+                    [0,0,0,0,1,1,0,0,0,0],
+                    [0,0,0,0,1,1,0,0,0,0],
+                    [0,0,0,0,1,1,0,0,0,0],
+                    [0,0,0,0,1,1,0,0,0,0]
+                ],
+                'B': [
+                    [1,1,1,1,1,1,1,1,0,0],
+                    [1,1,1,1,1,1,1,1,1,0],
+                    [1,1,0,0,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,0,0,1,1],
+                    [1,1,1,1,1,1,1,1,1,0],
+                    [1,1,1,1,1,1,1,1,1,0],
+                    [1,1,0,0,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,0,0,1,1],
+                    [1,1,1,1,1,1,1,1,1,1],
+                    [1,1,1,1,1,1,1,1,1,0]
+                ],
+                'I': [
+                    [1,1,1,1,1,1,1,1,1,1],
+                    [1,1,1,1,1,1,1,1,1,1],
+                    [0,0,0,0,1,1,0,0,0,0],
+                    [0,0,0,0,1,1,0,0,0,0],
+                    [0,0,0,0,1,1,0,0,0,0],
+                    [0,0,0,0,1,1,0,0,0,0],
+                    [0,0,0,0,1,1,0,0,0,0],
+                    [0,0,0,0,1,1,0,0,0,0],
+                    [0,0,0,0,1,1,0,0,0,0],
+                    [0,0,0,0,1,1,0,0,0,0],
+                    [1,1,1,1,1,1,1,1,1,1],
+                    [1,1,1,1,1,1,1,1,1,1]
+                ],
+                'R': [
+                    [1,1,1,1,1,1,1,1,0,0],
+                    [1,1,1,1,1,1,1,1,1,0],
+                    [1,1,0,0,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,0,0,1,1],
+                    [1,1,1,1,1,1,1,1,1,0],
+                    [1,1,1,1,1,1,1,1,0,0],
+                    [1,1,0,0,0,1,1,0,0,0],
+                    [1,1,0,0,0,0,1,1,0,0],
+                    [1,1,0,0,0,0,0,1,1,0],
+                    [1,1,0,0,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,0,0,1,1]
+                ],
+                'T': [
+                    [1,1,1,1,1,1,1,1,1,1],
+                    [1,1,1,1,1,1,1,1,1,1],
+                    [0,0,0,0,1,1,0,0,0,0],
+                    [0,0,0,0,1,1,0,0,0,0],
+                    [0,0,0,0,1,1,0,0,0,0],
+                    [0,0,0,0,1,1,0,0,0,0],
+                    [0,0,0,0,1,1,0,0,0,0],
+                    [0,0,0,0,1,1,0,0,0,0],
+                    [0,0,0,0,1,1,0,0,0,0],
+                    [0,0,0,0,1,1,0,0,0,0],
+                    [0,0,0,0,1,1,0,0,0,0],
+                    [0,0,0,0,1,1,0,0,0,0]
+                ],
+                'D': [
+                    [1,1,1,1,1,1,1,1,0,0],
+                    [1,1,1,1,1,1,1,1,1,0],
+                    [1,1,0,0,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,0,0,1,1],
+                    [1,1,1,1,1,1,1,1,1,0],
+                    [1,1,1,1,1,1,1,1,0,0]
+                ],
+                'U': [
+                    [1,1,0,0,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,0,0,1,1],
+                    [1,1,1,1,1,1,1,1,1,1],
+                    [1,1,1,1,1,1,1,1,1,1]
+                ],
+                'O': [
+                    [0,0,1,1,1,1,1,1,0,0],
+                    [0,1,1,1,1,1,1,1,1,0],
+                    [1,1,1,0,0,0,0,1,1,1],
+                    [1,1,0,0,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,0,0,1,1],
+                    [1,1,1,0,0,0,0,1,1,1],
+                    [0,1,1,1,1,1,1,1,1,0],
+                    [0,0,1,1,1,1,1,1,0,0]
+                ],
+                'N': [
+                    [1,1,0,0,0,0,0,0,1,1],
+                    [1,1,1,0,0,0,0,0,1,1],
+                    [1,1,1,1,0,0,0,0,1,1],
+                    [1,1,0,1,1,0,0,0,1,1],
+                    [1,1,0,0,1,1,0,0,1,1],
+                    [1,1,0,0,0,1,1,0,1,1],
+                    [1,1,0,0,0,0,1,1,1,1],
+                    [1,1,0,0,0,0,0,1,1,1],
+                    [1,1,0,0,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,0,0,1,1]
+                ],
+                'G': [
+                    [0,0,1,1,1,1,1,1,0,0],
+                    [0,1,1,1,1,1,1,1,1,0],
+                    [1,1,1,0,0,0,0,1,1,1],
+                    [1,1,0,0,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,0,0,0,0],
+                    [1,1,0,0,0,1,1,1,1,1],
+                    [1,1,0,0,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,0,0,1,1],
+                    [1,1,1,0,0,0,0,1,1,1],
+                    [0,1,1,1,1,1,1,1,1,0],
+                    [0,0,1,1,1,1,1,1,0,0]
+                ],
+                '1': [
+                    [0,0,0,0,1,1,0,0,0,0],
+                    [0,0,0,1,1,1,0,0,0,0],
+                    [0,0,1,1,1,1,0,0,0,0],
+                    [0,1,1,0,1,1,0,0,0,0],
+                    [1,1,0,0,1,1,0,0,0,0],
+                    [0,0,0,0,1,1,0,0,0,0],
+                    [0,0,0,0,1,1,0,0,0,0],
+                    [0,0,0,0,1,1,0,0,0,0],
+                    [0,0,0,0,1,1,0,0,0,0],
+                    [0,0,0,0,1,1,0,0,0,0],
+                    [1,1,1,1,1,1,1,1,1,1],
+                    [1,1,1,1,1,1,1,1,1,1]
+                ],
+                '2': [
+                    [0,0,1,1,1,1,1,1,0,0],
+                    [0,1,1,1,1,1,1,1,1,0],
+                    [1,1,1,0,0,0,0,1,1,1],
+                    [1,1,0,0,0,0,0,0,1,1],
+                    [0,0,0,0,0,0,0,0,1,1],
+                    [0,0,0,0,0,0,0,1,1,0],
+                    [0,0,0,0,0,0,1,1,0,0],
+                    [0,0,0,0,0,1,1,0,0,0],
+                    [0,0,0,0,1,1,0,0,0,0],
+                    [0,0,0,1,1,0,0,0,0,0],
+                    [1,1,1,1,1,1,1,1,1,1],
+                    [1,1,1,1,1,1,1,1,1,1]
+                ],
+                '0': [
+                    [0,0,1,1,1,1,1,1,0,0],
+                    [0,1,1,1,1,1,1,1,1,0],
+                    [1,1,1,0,0,0,0,1,1,1],
+                    [1,1,0,0,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,0,0,1,1],
+                    [1,1,0,0,0,0,0,0,1,1],
+                    [1,1,1,0,0,0,0,1,1,1],
+                    [0,1,1,1,1,1,1,1,1,0],
+                    [0,0,1,1,1,1,1,1,0,0]
+                ]
+            };
+            
+            let currentBlocks = [];
+            let countdownValue = 3;
+            let confettiCount = 0;
+            let confettiInterval;
+            let currentMessageIndex = 0;
+            const messages = ["HAPPY BIRTHDAY", "PHUONG", "12T10"];
+            const messageDurations = [2000, 1500, 1000]; // 2s, 1.5s, 1s - Much faster!
+            
+            // Music control
+            let isMusicPlaying = false;
+            let isEnvelopeOpen = false;
+            
+            function toggleMusic() {
+                if (isMusicPlaying) {
+                    birthdayMusic.pause();
+                    musicControl.classList.add('muted');
+                } else {
+                    birthdayMusic.play().catch(e => {
+                        console.log("Audio play failed:", e);
+                    });
+                    musicControl.classList.remove('muted');
+                }
+                isMusicPlaying = !isMusicPlaying;
+            }
+            
+            function createConfetti() {
+                const colors = ['#e6d2aa', '#ffebcd', '#f5deb3', '#fff8dc', '#faf0e6'];
+                const container = document.querySelector('.container');
+                
+                for (let i = 0; i < 50; i++) {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti-piece';
+                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.left = Math.random() * 100 + 'vw';
+                    confetti.style.animation = `confetti-fall ${Math.random() * 3 + 2}s linear forwards`;
+                    confetti.style.animationDelay = Math.random() * 2 + 's';
+                    container.appendChild(confetti);
+                    
+                    // Remove confetti after animation completes
+                    setTimeout(() => {
+                        confetti.remove();
+                    }, 5000);
+                }
+            }
+            
+            // Envelope click handler
+            envelope.addEventListener('click', function() {
+                if (!isEnvelopeOpen) {
+                    envelope.classList.add('open');
+                    isEnvelopeOpen = true;
+                    createConfetti();
+                } else {
+                    envelope.classList.remove('open');
+                    isEnvelopeOpen = false;
+                }
+            });
+            
+            function createNumber(number, isInitial = false) {
+                // Clear existing blocks
+                currentBlocks.forEach(block => {
+                    if (block.parentNode === countdownArea) {
+                        countdownArea.removeChild(block);
+                    }
+                });
+                currentBlocks = [];
+                
+                const pattern = numberPatterns[number];
+                const blockSize = 8;
+                const gap = 3;
+                const totalWidth = pattern[0].length * (blockSize + gap) - gap;
+                const totalHeight = pattern.length * (blockSize + gap) - gap;
+                
+                const startX = (countdownArea.offsetWidth - totalWidth) / 2;
+                const startY = (countdownArea.offsetHeight - totalHeight) / 2;
+                
+                // Create blocks for the number
+                for (let row = 0; row < pattern.length; row++) {
+                    for (let col = 0; col < pattern[row].length; col++) {
+                        if (pattern[row][col] === 1) {
+                            const block = document.createElement('div');
+                            block.className = 'block';
+                            
+                            const finalX = startX + col * (blockSize + gap);
+                            const finalY = startY + row * (blockSize + gap);
+                            
+                            if (isInitial) {
+                                // For initial number, just place them directly
+                                block.style.left = `${finalX}px`;
+                                block.style.top = `${finalY}px`;
+                                block.style.opacity = '1';
+                            } else {
+                                // For subsequent numbers, start from random positions
+                                const startPosX = Math.random() * countdownArea.offsetWidth;
+                                const startPosY = Math.random() * countdownArea.offsetHeight;
+                                
+                                block.style.left = `${startPosX}px`;
+                                block.style.top = `${startPosY}px`;
+                                block.style.opacity = '0';
+                                
+                                // Use requestAnimationFrame for smoother animation
+                                const startTime = Date.now();
+                                const duration = 200 + Math.random() * 100; // Faster animation
+                                
+                                function animateBlock() {
+                                    const elapsed = Date.now() - startTime;
+                                    const progress = Math.min(elapsed / duration, 1);
+                                    
+                                    // Easing function for smooth motion
+                                    const ease = 1 - Math.pow(1 - progress, 3);
+                                    
+                                    const currentX = startPosX + (finalX - startPosX) * ease;
+                                    const currentY = startPosY + (finalY - startPosY) * ease;
+                                    
+                                    block.style.left = `${currentX}px`;
+                                    block.style.top = `${currentY}px`;
+                                    block.style.opacity = progress.toString();
+                                    
+                                    if (progress < 1) {
+                                        requestAnimationFrame(animateBlock);
+                                    }
+                                }
+                                
+                                // Minimal stagger for faster effect
+                                setTimeout(() => {
+                                    requestAnimationFrame(animateBlock);
+                                }, Math.random() * 30); // Reduced stagger
+                            }
+                            
+                            countdownArea.appendChild(block);
+                            currentBlocks.push(block);
+                        }
+                    }
+                }
+            }
+            
+            function createMessage(text, duration = 2000) {
+                // Clear existing blocks
+                currentBlocks.forEach(block => {
+                    if (block.parentNode === messageArea) {
+                        messageArea.removeChild(block);
+                    }
+                });
+                currentBlocks = [];
+                
+                const blockSize = 6;
+                const gap = 2;
+                const letterSpacing = 12;
+                
+                // Calculate total width
+                let totalWidth = 0;
+                for (let i = 0; i < text.length; i++) {
+                    const letter = text[i];
+                    if (letter === ' ') {
+                        totalWidth += 25;
+                    } else {
+                        totalWidth += letterPatterns[letter][0].length * (blockSize + gap) - gap;
+                        if (i < text.length - 1) totalWidth += letterSpacing;
+                    }
+                }
+                
+                const startX = (messageArea.offsetWidth - totalWidth) / 2;
+                const startY = (messageArea.offsetHeight - 12 * (blockSize + gap) - gap) / 2;
+                
+                let currentX = startX;
+                
+                // Calculate timing for specified duration assembly
+                const totalLetters = text.replace(/ /g, '').length;
+                const timePerLetter = duration / totalLetters;
+                
+                // Create blocks for each letter with precise timing
+                function createLetter(index, startTime) {
+                    if (index >= text.length) {
+                        // Schedule next message after a delay
+                        setTimeout(() => {
+                            currentMessageIndex++;
+                            if (currentMessageIndex < messages.length) {
+                                explodeCurrentMessage();
+                            } else {
+                                // After last message, show the envelope
+                                setTimeout(showEnvelope, 500); // Reduced delay
+                            }
+                        }, 500); // Reduced delay before next message
+                        return;
+                    }
+                    
+                    const letter = text[index];
+                    
+                    if (letter === ' ') {
+                        currentX += 25;
+                        // Move to next letter immediately
+                        createLetter(index + 1, startTime);
+                        return;
+                    }
+                    
+                    const pattern = letterPatterns[letter];
+                    
+                    // Create blocks for this letter
+                    const letterBlocks = [];
+                    for (let row = 0; row < pattern.length; row++) {
+                        for (let col = 0; col < pattern[row].length; col++) {
+                            if (pattern[row][col] === 1) {
+                                const block = document.createElement('div');
+                                block.className = 'block';
+                                
+                                const finalX = currentX + col * (blockSize + gap);
+                                const finalY = startY + row * (blockSize + gap);
+                                
+                                // Start from random positions
+                                const startPosX = Math.random() * messageArea.offsetWidth;
+                                const startPosY = Math.random() * messageArea.offsetHeight;
+                                
+                                block.style.left = `${startPosX}px`;
+                                block.style.top = `${startPosY}px`;
+                                block.style.opacity = '0';
+                                
+                                letterBlocks.push({
+                                    block: block,
+                                    finalX: finalX,
+                                    finalY: finalY,
+                                    startPosX: startPosX,
+                                    startPosY: startPosY
+                                });
+                                
+                                messageArea.appendChild(block);
+                                currentBlocks.push(block);
+                            }
+                        }
+                    }
+                    
+                    // Animate blocks for this letter with precise timing
+                    const letterStartTime = Date.now();
+                    const targetDuration = timePerLetter * 0.8; // 80% of time for animation
+                    
+                    animateLetterBlocks(letterBlocks, 0, letterStartTime, targetDuration, () => {
+                        // Move to next letter position
+                        currentX += pattern[0].length * (blockSize + gap) - gap + letterSpacing;
+                        
+                        // Calculate delay for next letter to maintain total duration
+                        const elapsed = Date.now() - startTime;
+                        const targetElapsed = (index + 1) * timePerLetter;
+                        const delay = Math.max(0, targetElapsed - elapsed);
+                        
+                        // Create next letter
+                        setTimeout(() => createLetter(index + 1, startTime), delay);
+                    });
+                }
+                
+                // Start creating letters with timing start
+                const startTime = Date.now();
+                createLetter(0, startTime);
+            }
+            
+            function animateLetterBlocks(letterBlocks, index, startTime, targetDuration, callback) {
+                if (index >= letterBlocks.length) {
+                    if (callback) callback();
+                    return;
+                }
+                
+                const blockData = letterBlocks[index];
+                const { block, finalX, finalY, startPosX, startPosY } = blockData;
+                
+                // Much faster animation speeds for all messages
+                const duration = 50 + Math.random() * 50; // Very fast animation
+                
+                function animateBlock() {
+                    const elapsed = Date.now() - startTime;
+                    const progress = Math.min(elapsed / duration, 1);
+                    
+                    // Easing function for smooth motion
+                    const ease = 1 - Math.pow(1 - progress, 3);
+                    
+                    const currentX = startPosX + (finalX - startPosX) * ease;
+                    const currentY = startPosY + (finalY - startPosY) * ease;
+                    
+                    block.style.left = `${currentX}px`;
+                    block.style.top = `${currentY}px`;
+                    block.style.opacity = progress.toString();
+                    
+                    if (progress < 1) {
+                        requestAnimationFrame(animateBlock);
+                    } else {
+                        // Move to next block immediately
+                        animateLetterBlocks(letterBlocks, index + 1, startTime, targetDuration, callback);
+                    }
+                }
+                
+                // Start animation immediately
+                requestAnimationFrame(animateBlock);
+            }
+            
+            function explodeCurrentMessage() {
+                // Create particles during explosion
+                createParticles();
+                
+                currentBlocks.forEach((block, index) => {
+                    const startX = parseFloat(block.style.left);
+                    const startY = parseFloat(block.style.top);
+                    
+                    const angle = Math.random() * Math.PI * 2;
+                    const distance = 40 + Math.random() * 60;
+                    const targetX = startX + Math.cos(angle) * distance;
+                    const targetY = startY + Math.sin(angle) * distance;
+                    
+                    const startTime = Date.now();
+                    const duration = 150 + Math.random() * 100; // Faster explosion
+                    
+                    function animateExplosion() {
+                        const elapsed = Date.now() - startTime;
+                        const progress = Math.min(elapsed / duration, 1);
+                        
+                        // Easing function for explosion
+                        const ease = Math.pow(progress, 0.7);
+                        
+                        const currentX = startX + (targetX - startX) * ease;
+                        const currentY = startY + (targetY - startY) * ease;
+                        const rotation = progress * 360;
+                        const opacity = 1 - progress;
+                        
+                        block.style.left = `${currentX}px`;
+                        block.style.top = `${currentY}px`;
+                        block.style.transform = `rotate(${rotation}deg)`;
+                        block.style.opacity = opacity.toString();
+                        
+                        if (progress < 1) {
+                            requestAnimationFrame(animateExplosion);
+                        } else {
+                            // Remove block after explosion
+                            if (block.parentNode === messageArea) {
+                                block.parentNode.removeChild(block);
+                            }
+                        }
+                    }
+                    
+                    // Minimal stagger for faster explosions
+                    setTimeout(() => {
+                        requestAnimationFrame(animateExplosion);
+                    }, index * 3); // Reduced stagger
+                });
+                
+                // After explosion, show next message
+                setTimeout(() => {
+                    showNextMessage();
+                }, 300); // Reduced delay
+            }
+            
+            function showNextMessage() {
+                if (currentMessageIndex < messages.length) {
+                    const message = messages[currentMessageIndex];
+                    const duration = messageDurations[currentMessageIndex];
+                    createMessage(message, duration);
+                }
+            }
+            
+            function showEnvelope() {
+                // Clear message area
+                messageArea.style.opacity = '0';
+                
+                // Show envelope with animation
+                setTimeout(() => {
+                    envelopeContainer.style.opacity = '1';
+                    // Start music when envelope appears
+                    toggleMusic();
+                }, 300); // Reduced delay
+            }
+            
+            function createParticles() {
+                for (let i = 0; i < 15; i++) {
+                    const particle = document.createElement('div');
+                    particle.className = 'particle';
+                    
+                    // Position particles around the center
+                    const centerX = messageArea.offsetWidth / 2;
+                    const centerY = messageArea.offsetHeight / 2;
+                    
+                    particle.style.left = `${centerX}px`;
+                    particle.style.top = `${centerY}px`;
+                    
+                    document.querySelector('.container').appendChild(particle);
+                    
+                    // Animate particles
+                    const angle = Math.random() * Math.PI * 2;
+                    const distance = 70 + Math.random() * 100;
+                    const targetX = centerX + Math.cos(angle) * distance;
+                    const targetY = centerY + Math.sin(angle) * distance;
+                    
+                    const startTime = Date.now();
+                    const duration = 200 + Math.random() * 150; // Faster particles
+                    
+                    function animateParticle() {
+                        const elapsed = Date.now() - startTime;
+                        const progress = Math.min(elapsed / duration, 1);
+                        
+                        const currentX = centerX + (targetX - centerX) * progress;
+                        const currentY = centerY + (targetY - centerY) * progress;
+                        const opacity = 1 - progress;
+                        
+                        particle.style.left = `${currentX}px`;
+                        particle.style.top = `${currentY}px`;
+                        particle.style.opacity = opacity.toString();
+                        
+                        if (progress < 1) {
+                            requestAnimationFrame(animateParticle);
+                        } else {
+                            // Remove particle after animation
+                            if (particle.parentNode) {
+                                particle.parentNode.removeChild(particle);
+                            }
+                        }
+                    }
+                    
+                    requestAnimationFrame(animateParticle);
+                }
+            }
+            
+            function createConfetti() {
+                const colors = ['#e6d2aa', '#ffebcd', '#f5deb3', '#fff8dc', '#faf0e6'];
+                
+                for (let i = 0; i < 60; i++) {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    
+                    // Random color
+                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    
+                    // Random position at top of screen
+                    confetti.style.left = `${Math.random() * 100}vw`;
+                    confetti.style.top = '-20px';
+                    
+                    // Random rotation
+                    confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+                    
+                    document.querySelector('.container').appendChild(confetti);
+                    
+                    // Animate confetti falling
+                    const startTime = Date.now();
+                    const duration = 1200 + Math.random() * 1000;
+                    const endY = window.innerHeight + 20;
+                    
+                    function animateConfetti() {
+                        const elapsed = Date.now() - startTime;
+                        const progress = Math.min(elapsed / duration, 1);
+                        
+                        const currentY = -20 + (endY + 20) * progress;
+                        const currentX = parseFloat(confetti.style.left) + Math.sin(progress * 10) * 30;
+                        const opacity = progress < 0.1 ? progress * 10 : 
+                                      progress > 0.9 ? 1 - (progress - 0.9) * 10 : 1;
+                        const rotation = parseFloat(confetti.style.transform.replace('rotate(', '').replace('deg)', '')) + 5;
+                        
+                        confetti.style.left = `${currentX}px`;
+                        confetti.style.top = `${currentY}px`;
+                        confetti.style.transform = `rotate(${rotation}deg)`;
+                        confetti.style.opacity = opacity.toString();
+                        
+                        if (progress < 1) {
+                            requestAnimationFrame(animateConfetti);
+                        } else {
+                            // Remove confetti after animation
+                            if (confetti.parentNode) {
+                                confetti.parentNode.removeChild(confetti);
+                            }
+                        }
+                    }
+                    
+                    // Minimal stagger
+                    setTimeout(() => {
+                        requestAnimationFrame(animateConfetti);
+                    }, Math.random() * 300);
+                }
+            }
+            
+            function showBirthdayMessage() {
+                // Show message area immediately
+                messageArea.style.opacity = '1';
+                
+                // Start with first message (Happy Birthday)
+                currentMessageIndex = 0;
+                showNextMessage();
+                
+                // Start confetti celebration
+                startConfettiCelebration();
+            }
+            
+            function startConfettiCelebration() {
+                confettiCount = 0;
+                
+                // Create confetti bursts
+                createConfetti();
+                confettiCount++;
+                
+                confettiInterval = setInterval(() => {
+                    if (confettiCount < 3) {
+                        createConfetti();
+                        confettiCount++;
+                    } else {
+                        clearInterval(confettiInterval);
+                    }
+                }, 1500);
+            }
+            
+            function startCountdown() {
+                countdownValue = 3;
+                createNumber(countdownValue, true);
+                
+                const countdownInterval = setInterval(() => {
+                    if (countdownValue === 3) {
+                        explodeBlocks();
+                        setTimeout(() => {
+                            countdownValue--;
+                            createNumber(countdownValue);
+                        }, 400); // Faster transitions
+                    } else if (countdownValue === 2) {
+                        setTimeout(() => {
+                            explodeBlocks();
+                        }, 800); // Faster transitions
+                        
+                        setTimeout(() => {
+                            countdownValue--;
+                            createNumber(countdownValue);
+                        }, 1200); // Faster transitions
+                    } else if (countdownValue === 1) {
+                        clearInterval(countdownInterval);
+                        setTimeout(() => {
+                            explodeBlocks();
+                            // Show birthday message after final explosion
+                            setTimeout(showBirthdayMessage, 300); // Faster transition
+                        }, 600); // Faster transition
+                    }
+                }, 1200); // Faster countdown
+            }
+            
+            function explodeBlocks() {
+                // Create particles during explosion
+                createParticles();
+                
+                currentBlocks.forEach((block, index) => {
+                    const startX = parseFloat(block.style.left);
+                    const startY = parseFloat(block.style.top);
+                    
+                    const angle = Math.random() * Math.PI * 2;
+                    const distance = 40 + Math.random() * 60;
+                    const targetX = startX + Math.cos(angle) * distance;
+                    const targetY = startY + Math.sin(angle) * distance;
+                    
+                    const startTime = Date.now();
+                    const duration = 150 + Math.random() * 100; // Faster explosions
+                    
+                    function animateExplosion() {
+                        const elapsed = Date.now() - startTime;
+                        const progress = Math.min(elapsed / duration, 1);
+                        
+                        // Easing function for explosion
+                        const ease = Math.pow(progress, 0.7);
+                        
+                        const currentX = startX + (targetX - startX) * ease;
+                        const currentY = startY + (targetY - startY) * ease;
+                        const rotation = progress * 360;
+                        const opacity = 1 - progress;
+                        
+                        block.style.left = `${currentX}px`;
+                        block.style.top = `${currentY}px`;
+                        block.style.transform = `rotate(${rotation}deg)`;
+                        block.style.opacity = opacity.toString();
+                        
+                        if (progress < 1) {
+                            requestAnimationFrame(animateExplosion);
+                        } else {
+                            // Remove block after explosion
+                            if (block.parentNode === countdownArea) {
+                                block.parentNode.removeChild(block);
+                            }
+                        }
+                    }
+                    
+                    // Minimal stagger for faster explosions
+                    setTimeout(() => {
+                        requestAnimationFrame(animateExplosion);
+                    }, index * 3); // Reduced stagger
+                });
+            }
+            
+            // Music control click handler
+            musicControl.addEventListener('click', toggleMusic);
+            
+            // Start everything when page loads
+            // Start matrix animation
+            animateMatrix();
+            
+            // Hide loading text after 2 seconds
+            setTimeout(() => {
+                loadingText.style.opacity = '0';
+                setTimeout(() => {
+                    loadingText.style.display = 'none';
+                }, 1000);
+            }, 2000);
+            
+            // Start countdown
+            startCountdown();
+            
+            // Handle window resize
+            window.addEventListener('resize', function() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                
+                // Recalculate columns for matrix
+                const newColumns = Math.floor(canvas.width / fontSize);
+                while (drops.length < newColumns) {
+                    drops.push(Math.floor(Math.random() * canvas.height / fontSize));
+                }
+                while (drops.length > newColumns) {
+                    drops.pop();
+                }
+            });
+        }
+    </script>
+<source src="GHÉ QUA   OFFICIAL MV  Dick x PC x Tofu - BẠN CÓ TÀI MÀ.mp3"autoplay loop></audio>
+</body>
+</html>

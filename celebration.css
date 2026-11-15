@@ -1,0 +1,490 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+}
+
+body {
+    background-color: #0b0f14;
+    overflow: hidden;
+    height: 100vh;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #e6d2aa;
+}
+
+.device-check {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #e6d2aa;
+    font-size: 20px;
+    font-family: 'Cinzel', serif;
+    letter-spacing: 1.5px;
+    text-align: center;
+    z-index: 100;
+    opacity: 1;
+    transition: opacity 0.8s ease;
+    pointer-events: none;
+    text-shadow: 0 0 15px rgba(197, 143, 121, 0.8);
+}
+
+.container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+}
+
+canvas {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.glow {
+    position: absolute;
+    width: 85vw;
+    height: 85vw;
+    max-width: 450px;
+    max-height: 450px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(197, 143, 121, 0.28) 0%, rgba(130, 116, 155, 0.15) 45%, transparent 70%);
+    z-index: 5;
+    pointer-events: none;
+}
+
+.countdown-area {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80vw;
+    height: 80vw;
+    max-width: 320px;
+    max-height: 320px;
+    z-index: 10;
+}
+
+.message-area {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 95vw;
+    max-width: 780px;
+    height: auto;
+    min-height: 280px;
+    z-index: 10;
+    opacity: 0;
+    transition: opacity 0.35s ease-in-out;
+}
+
+.block {
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    background: linear-gradient(135deg, #e6d2aa 0%, #C58F79 50%, #fff8e7 100%);
+    border-radius: 1px;
+    box-shadow: 0 0 6px rgba(230, 210, 170, 0.95), 0 0 12px rgba(197, 143, 121, 0.6);
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    opacity: 0;
+}
+
+@media (min-width: 768px) {
+    .block {
+        width: 6.5px;
+        height: 6.5px;
+    }
+}
+
+.teacher-day-message {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #e6d2aa;
+    font-family: 'Cinzel', serif;
+    font-size: clamp(1.8rem, 6vw, 3.2rem);
+    font-weight: 900;
+    text-align: center;
+    text-shadow: 0 0 20px rgba(197, 143, 121, 0.9), 0 0 40px rgba(130, 116, 155, 0.7);
+    opacity: 0;
+    z-index: 20;
+    width: 90%;
+    letter-spacing: 2px;
+    animation: pulse 2s infinite alternate;
+}
+
+@keyframes pulse {
+    0% { text-shadow: 0 0 15px rgba(230, 210, 170, 0.8), 0 0 25px rgba(197, 143, 121, 0.6); }
+    100% { text-shadow: 0 0 30px rgba(255, 240, 200, 1), 0 0 55px rgba(197, 143, 121, 0.95); }
+}
+
+.particle {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    background-color: #e6d2aa;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 15;
+    box-shadow: 0 0 8px #C58F79;
+}
+
+.confetti {
+    position: absolute;
+    width: 8px;
+    height: 14px;
+    opacity: 0;
+    z-index: 28;
+    border-radius: 2px;
+}
+
+/* ================= 3D ENVELOPE DESIGN ================= */
+.envelope-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90vw;
+    max-width: 420px;
+    height: 65vh;
+    max-height: 520px;
+    perspective: 1200px;
+    z-index: 25;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+}
+
+.envelope {
+    position: relative;
+    width: 100%;
+    height: 250px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: linear-gradient(135deg, #1c1511 0%, #2e231c 100%);
+    border-radius: 6px;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), 0 0 35px rgba(197, 143, 121, 0.4);
+    border: 2px solid #C58F79;
+    cursor: pointer;
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-style: preserve-3d;
+}
+
+.envelope:hover {
+    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.95), 0 0 50px rgba(197, 143, 121, 0.7);
+    transform: translateY(-52%) scale(1.02);
+}
+
+.flap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-left: calc(min(90vw, 420px) / 2 - 2px) solid transparent;
+    border-right: calc(min(90vw, 420px) / 2 - 2px) solid transparent;
+    border-top: 130px solid #C58F79;
+    transform-origin: top;
+    transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 10;
+}
+
+.envelope-front {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(145deg, #2a1f18 0%, #1a130f 100%);
+    border-radius: 6px;
+    border: 2px solid #C58F79;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+    box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.8);
+    transition: opacity 0.5s ease;
+    pointer-events: none;
+}
+
+.envelope-seal {
+    font-size: 2.2rem;
+    filter: drop-shadow(0 2px 8px rgba(197, 143, 121, 0.8));
+    margin-top: 25px;
+}
+
+.envelope-front .message {
+    font-family: 'Great Vibes', cursive;
+    font-size: 2.4rem;
+    color: #e6d2aa;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8), 0 0 15px rgba(197, 143, 121, 0.8);
+    margin: 4px 0 2px;
+}
+
+.envelope-subtitle {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    color: #C58F79;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+.envelope-back {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+}
+
+.letter {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    background: #fbf7ee;
+    background-image: 
+        radial-gradient(#dcd1ba 0.8px, transparent 0.8px),
+        linear-gradient(180deg, rgba(255,255,255,0.6) 0%, rgba(0,0,0,0.03) 100%);
+    background-size: 12px 12px, 100% 100%;
+    color: #2b221a;
+    border-radius: 6px;
+    padding: 18px 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: all 0.9s cubic-bezier(0.34, 1.25, 0.64, 1);
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.35);
+    border: 1px solid #d5c3a3;
+    overflow-y: hidden !important;
+    overflow-x: hidden !important;
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+    
+    /* ẨN HOÀN TOÀN TRONG PHONG BÌ KHI CHƯA MỞ */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(30px) scale(0.9);
+    z-index: 2;
+}
+
+.letter::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+}
+
+.letter-badge {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    font-weight: 700;
+    color: #C58F79;
+    letter-spacing: 0.8px;
+    text-align: center;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+}
+
+.letter-title {
+    font-family: 'Great Vibes', cursive;
+    font-size: 2.1rem;
+    color: #344C63;
+    text-align: center;
+    margin: 2px 0 6px;
+    line-height: 1.1;
+}
+
+.letter-body {
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+    line-height: 1.55;
+    color: #2b221a;
+    text-align: justify;
+}
+
+.letter-body p {
+    margin-bottom: 6px;
+}
+
+.letter-footer {
+    text-align: center;
+    margin-top: 4px;
+    border-top: 1px dashed rgba(52, 76, 99, 0.25);
+    padding-top: 4px;
+}
+
+.letter-footer .heart {
+    font-size: 18px;
+    display: inline-block;
+    animation: heartBeat 1.5s infinite;
+}
+
+@keyframes heartBeat {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.25); }
+}
+
+.letter-sign {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 11px;
+    color: #344C63;
+    letter-spacing: 0.5px;
+}
+
+.return-btn {
+    display: block;
+    margin: 8px auto 0;
+    padding: 5px 14px;
+    background-color: #344C63;
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 11px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    border-radius: 20px;
+    text-align: center;
+    transition: background 0.2s ease, transform 0.2s ease;
+    width: fit-content;
+}
+
+.return-btn:hover {
+    background-color: #C58F79;
+    transform: scale(1.05);
+}
+
+/* KHI PHONG BÌ MỞ */
+.envelope.open .flap {
+    transform: rotateX(180deg);
+    z-index: 0 !important;
+    opacity: 0 !important; /* Ẩn nắp phong bì khi đã mở để không bao giờ che khuất tâm thư */
+    pointer-events: none;
+}
+
+.envelope.open .envelope-front {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.envelope.open .letter {
+    opacity: 1 !important;
+    visibility: visible !important;
+    top: -210px !important;
+    height: 440px !important;
+    z-index: 50 !important;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7);
+    transform: translateY(0) scale(1.02) !important;
+}
+
+@media (min-width: 640px) {
+    .envelope.open .letter {
+        top: -230px !important;
+        height: 470px !important;
+        padding: 22px 20px;
+    }
+    .letter-body {
+        font-size: 14px;
+    }
+}
+
+.instruction {
+    position: absolute;
+    bottom: -45px;
+    width: 100%;
+    text-align: center;
+    color: #e6d2aa;
+    font-style: italic;
+    font-size: 13px;
+    text-shadow: 0 0 8px rgba(197, 143, 121, 0.8);
+    animation: fadeInOut 2s infinite alternate;
+}
+
+@keyframes fadeInOut {
+    0% { opacity: 0.6; }
+    100% { opacity: 1; }
+}
+
+/* ================= MUSIC CONTROL & NAV ================= */
+.music-control {
+    display: none !important;
+}
+
+.music-control:hover {
+    background: #344C63;
+    transform: scale(1.1);
+}
+
+.music-icon {
+    color: #e6d2aa;
+    font-size: 24px;
+    line-height: 1;
+}
+
+.music-control.playing .music-icon {
+    animation: spin 3s linear infinite;
+}
+
+@keyframes spin {
+    100% { transform: rotate(360deg); }
+}
+
+.music-control.muted .music-icon {
+    opacity: 0.4;
+    animation: none;
+}
+
+.nav-back-link {
+    position: fixed;
+    top: 22px;
+    left: 22px;
+    z-index: 40;
+    background: rgba(28, 21, 17, 0.85);
+    border: 1.5px solid #C58F79;
+    color: #e6d2aa;
+    padding: 8px 16px;
+    border-radius: 30px;
+    font-size: 12px;
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    text-decoration: none;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+    backdrop-blur-md: 4px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+}
+
+.nav-back-link:hover {
+    background: #344C63;
+    color: #fff;
+    transform: translateX(-3px);
+}
+
+.loading-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #e6d2aa;
+    font-family: 'Cinzel', serif;
+    font-size: 20px;
+    letter-spacing: 1.5px;
+    z-index: 35;
+    text-align: center;
+    opacity: 1;
+    transition: opacity 0.8s ease;
+    text-shadow: 0 0 15px rgba(197, 143, 121, 0.8);
+    pointer-events: none;
+}
