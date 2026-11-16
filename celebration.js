@@ -8,8 +8,7 @@
     const envelope = document.getElementById('envelope');
     const musicControl = document.getElementById('music-control');
     const celebrationMusic = document.getElementById('celebration-music');
-    const loadingText = document.getElementById('loading-text');
-    const deviceCheck = document.getElementById('device-check');
+    const loadingOverlay = document.getElementById('loading-overlay') || document.getElementById('device-check');
     const container = document.getElementById('container');
 
     // Canvas Matrix Background
@@ -366,36 +365,54 @@
         if (callback) setTimeout(callback, 260);
     }
 
-    // Hiển thị thông điệp ghép từ hạt: "HAPPY TEACHER DAY" và "20/11"
+    // Hiển thị thông điệp ghép từ hạt: "HAPPY TEACHER DAY" và "20/11" (Tự động co giãn theo màn hình)
     function displayParticleMessage(text, onComplete) {
         messageArea.style.opacity = '1';
         messageArea.innerHTML = '';
         currentBlocks = [];
 
-        const isMobile = window.innerWidth < 768;
-        const blockSize = isMobile ? (text.length > 8 ? 3.5 : 5.5) : (text.length > 8 ? 5.5 : 8);
-        const gap = 1;
-        const letterSpacing = isMobile ? 4 : 8;
+        const screenW = window.innerWidth;
+        const maxAllowedW = Math.min(screenW * 0.90, 760);
+        let gap = 1;
+        let letterSpacing = screenW < 640 ? 3 : 6;
+        let spaceWidth = screenW < 640 ? 8 : 14;
+        let blockSize = screenW < 640 ? (text.length > 8 ? 4.0 : 6.0) : (text.length > 8 ? 5.5 : 8.0);
 
-        let totalWidth = 0;
-        for (let i = 0; i < text.length; i++) {
-            const letter = text[i];
-            if (letter === ' ') {
-                totalWidth += isMobile ? 10 : 16;
-            } else if (letterPatterns[letter]) {
-                totalWidth += letterPatterns[letter][0].length * (blockSize + gap) - gap;
-                if (i < text.length - 1) totalWidth += letterSpacing;
+        function computeTextWidth(bSize, lSpacing, sWidth) {
+            let w = 0;
+            for (let i = 0; i < text.length; i++) {
+                if (text[i] === ' ') {
+                    w += sWidth;
+                } else if (letterPatterns[text[i]]) {
+                    const cols = letterPatterns[text[i]][0].length;
+                    w += cols * (bSize + gap) - gap;
+                    if (i < text.length - 1) w += lSpacing;
+                }
             }
+            return w;
         }
 
-        const startX = Math.max(10, (messageArea.offsetWidth - totalWidth) / 2);
+        while (blockSize > 1.4 && computeTextWidth(blockSize, letterSpacing, spaceWidth) > maxAllowedW) {
+            blockSize -= 0.1;
+            if (blockSize < 3.2 && letterSpacing > 2) {
+                letterSpacing = 2;
+                spaceWidth = 6;
+            }
+            if (blockSize < 2.2 && letterSpacing > 1) {
+                letterSpacing = 1;
+                spaceWidth = 4;
+            }
+        }
+        let totalWidth = computeTextWidth(blockSize, letterSpacing, spaceWidth);
+
+        const startX = Math.max(6, (messageArea.offsetWidth - totalWidth) / 2);
         const startY = (messageArea.offsetHeight - 8 * (blockSize + gap)) / 2;
         let currentX = startX;
 
         for (let i = 0; i < text.length; i++) {
             const letter = text[i];
             if (letter === ' ') {
-                currentX += isMobile ? 10 : 16;
+                currentX += spaceWidth;
                 continue;
             }
             const pattern = letterPatterns[letter];
@@ -536,27 +553,38 @@
         envelopeContainer.style.opacity = '1';
         createConfettiBurst(50);
 
-        // Tự động mở nhẹ hoặc cho phép người dùng click
-        envelope.addEventListener('click', () => {
+        const openEnvelopeAction = () => {
             if (!isEnvelopeOpen) {
                 envelope.classList.add('open');
+                document.body.classList.add('letter-active');
                 isEnvelopeOpen = true;
+
+                // Đưa lá thư ra ngoài cấp cao (container) để không bị kẹp bởi transform/perspective của phong bì
+                const letterEl = document.querySelector('.letter');
+                if (letterEl) {
+                    letterEl.classList.add('is-active');
+                    const cont = document.getElementById('container') || document.body;
+                    if (letterEl.parentElement !== cont) {
+                        cont.appendChild(letterEl);
+                    }
+                }
+
                 const instruction = document.getElementById('instruction');
                 if (instruction) instruction.style.opacity = '0';
+                const navBack = document.querySelector('.nav-back-link');
+                if (navBack) {
+                    navBack.style.opacity = '0';
+                    navBack.style.pointerEvents = 'none';
+                }
                 createConfettiBurst(60);
             }
-        });
+        };
+
+        // Cho phép người dùng chạm/click mở phong bì
+        envelope.addEventListener('click', openEnvelopeAction);
 
         // Tự động mở phong bì sau 2 giây để Thầy Cô chiêm ngưỡng rồi đọc trọn vẹn lời chúc
-        setTimeout(() => {
-            if (!isEnvelopeOpen) {
-                envelope.classList.add('open');
-                isEnvelopeOpen = true;
-                const instruction = document.getElementById('instruction');
-                if (instruction) instruction.style.opacity = '0';
-                createConfettiBurst(50);
-            }
-        }, 2000);
+        setTimeout(openEnvelopeAction, 1000);
     }
 
     // Bắt đầu quy trình đếm ngược 3-2-1 chậm rãi, hoài niệm
@@ -593,14 +621,17 @@
         tryStartMusic();
 
         setTimeout(() => {
-            deviceCheck.style.opacity = '0';
-            loadingText.style.opacity = '0';
-            setTimeout(() => {
-                deviceCheck.style.display = 'none';
-                loadingText.style.display = 'none';
+            if (loadingOverlay) {
+                loadingOverlay.style.opacity = '0';
+                setTimeout(() => {
+                    loadingOverlay.style.display = 'none';
+                    container.style.opacity = '1';
+                    startCelebrationFlow();
+                }, 600);
+            } else {
                 container.style.opacity = '1';
                 startCelebrationFlow();
-            }, 600);
-        }, 800);
+            }
+        }, 700);
     });
 })();

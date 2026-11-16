@@ -366,7 +366,7 @@ lucide.createIcons();
                                 marker.style.transform = 'translate(-50%, -50%) rotate(45deg) scale(1.15)';
                             }
                         }
-                    }, 2000); // ĐÚNG 2 GIÂY CHỜ THEO YÊU CẦU
+                    }, 1000); // ĐỢI 1 GIÂY TRÊN MÁY TÍNH THÌ TỰ ĐỘNG PHÓNG RA (THEO YÊU CẦU)
                 }
             }
         }
@@ -486,36 +486,104 @@ lucide.createIcons();
             const galleryGroup = new THREE.Group();
             scene.add(galleryGroup);
 
-            // 1. Quả cầu Tri Thức Hologram 3D ở trung tâm
-            const sphereGeo = new THREE.IcosahedronGeometry(36, 2);
-            const sphereMat = new THREE.MeshStandardMaterial({
-                color: 0x82749B,
-                metalness: 0.85,
-                roughness: 0.2,
-                wireframe: true,
-                emissive: 0x82749B,
-                emissiveIntensity: 0.2,
+            // 1. Mô hình 3D "Cuốn Sách Tri Thức Mở" ở trung tâm phòng tranh (Không gian Sư phạm Tri Ân)
+            const bookGroup = new THREE.Group();
+
+            // Chất liệu bìa sách da cổ điển màu đỏ đất nung trầm (#8C4730)
+            const coverMat = new THREE.MeshStandardMaterial({
+                color: 0x8C4730,
+                metalness: 0.3,
+                roughness: 0.55,
+                emissive: 0x5C2618,
+                emissiveIntensity: 0.2
             });
-            const coreSphere = new THREE.Mesh(sphereGeo, sphereMat);
-            galleryGroup.add(coreSphere);
 
-            // Lõi phát sáng bên trong quả cầu
-            const innerGeo = new THREE.SphereGeometry(18, 32, 32);
-            const innerMat = new THREE.MeshBasicMaterial({ color: 0xC58F79 });
-            const innerCore = new THREE.Mesh(innerGeo, innerMat);
-            galleryGroup.add(innerCore);
+            // Chất liệu trang giấy ngà ấm viền vàng phát sáng dịu (#FFFDF5)
+            const pagesMat = new THREE.MeshStandardMaterial({
+                color: 0xFFFDF5,
+                metalness: 0.1,
+                roughness: 0.7,
+                emissive: 0xC58F79,
+                emissiveIntensity: 0.25
+            });
 
-            // 2. Vòng quỹ đạo ánh sáng vàng quay xung quanh
-            const ringGeo = new THREE.TorusGeometry(62, 1.2, 16, 100);
-            const ringMat = new THREE.MeshStandardMaterial({ color: 0xC58F79, metalness: 0.85, roughness: 0.15 });
-            const ringMesh = new THREE.Mesh(ringGeo, ringMat);
-            ringMesh.rotation.x = Math.PI / 3;
-            galleryGroup.add(ringMesh);
+            // Chất liệu gáy sách mạ đồng ánh kim (#C58F79)
+            const spineMat = new THREE.MeshStandardMaterial({
+                color: 0xC58F79,
+                metalness: 0.85,
+                roughness: 0.25
+            });
 
-            const ringGeo2 = new THREE.TorusGeometry(78, 1, 16, 100);
-            const ringMesh2 = new THREE.Mesh(ringGeo2, ringMat);
-            ringMesh2.rotation.y = Math.PI / 4;
-            galleryGroup.add(ringMesh2);
+            const coverW = 26;
+            const coverH = 34;
+            const coverT = 1.2;
+            const openAngle = 0.22; // Độ nghiêng ~13 độ mở tự nhiên
+
+            // Bìa trái & bìa phải
+            const leftCover = new THREE.Mesh(new THREE.BoxGeometry(coverW, coverT, coverH), coverMat);
+            leftCover.position.set(-coverW / 2, 0, 0);
+            leftCover.rotation.z = openAngle;
+            bookGroup.add(leftCover);
+
+            const rightCover = new THREE.Mesh(new THREE.BoxGeometry(coverW, coverT, coverH), coverMat);
+            rightCover.position.set(coverW / 2, 0, 0);
+            rightCover.rotation.z = -openAngle;
+            bookGroup.add(rightCover);
+
+            // Khối trang sách mở
+            const pageW = 24;
+            const pageH = 32;
+            const pageT = 2.8;
+
+            const leftPages = new THREE.Mesh(new THREE.BoxGeometry(pageW, pageT, pageH), pagesMat);
+            leftPages.position.set(-pageW / 2 - 0.5, 1.4, 0);
+            leftPages.rotation.z = openAngle;
+            bookGroup.add(leftPages);
+
+            const rightPages = new THREE.Mesh(new THREE.BoxGeometry(pageW, pageT, pageH), pagesMat);
+            rightPages.position.set(pageW / 2 + 0.5, 1.4, 0);
+            rightPages.rotation.z = -openAngle;
+            bookGroup.add(rightPages);
+
+            // Gáy sách ở giữa
+            const spine = new THREE.Mesh(new THREE.CylinderGeometry(1.8, 1.8, coverH, 16, 1, false, 0, Math.PI), spineMat);
+            spine.rotation.x = Math.PI / 2;
+            spine.rotation.z = Math.PI;
+            spine.position.set(0, -0.6, 0);
+            bookGroup.add(spine);
+
+            // Dải ruy băng đánh dấu trang lụa đỏ đất nung
+            const ribbonMat = new THREE.MeshStandardMaterial({
+                color: 0xC58F79,
+                metalness: 0.4,
+                roughness: 0.4,
+                emissive: 0x8C4730,
+                emissiveIntensity: 0.35
+            });
+            const ribbon = new THREE.Mesh(new THREE.BoxGeometry(1.6, 0.4, coverH + 10), ribbonMat);
+            ribbon.position.set(0, 2.2, 3);
+            ribbon.rotation.x = 0.12;
+            bookGroup.add(ribbon);
+
+            // Vòng hào quang tri thức thanh nhã mạ đồng
+            const auraGeo = new THREE.TorusGeometry(46, 0.9, 16, 80);
+            const auraMat = new THREE.MeshStandardMaterial({
+                color: 0xC58F79,
+                metalness: 0.8,
+                roughness: 0.2,
+                emissive: 0xC58F79,
+                emissiveIntensity: 0.3
+            });
+            const auraRing = new THREE.Mesh(auraGeo, auraMat);
+            auraRing.rotation.x = Math.PI / 2.3;
+            bookGroup.add(auraRing);
+
+            // Ánh sáng ấm dịu tỏa ra từ trang sách
+            const bookGlowLight = new THREE.PointLight(0xC58F79, 1.6, 220);
+            bookGlowLight.position.set(0, 16, 0);
+            bookGroup.add(bookGlowLight);
+
+            galleryGroup.add(bookGroup);
 
             // 3. 5 Khung Tranh Kỷ Niệm 3D lơ lửng mang ảnh thật của Thầy Cô
             const defaultPhotos = [
@@ -737,11 +805,11 @@ lucide.createIcons();
                 galleryGroup.rotation.y += (targetRotationY - galleryGroup.rotation.y) * 0.08;
                 galleryGroup.rotation.x += (targetRotationX - galleryGroup.rotation.x) * 0.08;
                 
-                // Hiệu ứng bồng bềnh
-                coreSphere.rotation.x += 0.005;
-                coreSphere.rotation.y += 0.008;
-                ringMesh.rotation.z += 0.006;
-                ringMesh2.rotation.x += 0.004;
+                // Cuốn sách Tri Thức bồng bềnh và xoay nhẹ nhàng
+                bookGroup.rotation.y += 0.005;
+                auraRing.rotation.z += 0.006;
+                const bookTime = Date.now() * 0.0015;
+                bookGroup.position.y = Math.sin(bookTime) * 3;
 
                 const time = Date.now() * 0.0015;
                 memoryFrames.forEach((frame, idx) => {
@@ -811,34 +879,108 @@ if (bgMusic) {
     });
 }
 
-// ================= 8. KHI LƯỚT TỚI FOOTER: ĐỢI 1 GIÂY RỒI CHUYỂN QUA TRANG TRI ÂN ĐẶC BIỆT =================
-const footerEl = document.querySelector('footer');
-let isTransitioningToCelebration = false;
+// ================= 8. ĐIỀU KHIỂN ÂM THANH NỔI (MUTE / UNMUTE) =================
+const audioToggleBtn = document.getElementById('audio-toggle-btn');
+const audioIcon = document.getElementById('audio-icon');
+const audioText = document.getElementById('audio-text');
 
-if (footerEl) {
-    const footerObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting && !isTransitioningToCelebration) {
-                isTransitioningToCelebration = true;
-                const indicatorText = document.getElementById('footer-transition-text');
-                if (indicatorText) {
-                    indicatorText.innerHTML = '<span class="text-[#C58F79] font-bold animate-pulse">✨ Đang chuyển sang Không gian Tri Ân đặc biệt sau 1 giây...</span>';
-                }
-
-                // Lưu lại thời gian phát nhạc chính xác trước khi chuyển trang
-                if (bgMusic) {
-                    sessionStorage.setItem('bgMusicCurrentTime', bgMusic.currentTime);
-                }
-                
-                setTimeout(() => {
-                    document.body.style.transition = 'opacity 0.6s ease';
-                    document.body.style.opacity = '0';
-                    setTimeout(() => {
-                        window.location.href = 'celebration.html';
-                    }, 600);
-                }, 1000);
-            }
-        });
-    }, { threshold: 0.25 });
-    footerObserver.observe(footerEl);
+if (audioToggleBtn && bgMusic) {
+    audioToggleBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (bgMusic.paused) {
+            bgMusic.play().then(() => {
+                if (audioIcon) audioIcon.textContent = '🎵';
+                if (audioText) audioText.textContent = 'Nhạc: Bật';
+                audioToggleBtn.classList.remove('opacity-60');
+            }).catch(() => {});
+        } else {
+            bgMusic.pause();
+            if (audioIcon) audioIcon.textContent = '🔇';
+            if (audioText) audioText.textContent = 'Nhạc: Tắt';
+            audioToggleBtn.classList.add('opacity-60');
+        }
+    });
 }
+
+// ================= 9. TỰ ĐỘNG CHUYỂN TRANG TRI ÂN SAU 2 GIÂY KHI CUỘN ĐẾN CHÂN TRANG =================
+(function initFooterAutoRedirect() {
+    const footerElem = document.querySelector('footer');
+    const footerTransitionBtn = document.getElementById('footer-transition-indicator');
+    const countdownSecEl = document.getElementById('countdown-sec');
+    let autoRedirectTimer = null;
+    let countdownInterval = null;
+    let hasRedirected = false;
+
+    function navigateToCelebration() {
+        if (hasRedirected) return;
+        hasRedirected = true;
+        if (bgMusic && !bgMusic.paused && bgMusic.currentTime > 0) {
+            sessionStorage.setItem('bgMusicCurrentTime', bgMusic.currentTime);
+        }
+        window.location.href = 'celebration.html';
+    }
+
+    if (footerTransitionBtn) {
+        footerTransitionBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            navigateToCelebration();
+        });
+    }
+
+    if (!footerElem) return;
+
+    function startAutoRedirectCountdown() {
+        if (autoRedirectTimer || hasRedirected) return;
+        let remainingSeconds = 2;
+        if (countdownSecEl) countdownSecEl.textContent = remainingSeconds;
+
+        countdownInterval = setInterval(() => {
+            remainingSeconds -= 1;
+            if (countdownSecEl && remainingSeconds >= 0) {
+                countdownSecEl.textContent = remainingSeconds;
+            }
+        }, 1000);
+
+        autoRedirectTimer = setTimeout(() => {
+            clearInterval(countdownInterval);
+            navigateToCelebration();
+        }, 2000);
+    }
+
+    function cancelAutoRedirectCountdown() {
+        if (hasRedirected) return;
+        if (autoRedirectTimer) {
+            clearTimeout(autoRedirectTimer);
+            autoRedirectTimer = null;
+        }
+        if (countdownInterval) {
+            clearInterval(countdownInterval);
+            countdownInterval = null;
+        }
+        if (countdownSecEl) {
+            countdownSecEl.textContent = '2';
+        }
+    }
+
+    if ('IntersectionObserver' in window) {
+        const footerObserver = new IntersectionObserver((entries) => {
+            const entry = entries[0];
+            if (entry.isIntersecting) {
+                startAutoRedirectCountdown();
+            } else {
+                cancelAutoRedirectCountdown();
+            }
+        }, { threshold: 0.35 });
+
+        footerObserver.observe(footerElem);
+    } else {
+        window.addEventListener('scroll', () => {
+            const rect = footerElem.getBoundingClientRect();
+            if (rect.top < window.innerHeight && rect.bottom >= 0) {
+                startAutoRedirectCountdown();
+            } else {
+                cancelAutoRedirectCountdown();
+            }
+        }, { passive: true });
+    }
+})();

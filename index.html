@@ -16,10 +16,10 @@
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     
-    <!-- Google Fonts: Playfair Display, Great Vibes, Inter, Cinzel -->
+    <!-- Google Fonts: Playfair Display, Great Vibes, Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <script>
         tailwind.config = {
@@ -29,12 +29,14 @@
                         sans: ['Inter', 'sans-serif'],
                         serif: ['"Playfair Display"', 'Georgia', 'serif'],
                         script: ['"Great Vibes"', 'cursive'],
-                        cinzel: ['"Cinzel"', 'serif'],
+                        cinzel: ['"Playfair Display"', 'Georgia', 'serif'],
                     },
                     colors: {
                         'brand-light': '#EAF5F5',
                         'brand-pastel': '#C6E2E5',
                         'brand-navy': '#344C63',
+                        'brand-navy-deep': '#1C2D3D',
+                        'brand-terracotta-deep': '#8C4730',
                         'brand-lavender': '#82749B',
                         'brand-terracotta': '#C58F79',
                         'brand-muted': '#4A6072',
@@ -44,7 +46,7 @@
                         'brand-amber': '#C58F79',      // Terracotta (10% màu nhấn phụ: con số, ký hiệu)
                         'news-red': '#C58F79',         // Terracotta (tiêu điểm, dấu ấn)
                         'news-paper': '#FFFFFF',       // Nền giấy sáng tinh khôi
-                        'news-ink': '#344C63',         // Navy (45% màu chữ: tiêu đề, thông tin chính)
+                        'news-ink': '#1C2D3D',         // Navy (45% màu chữ: tiêu đề, thông tin chính)
                     },
                     animation: {
                         'fade-in-up': 'fadeInUp 1s ease-out forwards',
@@ -88,20 +90,20 @@
         <div class="relative z-10 w-full max-w-6xl mx-auto px-6 sm:px-8 lg:px-12 flex flex-col items-center text-center">
             
             <div class="mb-4 sm:mb-6 animate-fade-in-up">
-                <span class="font-script text-4xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl text-[#82749B] font-medium tracking-wide text-glow animate-float inline-block drop-shadow-sm hero-script-text">
+                <span class="font-script text-4xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl text-[#82749B] font-bold tracking-wide animate-float inline-block drop-shadow-sm hero-script-text">
                     Tri ân Thầy Cô
                 </span>
             </div>
 
-            <h1 class="font-serif text-3xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold leading-tight mb-4 sm:mb-6 animate-fade-in-up text-[#344C63] hero-title">
-                Chào mừng <br class="sm:hidden" />
-                Ngày Nhà giáo <br />
-                <span class="text-[#C58F79] italic">Việt Nam 20/11</span>
+            <h1 class="font-serif text-3xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black leading-tight mb-4 sm:mb-6 animate-fade-in-up text-[#1C2D3D] hero-title">
+                Chào mừng <br />
+                <span class="inline-block whitespace-nowrap">Ngày Nhà giáo</span> <br />
+                <span class="text-[#8C4730] italic inline-block whitespace-nowrap">Việt Nam 20/11</span>
             </h1>
 
             <div class="w-40 sm:w-56 h-[2px] bg-gradient-to-r from-transparent via-[#82749B] to-transparent opacity-80 mb-8 animate-fade-in"></div>
 
-            <p class="font-sans text-sm sm:text-base md:text-lg lg:text-xl text-[#4A6072] max-w-2xl lg:max-w-3xl mx-auto font-light tracking-wide leading-relaxed animate-fade-in-up text-glow hero-desc">
+            <p class="font-sans text-sm sm:text-base md:text-lg lg:text-xl text-[#2C3E50] max-w-2xl lg:max-w-3xl mx-auto font-normal tracking-wide leading-relaxed animate-fade-in-up hero-desc">
                 "Dưới ánh mặt trời, không có nghề nào cao quý hơn nghề dạy học." <br class="hidden sm:block" />
                 Mùa Hiến chương đầu tiên của tuổi 15 dưới mái trường Chuyên Quang Trung, tập thể Chi đoàn 10I xin gửi gắm trọn vẹn lòng biết ơn mộc mạc và kính chúc Quý Thầy Cô luôn nhiều niềm vui, mạnh khỏe bên chúng em!
             </p>
@@ -125,7 +127,7 @@
         
         <div class="text-center max-w-3xl mx-auto mb-20 sm:mb-32">
             <h2 class="font-serif text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-[#344C63] mb-5 tracking-tight">
-                6 Mốc Son Lịch Sử <br class="sm:hidden" />
+                6 Mốc Son Lịch Sử <br />
                 <span class="text-[#82749B] italic">Ngày Nhà Giáo Việt Nam</span>
             </h2>
             <div class="w-24 h-[2px] bg-gradient-to-r from-transparent via-brand-gold to-transparent mx-auto mt-4 mb-6"></div>
@@ -135,15 +137,15 @@
         </div>
 
         <div class="relative max-w-7xl mx-auto">
-            <div id="timeline-rail-track" class="timeline-rail absolute left-4 sm:left-1/2 top-4 bottom-8 w-[3px] -translate-x-1/2 rounded-full z-0"></div>
-            <div id="scroll-progress-line" class="absolute left-4 sm:left-1/2 top-4 w-[3px] -translate-x-1/2 bg-gradient-to-b from-[#82749B] via-[#C58F79] to-[#344C63] rounded-full transition-all duration-150 z-0" style="height: 0px; box-shadow: 0 0 20px rgba(197, 143, 121, 0.6);"></div>
+            <div id="timeline-rail-track" class="timeline-rail absolute left-4 sm:left-1/2 top-4 bottom-8 w-[2px] -translate-x-1/2 rounded-full z-0 bg-[#344C63]/15"></div>
+            <div id="scroll-progress-line" class="absolute left-4 sm:left-1/2 top-4 w-[2px] -translate-x-1/2 bg-[#8C4730] rounded-full transition-all duration-150 z-0" style="height: 0px; box-shadow: none;"></div>
 
             <div id="timeline-milestones-container" class="space-y-36 sm:space-y-56 relative z-30 py-8">
 
                 <!-- MỐC 1: 1946 (BÊN TRÁI PHÓNG NGANG SANG PHẢI) -->
                 <div class="timeline-node relative flex items-center group" data-side="left" data-index="0">
                     <div class="milestone-marker-node absolute left-4 sm:left-1/2 -translate-x-1/2 w-13 h-13 sm:w-16 sm:h-16 bg-[#344C63] border-[2.5px] border-[#C58F79] rotate-45 flex items-center justify-center z-50 shadow-xl">
-                        <span class="-rotate-45 font-cinzel font-black text-white text-base sm:text-xl">I</span>
+                        <span class="-rotate-45 font-serif uppercase font-black text-white text-base sm:text-xl">I</span>
                     </div>
 
                     <div class="monument-wrapper ml-12 sm:ml-0">
@@ -157,7 +159,7 @@
                                 <!-- CỘT ẢNH TƯ LIỆU: MẶC ĐỊNH ẨN HOÀN TOÀN, CHỈ XUẤT HIỆN KHI EXPANDED (SAU 2S) -->
                                 <div class="monument-photo-dossier">
                                     <div>
-                                        <div class="flex items-center gap-2 mb-3 text-[11px] font-cinzel text-[#82749B] tracking-widest font-bold">
+                                        <div class="flex items-center gap-2 mb-3 text-[11px] font-serif uppercase text-[#82749B] tracking-widest font-bold">
                                             <i data-lucide="folder-archive" class="w-4 h-4 text-[#82749B]"></i>
                                             <span>HỒ SƠ TƯ LIỆU GỐC</span>
                                         </div>
@@ -172,9 +174,9 @@
                                         </div>
                                     </div>
 
-                                    <div class="flex items-center justify-between pt-3 border-t border-[#C6E2E5] text-[11px] font-cinzel text-[#C58F79] tracking-widest font-bold">
+                                    <div class="flex items-center justify-between pt-3 border-t border-[#C6E2E5] text-[11px] font-serif uppercase text-[#C58F79] tracking-widest font-bold">
                                         <div class="flex items-center gap-2">
-                                            <span class="w-2 h-2 rounded-full bg-red-600 animate-pulse"></span>
+                                            <span class="w-2 h-2 rounded-full bg-[#8C4730]"></span>
                                             <span>DẤU ẤN LỊCH SỬ • FISE QUỐC TẾ</span>
                                         </div>
                                         <span class="text-[10px] text-stone-500 font-serif uppercase tracking-normal">Paris 1946</span>
@@ -185,7 +187,7 @@
                                 <div class="monument-content-column flex flex-col justify-between h-full">
                                     <div>
                                         <div class="flex items-baseline justify-between mb-4 flex-wrap gap-2">
-                                            <span class="text-5xl sm:text-6xl lg:text-7xl font-cinzel font-black text-[#C58F79] tracking-tight">1946</span>
+                                            <span class="text-5xl sm:text-6xl lg:text-7xl font-serif uppercase font-black text-[#C58F79] tracking-tight">1946</span>
                                             <span class="text-xs uppercase tracking-widest text-[#344C63] font-serif border border-[#82749B]/40 bg-[#C6E2E5]/60 px-3 py-1 font-semibold">Tháng 7 • Paris, Pháp</span>
                                         </div>
 
@@ -193,7 +195,7 @@
                                             Thành lập Liên hiệp FISE Quốc tế
                                         </h3>
 
-                                        <p class="text-base sm:text-lg text-[#4A6072] leading-relaxed font-serif font-light mb-6">
+                                        <p class="text-base sm:text-lg text-[#2C3E50] leading-relaxed font-serif font-normal mb-6">
                                             Tại thủ đô Paris hoa lệ, tổ chức quốc tế của các nhà giáo tiến bộ mang tên <strong>FISE</strong> (Liên hiệp quốc tế các Công đoàn Giáo dục) chính thức ra đời. Sự kiện đánh dấu bước ngoặt đoàn kết các lực lượng giáo dục tiến bộ toàn cầu trong cuộc đấu tranh chống chủ nghĩa đế quốc, bảo vệ hòa bình và quyền lợi chính đáng của nhà giáo.
                                         </p>
 
@@ -215,7 +217,7 @@
                 <!-- MỐC 2: 1949 (BÊN PHẢI PHÓNG NGANG SANG TRÁI) -->
                 <div class="timeline-node relative flex items-center group" data-side="right" data-index="1">
                     <div class="milestone-marker-node absolute left-4 sm:left-1/2 -translate-x-1/2 w-13 h-13 sm:w-16 sm:h-16 bg-[#344C63] border-[2.5px] border-[#C58F79] rotate-45 flex items-center justify-center z-50 shadow-xl">
-                        <span class="-rotate-45 font-cinzel font-black text-white text-base sm:text-xl">II</span>
+                        <span class="-rotate-45 font-serif uppercase font-black text-white text-base sm:text-xl">II</span>
                     </div>
 
                     <div class="monument-wrapper ml-12 sm:ml-0">
@@ -229,7 +231,7 @@
                                 <!-- CỘT ẢNH TƯ LIỆU: MẶC ĐỊNH ẨN HOÀN TOÀN, CHỈ XUẤT HIỆN KHI EXPANDED (SAU 2S) -->
                                 <div class="monument-photo-dossier">
                                     <div>
-                                        <div class="flex items-center gap-2 mb-3 text-[11px] font-cinzel text-[#82749B] tracking-widest font-bold">
+                                        <div class="flex items-center gap-2 mb-3 text-[11px] font-serif uppercase text-[#82749B] tracking-widest font-bold">
                                             <i data-lucide="file-text" class="w-4 h-4 text-[#82749B]"></i>
                                             <span>NGUYÊN BẢN HIẾN CHƯƠNG</span>
                                         </div>
@@ -244,9 +246,9 @@
                                         </div>
                                     </div>
 
-                                    <div class="flex items-center justify-between pt-3 border-t border-[#C6E2E5] text-[11px] font-cinzel text-[#C58F79] tracking-widest font-bold">
+                                    <div class="flex items-center justify-between pt-3 border-t border-[#C6E2E5] text-[11px] font-serif uppercase text-[#C58F79] tracking-widest font-bold">
                                         <div class="flex items-center gap-2">
-                                            <span class="w-2 h-2 rounded-full bg-red-600 animate-pulse"></span>
+                                            <span class="w-2 h-2 rounded-full bg-[#8C4730]"></span>
                                             <span>CHUẨN MỰC QUỐC TẾ • 15 CHƯƠNG</span>
                                         </div>
                                         <span class="text-[10px] text-stone-500 font-serif uppercase tracking-normal">Warszawa 1949</span>
@@ -257,7 +259,7 @@
                                 <div class="monument-content-column flex flex-col justify-between h-full">
                                     <div>
                                         <div class="flex items-baseline justify-between mb-4 flex-wrap gap-2">
-                                            <span class="text-5xl sm:text-6xl lg:text-7xl font-cinzel font-black text-[#C58F79] tracking-tight">1949</span>
+                                            <span class="text-5xl sm:text-6xl lg:text-7xl font-serif uppercase font-black text-[#C58F79] tracking-tight">1949</span>
                                             <span class="text-xs uppercase tracking-widest text-[#344C63] font-serif border border-[#82749B]/40 bg-[#C6E2E5]/60 px-3 py-1 font-semibold">Warszawa, Ba Lan</span>
                                         </div>
 
@@ -265,7 +267,7 @@
                                             Thông qua Hiến Chương Các Nhà Giáo
                                         </h3>
 
-                                        <p class="text-base sm:text-lg text-[#4A6072] leading-relaxed font-serif font-light mb-6">
+                                        <p class="text-base sm:text-lg text-[#2C3E50] leading-relaxed font-serif font-normal mb-6">
                                             Tại Hội nghị Vacsava (Warszawa), FISE đã soạn thảo và thông qua bản <strong>"Hiến chương các nhà giáo"</strong> gồm 15 chương. Văn kiện xác lập chuẩn mực quốc tế về bảo đảm quyền lợi vật chất, tinh thần và đề cao vị thế xã hội của người làm nghề dạy học.
                                         </p>
 
@@ -287,7 +289,7 @@
                 <!-- MỐC 3: 1953 (BÊN TRÁI PHÓNG NGANG SANG PHẢI) -->
                 <div class="timeline-node relative flex items-center group" data-side="left" data-index="2">
                     <div class="milestone-marker-node absolute left-4 sm:left-1/2 -translate-x-1/2 w-13 h-13 sm:w-16 sm:h-16 bg-[#344C63] border-[2.5px] border-[#C58F79] rotate-45 flex items-center justify-center z-50 shadow-xl">
-                        <span class="-rotate-45 font-cinzel font-black text-white text-base sm:text-xl">III</span>
+                        <span class="-rotate-45 font-serif uppercase font-black text-white text-base sm:text-xl">III</span>
                     </div>
 
                     <div class="monument-wrapper ml-12 sm:ml-0">
@@ -301,7 +303,7 @@
                                 <!-- CỘT ẢNH TƯ LIỆU: MẶC ĐỊNH ẨN HOÀN TOÀN, CHỈ XUẤT HIỆN KHI EXPANDED (SAU 2S) -->
                                 <div class="monument-photo-dossier">
                                     <div>
-                                        <div class="flex items-center gap-2 mb-3 text-[11px] font-cinzel text-[#82749B] tracking-widest font-bold">
+                                        <div class="flex items-center gap-2 mb-3 text-[11px] font-serif uppercase text-[#82749B] tracking-widest font-bold">
                                             <i data-lucide="globe" class="w-4 h-4 text-[#82749B]"></i>
                                             <span>KẾT NẠP QUỐC TẾ</span>
                                         </div>
@@ -316,9 +318,9 @@
                                         </div>
                                     </div>
 
-                                    <div class="flex items-center justify-between pt-3 border-t border-[#C6E2E5] text-[11px] font-cinzel text-[#C58F79] tracking-widest font-bold">
+                                    <div class="flex items-center justify-between pt-3 border-t border-[#C6E2E5] text-[11px] font-serif uppercase text-[#C58F79] tracking-widest font-bold">
                                         <div class="flex items-center gap-2">
-                                            <span class="w-2 h-2 rounded-full bg-red-600 animate-pulse"></span>
+                                            <span class="w-2 h-2 rounded-full bg-[#8C4730]"></span>
                                             <span>HỘI NHẬP GIÁO DỤC • KHÁNG CHIẾN KIẾN QUỐC</span>
                                         </div>
                                         <span class="text-[10px] text-stone-500 font-serif uppercase tracking-normal">Việt Nam 1953</span>
@@ -329,7 +331,7 @@
                                 <div class="monument-content-column flex flex-col justify-between h-full">
                                     <div>
                                         <div class="flex items-baseline justify-between mb-4 flex-wrap gap-2">
-                                            <span class="text-5xl sm:text-6xl lg:text-7xl font-cinzel font-black text-[#C58F79] tracking-tight">1953</span>
+                                            <span class="text-5xl sm:text-6xl lg:text-7xl font-serif uppercase font-black text-[#C58F79] tracking-tight">1953</span>
                                             <span class="text-xs uppercase tracking-widest text-[#344C63] font-serif border border-[#82749B]/40 bg-[#C6E2E5]/60 px-3 py-1 font-semibold">Tháng 7 • Việt Nam & FISE</span>
                                         </div>
 
@@ -337,7 +339,7 @@
                                             Giáo Dục Việt Nam Hội Nhập Quốc Tế
                                         </h3>
 
-                                        <p class="text-base sm:text-lg text-[#4A6072] leading-relaxed font-serif font-light mb-6">
+                                        <p class="text-base sm:text-lg text-[#2C3E50] leading-relaxed font-serif font-normal mb-6">
                                             Giữa những năm tháng kháng chiến kiến quốc gian khổ, <strong>Công đoàn Giáo dục Việt Nam</strong> (thành lập năm 1951) chính thức được kết nạp làm thành viên của FISE. Sự kiện thể hiện tinh thần quốc tế vô sản sâu sắc và sự ủng hộ to lớn của bạn bè năm châu đối với nền giáo dục cách mạng Việt Nam.
                                         </p>
 
@@ -359,7 +361,7 @@
                 <!-- MỐC 4: 1957 (BÊN PHẢI PHÓNG NGANG SANG TRÁI) -->
                 <div class="timeline-node relative flex items-center group" data-side="right" data-index="3">
                     <div class="milestone-marker-node absolute left-4 sm:left-1/2 -translate-x-1/2 w-13 h-13 sm:w-16 sm:h-16 bg-[#344C63] border-[2.5px] border-[#C58F79] rotate-45 flex items-center justify-center z-50 shadow-xl">
-                        <span class="-rotate-45 font-cinzel font-black text-white text-base sm:text-xl">IV</span>
+                        <span class="-rotate-45 font-serif uppercase font-black text-white text-base sm:text-xl">IV</span>
                     </div>
 
                     <div class="monument-wrapper ml-12 sm:ml-0">
@@ -373,7 +375,7 @@
                                 <!-- CỘT ẢNH TƯ LIỆU: MẶC ĐỊNH ẨN HOÀN TOÀN, CHỈ XUẤT HIỆN KHI EXPANDED (SAU 2S) -->
                                 <div class="monument-photo-dossier">
                                     <div>
-                                        <div class="flex items-center gap-2 mb-3 text-[11px] font-cinzel text-[#82749B] tracking-widest font-bold">
+                                        <div class="flex items-center gap-2 mb-3 text-[11px] font-serif uppercase text-[#82749B] tracking-widest font-bold">
                                             <i data-lucide="check-circle" class="w-4 h-4 text-[#82749B]"></i>
                                             <span>QUYẾT NGHỊ QUỐC TẾ</span>
                                         </div>
@@ -388,9 +390,9 @@
                                         </div>
                                     </div>
 
-                                    <div class="flex items-center justify-between pt-3 border-t border-[#C6E2E5] text-[11px] font-cinzel text-[#C58F79] tracking-widest font-bold">
+                                    <div class="flex items-center justify-between pt-3 border-t border-[#C6E2E5] text-[11px] font-serif uppercase text-[#C58F79] tracking-widest font-bold">
                                         <div class="flex items-center gap-2">
-                                            <span class="w-2 h-2 rounded-full bg-red-600 animate-pulse"></span>
+                                            <span class="w-2 h-2 rounded-full bg-[#8C4730]"></span>
                                             <span>BIỂU QUYẾT LỊCH SỬ • 57 QUỐC GIA</span>
                                         </div>
                                         <span class="text-[10px] text-stone-500 font-serif uppercase tracking-normal">Ba Lan 1957</span>
@@ -401,7 +403,7 @@
                                 <div class="monument-content-column flex flex-col justify-between h-full">
                                     <div>
                                         <div class="flex items-baseline justify-between mb-4 flex-wrap gap-2">
-                                            <span class="text-5xl sm:text-6xl lg:text-7xl font-cinzel font-black text-[#C58F79] tracking-tight">1957</span>
+                                            <span class="text-5xl sm:text-6xl lg:text-7xl font-serif uppercase font-black text-[#C58F79] tracking-tight">1957</span>
                                             <span class="text-xs uppercase tracking-widest text-[#344C63] font-serif border border-[#82749B]/40 bg-[#C6E2E5]/60 px-3 py-1 font-semibold">26 - 30/08 • Ba Lan</span>
                                         </div>
 
@@ -409,7 +411,7 @@
                                             Quyết Định Chọn Ngày 20/11 Lịch Sử
                                         </h3>
 
-                                        <p class="text-base sm:text-lg text-[#4A6072] leading-relaxed font-serif font-light mb-6">
+                                        <p class="text-base sm:text-lg text-[#2C3E50] leading-relaxed font-serif font-normal mb-6">
                                             Hội nghị FISE với 57 quốc gia tham dự đã đồng thuận quyết định lấy ngày <strong>20 tháng 11</strong> hằng năm làm ngày <em>"Quốc tế Hiến chương các Nhà giáo"</em>, nhắc nhở toàn thể xã hội về nghĩa vụ tôn trọng, bảo vệ người thầy và chăm lo nâng cao chất lượng giáo dục.
                                         </p>
 
@@ -431,7 +433,7 @@
                 <!-- MỐC 5: 1958 (BÊN TRÁI PHÓNG NGANG SANG PHẢI) -->
                 <div class="timeline-node relative flex items-center group" data-side="left" data-index="4">
                     <div class="milestone-marker-node absolute left-4 sm:left-1/2 -translate-x-1/2 w-13 h-13 sm:w-16 sm:h-16 bg-[#344C63] border-[2.5px] border-[#C58F79] rotate-45 flex items-center justify-center z-50 shadow-xl">
-                        <span class="-rotate-45 font-cinzel font-black text-white text-base sm:text-xl">V</span>
+                        <span class="-rotate-45 font-serif uppercase font-black text-white text-base sm:text-xl">V</span>
                     </div>
 
                     <div class="monument-wrapper ml-12 sm:ml-0">
@@ -445,7 +447,7 @@
                                 <!-- CỘT ẢNH TƯ LIỆU: MẶC ĐỊNH ẨN HOÀN TOÀN, CHỈ XUẤT HIỆN KHI EXPANDED (SAU 2S) -->
                                 <div class="monument-photo-dossier">
                                     <div>
-                                        <div class="flex items-center gap-2 mb-3 text-[11px] font-cinzel text-[#82749B] tracking-widest font-bold">
+                                        <div class="flex items-center gap-2 mb-3 text-[11px] font-serif uppercase text-[#82749B] tracking-widest font-bold">
                                             <i data-lucide="flame" class="w-4 h-4 text-[#82749B]"></i>
                                             <span>HÀO KHÍ THỜI CHIẾN</span>
                                         </div>
@@ -460,9 +462,9 @@
                                         </div>
                                     </div>
 
-                                    <div class="flex items-center justify-between pt-3 border-t border-[#C6E2E5] text-[11px] font-cinzel text-[#C58F79] tracking-widest font-bold">
+                                    <div class="flex items-center justify-between pt-3 border-t border-[#C6E2E5] text-[11px] font-serif uppercase text-[#C58F79] tracking-widest font-bold">
                                         <div class="flex items-center gap-2">
-                                            <span class="w-2 h-2 rounded-full bg-red-600 animate-pulse"></span>
+                                            <span class="w-2 h-2 rounded-full bg-[#8C4730]"></span>
                                             <span>LỄ KỶ NIỆM ĐẦU TIÊN • Ý CHÍ KIÊN CƯỜNG</span>
                                         </div>
                                         <span class="text-[10px] text-stone-500 font-serif uppercase tracking-normal">Việt Nam 1958</span>
@@ -473,7 +475,7 @@
                                 <div class="monument-content-column flex flex-col justify-between h-full">
                                     <div>
                                         <div class="flex items-baseline justify-between mb-4 flex-wrap gap-2">
-                                            <span class="text-5xl sm:text-6xl lg:text-7xl font-cinzel font-black text-[#C58F79] tracking-tight">1958</span>
+                                            <span class="text-5xl sm:text-6xl lg:text-7xl font-serif uppercase font-black text-[#C58F79] tracking-tight">1958</span>
                                             <span class="text-xs uppercase tracking-widest text-[#344C63] font-serif border border-[#82749B]/40 bg-[#C6E2E5]/60 px-3 py-1 font-semibold">20/11/1958 • Việt Nam</span>
                                         </div>
 
@@ -481,7 +483,7 @@
                                             Lễ Kỷ Niệm 20/11 Đầu Tiên Tại Việt Nam
                                         </h3>
 
-                                        <p class="text-base sm:text-lg text-[#4A6072] leading-relaxed font-serif font-light mb-6">
+                                        <p class="text-base sm:text-lg text-[#2C3E50] leading-relaxed font-serif font-normal mb-6">
                                             Ngày Quốc tế Hiến chương các Nhà giáo lần đầu tiên được tổ chức trang trọng trên toàn miền Bắc, sau đó lan tỏa mạnh mẽ vào các lớp học dưới hầm hào của vùng giải phóng miền Nam trong thời kỳ chống Mỹ cứu nước gian khổ.
                                         </p>
 
@@ -503,7 +505,7 @@
                 <!-- MỐC 6: 1982 (BÊN PHẢI PHÓNG NGANG SANG TRÁI - CAO TRÀO LỊCH SỬ) -->
                 <div class="timeline-node relative flex items-center group" data-side="right" data-index="5">
                     <div class="milestone-marker-node absolute left-4 sm:left-1/2 -translate-x-1/2 w-13 h-13 sm:w-16 sm:h-16 bg-[#C58F79] border-[2.5px] border-[#344C63] rotate-45 flex items-center justify-center z-50 shadow-2xl">
-                        <span class="-rotate-45 font-cinzel font-black text-white text-base sm:text-xl">VI</span>
+                        <span class="-rotate-45 font-serif uppercase font-black text-white text-base sm:text-xl">VI</span>
                     </div>
 
                     <div class="monument-wrapper ml-12 sm:ml-0">
@@ -517,27 +519,27 @@
                                 <!-- CỘT ẢNH TƯ LIỆU: MẶC ĐỊNH ẨN HOÀN TOÀN, CHỈ XUẤT HIỆN KHI EXPANDED (SAU 2S) -->
                                 <div class="monument-photo-dossier">
                                     <div>
-                                        <div class="flex items-center gap-2 mb-3 text-xs font-cinzel text-[#82749B] tracking-widest font-black">
+                                        <div class="flex items-center gap-2 mb-3 text-xs font-serif uppercase text-[#82749B] tracking-widest font-black">
                                             <i data-lucide="award" class="w-4 h-4 text-[#82749B]"></i>
                                             <span>SẮC LỆNH LỊCH SỬ</span>
                                         </div>
-                                        <div class="border-2 border-brand-gold/70 p-2 bg-[#0d0b09] shadow-2xl mb-3 group/img overflow-hidden">
-                                            <div class="aspect-[16/10] w-full overflow-hidden border border-brand-gold/40 bg-[#16120e] relative">
-                                                <img src="timeline_1982.jpg" alt="Ảnh tư liệu: Lễ mít-tinh Ngày Nhà giáo Việt Nam 20/11/1982" class="w-full h-full object-cover transition-transform duration-700 group-hover/img:scale-105" loading="lazy">
+                                        <div class="border border-[#C58F79] p-2 bg-[#F6FAF9] mb-3 group/img overflow-hidden">
+                                            <div class="aspect-[16/10] w-full overflow-hidden border border-[#C6E2E5] bg-[#EAF5F5] relative">
+                                                <img src="timeline_1982.jpg" alt="Ảnh tư liệu: Lễ mít-tinh <span class="inline-block whitespace-nowrap">Ngày Nhà giáo</span> Việt Nam 20/11/1982" class="w-full h-full object-cover transition-transform duration-700 group-hover/img:scale-105" loading="lazy">
                                                 <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none"></div>
                                             </div>
                                             <div class="text-[11px] font-serif italic text-[#82749B] text-center mt-2 px-1 font-bold">
-                                                Ảnh tư liệu: Đại lễ kỷ niệm Ngày Nhà giáo Việt Nam 20/11/1982 lần thứ nhất (Hà Nội)
+                                                Ảnh tư liệu: Đại lễ kỷ niệm <span class="inline-block whitespace-nowrap">Ngày Nhà giáo</span> Việt Nam 20/11/1982 lần thứ nhất (Hà Nội)
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div class="flex items-center justify-between pt-3 border-t border-brand-gold/30 text-xs font-cinzel text-[#82749B] tracking-widest font-black">
+                                    <div class="flex items-center justify-between pt-3 border-t border-brand-gold/30 text-xs font-serif uppercase text-[#82749B] tracking-widest font-black">
                                         <div class="flex items-center gap-2">
-                                            <span class="w-2.5 h-2.5 rounded-full bg-brand-gold animate-ping"></span>
+                                            <span class="w-2 h-2 rounded-full bg-[#8C4730]"></span>
                                             <span>QUỐC SÁCH HÀNG ĐẦU • TÔN SƯ TRỌNG ĐẠO</span>
                                         </div>
-                                        <span class="text-[10px] text-amber-300/80 font-serif uppercase tracking-normal">Hà Nội 1982</span>
+                                        <span class="text-[10px] text-[#4A6072] font-serif uppercase tracking-normal">Hà Nội 1982</span>
                                     </div>
                                 </div>
 
@@ -545,26 +547,26 @@
                                 <div class="monument-content-column flex flex-col justify-between h-full">
                                     <div>
                                         <div class="flex items-baseline justify-between mb-4 flex-wrap gap-2">
-                                            <span class="text-6xl sm:text-7xl lg:text-8xl font-cinzel font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-brand-gold to-yellow-100 tracking-tight">1982</span>
-                                            <span class="text-xs uppercase tracking-widest text-[#82749B] font-serif border border-brand-gold/60 bg-amber-950/60 px-3.5 py-1.5 font-bold">Quyết định 167-HĐBT</span>
+                                            <span class="text-6xl sm:text-7xl lg:text-8xl font-serif font-black text-[#8C4730] tracking-tight">1982</span>
+                                            <span class="text-xs uppercase tracking-widest text-[#8C4730] font-serif border border-[#C58F79] bg-[#EAF5F5] px-3.5 py-1.5 font-bold">Quyết định 167-HĐBT</span>
                                         </div>
 
-                                        <h3 class="font-serif text-xl sm:text-3xl lg:text-4xl font-extrabold text-[#344C63] mb-4 leading-tight">
+                                        <h3 class="font-serif text-xl sm:text-3xl lg:text-4xl font-black text-[#1C2D3D] mb-4 leading-tight">
                                             Khai Sinh Ngày Nhà Giáo Việt Nam
                                         </h3>
 
-                                        <p class="text-base sm:text-lg text-[#4A6072] leading-relaxed font-serif font-light mb-6">
-                                            Ngày 28/09/1982, Hội đồng Bộ trưởng (nay là Chính phủ) ban hành <strong>Quyết định 167-HĐBT</strong> chính thức lấy ngày <strong>20 tháng 11</strong> hằng năm là <strong>"Ngày Nhà giáo Việt Nam"</strong>. Kể từ đó, ngày 20/11 đã trở thành ngày hội truyền thống vẻ vang nhằm phát huy đạo lý Tôn sư Trọng đạo của toàn thể dân tộc.
+                                        <p class="text-base sm:text-lg text-[#2C3E50] leading-relaxed font-serif font-normal mb-6">
+                                            Ngày 28/09/1982, Hội đồng Bộ trưởng (nay là Chính phủ) ban hành <strong>Quyết định 167-HĐBT</strong> chính thức lấy ngày <strong>20 tháng 11</strong> hằng năm là <strong>"<span class="inline-block whitespace-nowrap">Ngày Nhà giáo</span> Việt Nam"</strong>. Kể từ đó, ngày 20/11 đã trở thành ngày hội truyền thống vẻ vang nhằm phát huy đạo lý Tôn sư Trọng đạo của toàn thể dân tộc.
                                         </p>
 
-                                        <blockquote class="pl-5 border-l-4 border-brand-gold text-base sm:text-lg lg:text-xl text-[#82749B] italic font-serif font-medium mb-6 bg-amber-950/30 py-3 pr-4">
+                                        <blockquote class="pl-5 border-l-4 border-[#8C4730] text-base sm:text-lg lg:text-xl text-[#1C2D3D] italic font-serif font-medium mb-6 bg-[#C6E2E5]/30 py-3 pr-4 rounded-r-lg">
                                             "Mốc son thời đại khắc sâu truyền thống 'Uống nước nhớ nguồn', khẳng định giáo dục là quốc sách hàng đầu dựng xây đất nước."
                                         </blockquote>
                                     </div>
 
-                                    <div class="pt-4 border-t border-brand-gold/30 flex items-center justify-between text-xs sm:text-sm font-serif text-amber-200 flex-wrap gap-2">
+                                    <div class="pt-4 border-t border-[#C6E2E5] flex items-center justify-between text-xs sm:text-sm font-serif text-[#4A6072] flex-wrap gap-2">
                                         <span class="text-[#82749B] font-bold">● MỐC SON THỜI ĐẠI:</span>
-                                        <span class="italic font-bold text-amber-100">Ngày hội tri ân của toàn thể nhân dân Việt Nam</span>
+                                        <span class="italic font-bold text-[#1C2D3D]">Ngày hội tri ân của toàn thể nhân dân Việt Nam</span>
                                     </div>
                                 </div>
                             </div>
@@ -641,8 +643,8 @@
                                 <div class="rule-double mt-3"></div>
                             </div>
 
-                            <div class="text-center my-4 py-2.5 bg-[#C6E2E5]/40/80 border-y-2 border-[#1c1815]/40">
-                                <h2 class="font-serif text-2xl sm:text-3xl lg:text-4xl font-black text-[#C58F79] uppercase leading-tight">
+                            <div class="text-center my-4 py-2.5 bg-[#C6E2E5]/40 border-y-2 border-[#1c1815]/40">
+                                <h2 class="font-serif text-2xl sm:text-3xl lg:text-4xl font-black text-[#8C4730] uppercase leading-tight">
                                     CHÀO MỪNG NGÀY NHÀ GIÁO VIỆT NAM 20-11:
                                 </h2>
                                 <h3 class="font-serif text-base sm:text-xl font-bold text-[#1c1815] uppercase mt-1">
@@ -726,7 +728,7 @@
 
                         <div class="pt-3 border-t border-[#1c1815]/20 flex justify-between items-center text-xs font-serif italic text-[#4A6072]">
                             <span>Trang 4 • Đa phương tiện & Kỷ yếu</span>
-                            <span>Kỷ niệm Ngày Nhà giáo Việt Nam 20/11</span>
+                            <span>Kỷ niệm <span class="inline-block whitespace-nowrap">Ngày Nhà giáo</span> Việt Nam 20/11</span>
                         </div>
                     </div>
 
@@ -879,7 +881,7 @@
             <!-- Lớp phủ hướng dẫn tương tác -->
             <div id="gallery-drag-hint" class="absolute bottom-3 sm:bottom-5 left-0 right-0 pointer-events-none flex justify-center items-center gap-3 text-[10px] sm:text-xs text-[#344C63] font-mono tracking-wider transition-all duration-1000 ease-out">
                 <span class="flex items-center gap-2 bg-[#FFFFFF]/90 backdrop-blur-md px-3 sm:px-5 py-1.5 sm:py-2 border border-[#82749B]/40 shadow-lg text-[#344C63] rounded-full">
-                    <i data-lucide="move" class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#82749B] animate-pulse"></i>
+                    <i data-lucide="move" class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#82749B]"></i>
                     <span>KÉO CHUỘT / VUỐT MÀN HÌNH ĐỂ XOAY KHÔNG GIAN 3D 360°</span>
                 </span>
             </div>
@@ -891,18 +893,26 @@
     <footer class="relative z-10 py-16 px-6 text-center border-t border-[#C6E2E5] text-[#C6E2E5] text-xs sm:text-sm bg-[#344C63]">
         <p class="font-script text-4xl text-[#82749B] mb-2">Tri Ân Người Gieo Hạt</p>
         <p class="font-sans font-light max-w-xl mx-auto">
-            Sản phẩm số dự thi Cuộc thi thiết kế Không gian truyền thông số "Dấu ấn Tri ân" chào mừng kỷ niệm Ngày Nhà giáo Việt Nam 20/11.<br>
+            Sản phẩm số dự thi Cuộc thi thiết kế Không gian truyền thông số "Dấu ấn Tri ân" chào mừng kỷ niệm <span class="inline-block whitespace-nowrap">Ngày Nhà giáo</span> Việt Nam 20/11.<br>
             <span class="text-[#EAF5F5] font-semibold mt-1 inline-block">Thực hiện bởi: Chi đoàn 10I • Trường THPT Chuyên Quang Trung</span>
         </p>
     
-        <!-- CHUYỂN TIẾP SANG TRANG TRI ÂN 20/11 KHI LƯỚT HẾT TRANG -->
-        <div id="footer-transition-indicator" class="mt-6 inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-[#EAF5F5]/10 border border-[#C58F79]/50 text-xs text-[#EAF5F5] font-serif shadow-lg transition-all duration-500 cursor-pointer hover:bg-[#EAF5F5]/20" onclick="window.location.href='celebration.html'">
-            <span class="w-2.5 h-2.5 rounded-full bg-[#C58F79] animate-ping"></span>
-            <span id="footer-transition-text">Khi lướt hết trang, tự động chuyển sang Không gian Tri Ân đặc biệt (hoặc bấm vào đây)...</span>
-            <i data-lucide="arrow-right" class="w-3.5 h-3.5 text-[#C58F79]"></i>
+        <!-- LỜI MỜI TRANG TRỌNG SANG KHÔNG GIAN TRI ÂN 20/11 -->
+        <div class="mt-8">
+            <a href="celebration.html" id="footer-transition-indicator" class="group inline-flex items-center gap-3 px-8 py-3.5 rounded-full bg-[#EAF5F5] text-[#1C2D3D] hover:bg-[#C6E2E5] border-2 border-[#C58F79] text-sm font-serif font-bold shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 cursor-pointer">
+                <span>🌸 Mở Bức Tâm Thư & Không Gian Tri Ân Đặc Biệt</span>
+                <i data-lucide="arrow-right" class="w-4 h-4 text-[#8C4730] transition-transform group-hover:translate-x-1.5"></i>
+            </a>
+            <p id="footer-redirect-countdown" class="text-[11px] text-[#C6E2E5]/90 mt-2.5 italic">Tự động chuyển sang Không Gian Tri Ân sau <span id="countdown-sec" class="font-bold text-[#EAF5F5]">2</span> giây (hoặc chạm để mở ngay)</p>
         </div>
 
     </footer>
+
+    <!-- NÚT ĐIỀU KHIỂN ÂM THANH NỔI (MUTE / UNMUTE) -->
+    <div id="audio-toggle-btn" class="fixed bottom-6 right-6 z-50 flex items-center gap-2.5 px-4 py-2 rounded-full bg-[#1C2D3D]/90 backdrop-blur-md border border-[#C58F79]/70 text-[#EAF5F5] shadow-2xl cursor-pointer hover:bg-[#1C2D3D] transition-all hover:scale-105 select-none" title="Bật / Tắt Nhạc nền">
+        <span id="audio-icon" class="text-sm">🎵</span>
+        <span id="audio-text" class="text-xs font-sans font-semibold tracking-wide">Nhạc: Bật</span>
+    </div>
 
     <!-- ==================== JAVASCRIPT: THREE.JS BACKGROUND, TỜ BÁO PHÓNG TO, LẬT BÁO & TRIỂN LÃM 3D ==================== -->
     <script src="script.js"></script>

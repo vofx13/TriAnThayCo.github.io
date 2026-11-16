@@ -8,13 +8,16 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="celebration.css">
 </head>
 <body>
-    <div class="device-check" id="device-check">
-        Đang khởi tạo Không gian Tri Ân 20/11...
+    <div class="loading-overlay" id="loading-overlay">
+        <div class="loading-spinner"></div>
+        <div class="loading-text" id="loading-text">
+            Đang khởi tạo Không gian Tri Ân 20/11...
+        </div>
     </div>
     
     <div class="container" id="container">
@@ -67,8 +70,6 @@
         <a href="index.html" class="nav-back-link" title="Quay lại trang chính">
             <span>← Báo Tường</span>
         </a>
-
-        <div class="loading-text" id="loading-text">Tri Ân Ngày Nhà Giáo Việt Nam 20/11...</div>
         
         <!-- Nhạc nền phát lặp lại (Nhac.mp3) -->
         <audio id="celebration-music" loop preload="auto">
